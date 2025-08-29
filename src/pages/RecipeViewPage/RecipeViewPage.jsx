@@ -7,6 +7,8 @@ import {
 } from '../../services/viewRecipeService.js';
 // import NotFoundPage from "../NotFoundPage/NotFoundPage.jsx";
 import Container from '../../components/Container/Container.jsx';
+import NotFound from '../NotFound/NotFound.jsx';
+
 export default function RecipeViewPage() {
   const { recipeId } = useParams();
   const [recipeDetails, setRecipeDetails] = useState(null);
@@ -36,7 +38,7 @@ export default function RecipeViewPage() {
           <RecipeDetails details={recipeDetails} ingredients={ingredients} />
         </Container>
       ) : (
-        <NotFoundPage />
+        <NotFound />
       )}
     </>
   );
