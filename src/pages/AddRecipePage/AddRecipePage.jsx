@@ -9,8 +9,7 @@ import { useMediaQuery } from 'react-responsive';
 import css from './AddRecipePage.module.css';
 import { FeedbackSchema } from './FeedbackSchema.js';
 import CategoryAndIngredientsSelect from '../../components/CategoryAndIngredientsSelect/CategoryAndIngredientsSelect.jsx';
-// import categories from './categoriesTemp.json';
-// import ingredients from './ingredientsTemp.json';
+
 import IngredientsTable from '../../components/IngredientsTable/IngredientsTable.jsx';
 import { addRecipe } from '../../redux/addRecipe/operations.js';
 import Container from '../../components/Container/Container.jsx';
@@ -76,7 +75,11 @@ const AddRecipePage = () => {
         formData.append(key, JSON.stringify(sanitizedIngredients));
       } else if (key === 'thumb' && values.thumb) {
         formData.append(key, values.thumb); // File
-      } else if (key !== 'ingredientsName' && key !== 'measure') {
+      } else if (
+        key !== 'ingredientsName' &&
+        key !== 'measure' &&
+        !(key === 'calories' && values.calories === '')
+      ) {
         formData.append(key, values[key]);
       }
     }
@@ -85,6 +88,7 @@ const AddRecipePage = () => {
       toast.success('Recipe added successfully!');
       actions.resetForm();
       navigate(`/recipes/${result.data._id}`);
+      dispatch(openModal({ type: 'recipeSaved' }));
     } catch {
       toast.error('Failed to add recipe. Please try again.');
     }
@@ -323,7 +327,7 @@ const AddRecipePage = () => {
                   <button
                     className={css.btn}
                     type="submit"
-                    onClick={() => dispatch(openModal({ type: 'recipeSaved' }))}
+                    // onClick={() => dispatch(openModal({ type: 'recipeSaved' }))}
                   >
                     Publish Recipe
                   </button>
