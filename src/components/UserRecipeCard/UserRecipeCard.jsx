@@ -28,7 +28,7 @@ export default function UserRecipeCard({
   const time = r.time ?? r.cookTime ?? r.totalTime ?? '';
   const cals = r.cals ?? r.calories ?? r.calory;
   const rawImg = r.photo || r.thumb || r.image || r.img || '';
-  const img = getImageUrl(rawImg || '/images/placeholder.png');
+  const img = rawImg ? getImageUrl(rawImg) : '/images/placeholder.png';
 
   const isFavoritesTab =
     /\/profile\/favorites/.test(loc.pathname) || mode === 'favorites';
@@ -80,7 +80,19 @@ export default function UserRecipeCard({
   return (
     <article className={s.card} data-rc="v2">
       <div className={s.thumbWrap}>
-        <img className={s.image} src={img} alt={heading} />
+        {img ? (
+          <img
+            className={s.thumb}
+            src={img}
+            alt={heading}
+            loading="lazy"
+            onError={(e) => {
+              e.currentTarget.src = '/images/placeholder.png';
+            }}
+          />
+        ) : (
+          <div className={s.thumbFallback} aria-label="No image available" />
+        )}
       </div>
 
       <div className={s.headerRow}>
