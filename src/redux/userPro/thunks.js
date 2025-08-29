@@ -10,13 +10,23 @@ import { getErrorMessage } from '../../utils/errors';
 export const fetchOwn = createAsyncThunk(
   'profile/fetchOwn',
   async (
-    { page = 1, limit = 12, replace = false } = {},
+    {
+      page = 1,
+      limit = 12,
+      replace = false,
+      title = '',
+      category = '',
+      ingredient = '',
+    } = {},
     { rejectWithValue, signal },
   ) => {
     try {
       const { items, totalPages, totalItems } = await getOwnRecipes({
         page,
         limit,
+        title,
+        category,
+        ingredient, // тут уже имя
         signal,
       });
       return { items, page, totalPages, totalItems, replace };
@@ -29,13 +39,23 @@ export const fetchOwn = createAsyncThunk(
 export const fetchSaved = createAsyncThunk(
   'profile/fetchSaved',
   async (
-    { page = 1, limit = 12, replace = false } = {},
+    {
+      page = 1,
+      limit = 12,
+      replace = false,
+      title = '',
+      category = '',
+      ingredient = '',
+    } = {},
     { rejectWithValue, signal },
   ) => {
     try {
       const { items, totalPages, totalItems } = await getSavedRecipes({
         page,
         limit,
+        title,
+        category,
+        ingredient, // тут уже имя
         signal,
       });
       return { items, page, totalPages, totalItems, replace };

@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CategorySelect from '../CategorySelect/CategorySelect.jsx';
 import IngredientsSelect from '../IngredientsSelect/IngredientsSelect.jsx';
-import { searchRecipes } from '../../redux/recipes/operations.js';
 import { selectIngredients } from '../../redux/ingredient/selectors.js';
+import { fetchOwn, fetchSaved } from '../../redux/userPro/thunks.js';
+import { selectUserProfileType } from '../../redux/userPro/selectors.js';
 import css from './FiltersProfile.module.css';
 
 const SPRITE = '/sprite/symbol-defs.svg';
@@ -11,49 +12,68 @@ const SPRITE = '/sprite/symbol-defs.svg';
 const FiltersProfile = () => {
   const dispatch = useDispatch();
 
-  // локальные значения выбора
+  // какая вкладка профиля активна: 'own' | 'favorites'
+  const profileType = useSelector(selectUserProfileType);
+  const fetcher = profileType === 'favorites' ? fetchSaved : fetchOwn;
+
+  // локальные значения селектов
   const [selectedCategory, setSelectedCategory] = useState('');
-  // здесь храним именно _id ингредиента (бек принимает id, как вы и делаете сейчас)
+  // тут у нас _id ингредиента из селекта
   const [selectedIngredient, setSelectedIngredient] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  // из стора берем текущий title (если где-то уже был поиск)
+  // заголовок из глобального поиска (если задан)
   const query = useSelector((s) => s.recipes.query);
   const titleFromQuery = (query?.title || '').trim();
 
-  // справочник ингредиентов (чтобы дождаться загрузки перед запросом)
+  // справочник ингредиентов
   const ingredients = useSelector(selectIngredients);
   const ingredientsLoaded =
     Array.isArray(ingredients) && ingredients.length > 0;
 
-  // защита от лишних одинаковых запросов (как в Filters.jsx)
+  // 🔁 маппим _id -> name (для профиля бек ожидает ИМЯ ингредиента)
+  const ingredientName = useMemo(() => {
+    if (!selectedIngredient) return '';
+    const found = (ingredients || []).find(
+      (i) => String(i?._id) === String(selectedIngredient),
+    );
+    return found?.name || '';
+  }, [selectedIngredient, ingredients]);
+
+  // защита от повторных идентичных запросов
   const lastKeyRef = useRef('');
 
   useEffect(() => {
-    // если выбран ингредиент, но справочник ещё не загрузился — ждём
+    // если выбран ингредиент, но справочник еще не подгрузился — ждем
     if (selectedIngredient && !ingredientsLoaded) return;
 
-    // если вообще ничего не выбрано (и нет title) — не ходим на бек
-    if (!titleFromQuery && !selectedCategory && !selectedIngredient) return;
+    // если нет вообще никаких критериев — ничего не делаем
+    // (первичную ленту грузит useLoadProfileRecipes)
+    if (!titleFromQuery && !selectedCategory && !ingredientName) return;
 
-    const key = `${titleFromQuery}|${selectedCategory}|${selectedIngredient}|1`;
-    if (key === lastKeyRef.current) return; // параметры не менялись
+    const key = `${profileType}|${titleFromQuery}|${selectedCategory}|${ingredientName}|1`;
+    if (key === lastKeyRef.current) return;
 
-    // сразу отправляем запрос «как на главной»
+    // ⚠️ отправляем в бек ИМЯ ингредиента, а не _id
     dispatch(
-      searchRecipes({
+      fetcher({
+        page: 1,
+        limit: 12,
+        replace: true,
         title: titleFromQuery,
         category: selectedCategory,
-        ingredient: selectedIngredient,
-        page: 1,
+        ingredient: ingredientName, // <-- имя
       }),
     );
 
     lastKeyRef.current = key;
   }, [
     dispatch,
+    fetcher,
+    profileType,
     titleFromQuery,
     selectedCategory,
+    ingredientName,
     selectedIngredient,
     ingredientsLoaded,
   ]);
@@ -61,7 +81,18 @@ const FiltersProfile = () => {
   const handleReset = () => {
     setSelectedCategory('');
     setSelectedIngredient('');
-    // без отдельного запроса — useEffect сам решит, что запрос сейчас не нужен
+    // перезагружаем ленту без фильтров (но с возможным title)
+    dispatch(
+      fetcher({
+        page: 1,
+        limit: 12,
+        replace: true,
+        title: titleFromQuery,
+        category: '',
+        ingredient: '',
+      }),
+    );
+    lastKeyRef.current = ''; // сбрасываем ключ, чтобы следующий выбор отработал
   };
 
   return (
@@ -92,7 +123,7 @@ const FiltersProfile = () => {
             selectedIngredient={selectedIngredient}
             onChange={setSelectedIngredient}
           />
-          {/* Кнопку "Apply filters" убрали по ТЗ — авто-запрос в useEffect */}
+          {/* По ТЗ — без кнопки Apply (авто-запрос в useEffect) */}
         </div>
       )}
     </>
@@ -100,6 +131,7 @@ const FiltersProfile = () => {
 };
 
 export default FiltersProfile;
+
 // import { useState } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 // import CategorySelect from '../CategorySelect/CategorySelect.jsx';

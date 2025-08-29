@@ -8,7 +8,9 @@ function normalizePagedResponse(raw) {
     items: Array.isArray(items) ? items : [],
     page: Number(raw?.data?.page ?? 1),
     perPage: Number(raw?.data?.perPage ?? PAGE_SIZE),
-    totalItems: Number(raw?.data?.totalItems ?? items.length ?? 0),
+    totalItems: Number(
+      raw?.data?.totalItems ?? (Array.isArray(items) ? items.length : 0),
+    ),
     totalPages: Number(raw?.data?.totalPages ?? 1),
   };
 }
@@ -16,11 +18,23 @@ function normalizePagedResponse(raw) {
 export async function getOwnRecipes({
   page = 1,
   limit = PAGE_SIZE,
+  title = '',
+  category = '',
+  ingredient = '',
   signal,
 } = {}) {
+  const params = { page, perPage: limit };
+  if (title) params.title = title;
+  if (category) params.category = category;
+  if (ingredient) params.ingredient = ingredient;
+
+  // небольшое анти-кеширование, чтобы избежать 304 с пустым телом
+  params._t = Date.now();
+
   const res = await api.get('/api/recipes/own', {
-    params: { page, perPage: limit },
+    params,
     signal,
+    headers: { 'Cache-Control': 'no-cache' },
   });
   return normalizePagedResponse(res.data);
 }
@@ -28,11 +42,23 @@ export async function getOwnRecipes({
 export async function getSavedRecipes({
   page = 1,
   limit = PAGE_SIZE,
+  title = '',
+  category = '',
+  ingredient = '',
   signal,
 } = {}) {
+  const params = { page, perPage: limit };
+  if (title) params.title = title;
+  if (category) params.category = category;
+  if (ingredient) params.ingredient = ingredient;
+
+  // анти-кеширование
+  params._t = Date.now();
+
   const res = await api.get('/api/recipes/saved', {
-    params: { page, perPage: limit },
+    params,
     signal,
+    headers: { 'Cache-Control': 'no-cache' },
   });
   return normalizePagedResponse(res.data);
 }
