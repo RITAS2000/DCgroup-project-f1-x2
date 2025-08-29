@@ -67,7 +67,7 @@ export default function RecipeCard({
         </button>
         <button className={css.btn_save} onClick={handleAddToSavedRecipes}>
           <svg width="24" height="24">
-            <use xlinkHref="../../../public/sprite/symbol-defs.svg#icon-bookmark-outline"></use>
+            <use xlinkHref="/sprite/symbol-defs.svg#icon-bookmark-outline"></use>
           </svg>
           {/* <svg
             width="24"
