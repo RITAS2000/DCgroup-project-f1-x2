@@ -15,8 +15,7 @@ export default function FooterLink() {
     if (!isLoggedIn) {
       e.preventDefault();
 
-      dispatch(openModal({type: 'notAuthorized'}));
-
+      dispatch(openModal({ type: 'notAuthorized' }));
     }
   };
 
@@ -34,7 +33,7 @@ export default function FooterLink() {
         className={({ isActive }) =>
           isActive ? `${css.link} ${css.isActive}` : css.link
         }
-        to="/profile"
+        to="/profile/own"
         onClick={handleAccountClick}
       >
         Account
