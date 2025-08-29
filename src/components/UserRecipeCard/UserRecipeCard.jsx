@@ -27,7 +27,7 @@ export default function UserRecipeCard({
   const time = r.time ?? r.cookTime ?? r.totalTime ?? '';
   const cals = r.cals ?? r.calories ?? r.calory;
   const rawImg = r.photo || r.thumb || r.image || r.img || '';
-  const img = getImageUrl(rawImg || '/images/placeholder.png');
+  const img = rawImg ? getImageUrl(rawImg) : '/images/placeholder.png';
 
   const isFavoritesTab =
     /\/profile\/favorites/.test(loc.pathname) || mode === 'favorites';
