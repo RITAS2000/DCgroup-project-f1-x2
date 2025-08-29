@@ -14,9 +14,8 @@ export default function ProfilePage() {
   const totalItems = useSelector(selectUserProfileTotalItems);
   const allowedTypes = ['own', 'favorites'];
 
+  // ✅ грузим список один раз через хук и используем его флаг загрузки
   const { isLoading } = useLoadProfileRecipes(recipeType);
-
-  useLoadProfileRecipes(recipeType);
 
   if (!allowedTypes.includes(recipeType)) {
     return <Navigate to="/profile/own" replace />;

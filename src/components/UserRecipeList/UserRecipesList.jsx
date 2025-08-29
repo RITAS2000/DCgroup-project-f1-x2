@@ -7,10 +7,8 @@ import {
   selectUserProfileError,
   selectUserProfilePage,
   selectUserProfileHasNext,
-  selectUserProfileShouldReload,
-  setRecipeType,
-  setShouldReload,
 } from '../../redux/userPro/slice';
+import { setRecipeType } from '../../redux/userPro/slice';
 import UserRecipeCard from '../UserRecipeCard/UserRecipeCard';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import { ClockLoader } from 'react-spinners';
@@ -24,7 +22,6 @@ export default function UserRecipesList({ type }) {
   const error = useSelector(selectUserProfileError);
   const page = useSelector(selectUserProfilePage);
   const hasNext = useSelector(selectUserProfileHasNext);
-  const shouldReload = useSelector(selectUserProfileShouldReload);
 
   const fetcher = useMemo(
     () => (type === 'favorites' ? fetchSaved : fetchOwn),
@@ -32,13 +29,10 @@ export default function UserRecipesList({ type }) {
   );
 
   useEffect(() => {
+    // ✅ только фиксируем активный тип;
+    // загрузкой занимается хук useLoadProfileRecipes и фильтры
     dispatch(setRecipeType(type));
-
-    if (shouldReload || !recipes.length) {
-      dispatch(fetcher({ page: 1, replace: true }));
-      dispatch(setShouldReload(false));
-    }
-  }, [dispatch, type, fetcher, shouldReload, recipes.length]);
+  }, [dispatch, type]);
 
   const loadMore = () => {
     dispatch(fetcher({ page: page + 1 }));
