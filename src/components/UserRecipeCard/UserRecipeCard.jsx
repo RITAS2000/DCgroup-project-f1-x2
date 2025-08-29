@@ -84,7 +84,7 @@ export default function UserRecipeCard({
             alt={heading}
             loading="lazy"
             onError={(e) => {
-              e.currentTarget.src = getImageUrl('/images/placeholder.png');
+              e.currentTarget.src = '/images/placeholder.png';
             }}
           />
         ) : (
