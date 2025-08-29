@@ -164,6 +164,11 @@
 
     transition: background-color 0.8s ease, box-shadow 0.8s ease;
 }
+.saved {
+  background-color: #9b6c43;
+  color: white;
+  border: none; 
+}
 
 .btn_save:hover {
     background-color: lightgrey;
