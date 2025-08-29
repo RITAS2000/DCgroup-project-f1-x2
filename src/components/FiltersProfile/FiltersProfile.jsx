@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CategorySelect from '../CategorySelect/CategorySelect.jsx';
 import IngredientsSelect from '../IngredientsSelect/IngredientsSelect.jsx';
@@ -26,15 +26,23 @@ const FiltersProfile = () => {
   const query = useSelector((s) => s.recipes.query);
   const titleFromQuery = (query?.title || '').trim();
 
-  // справочник ингредиентов (для сопоставления id -> name при локальном фильтре)
+  // справочник ингредиентов
   const ingredients = useSelector(selectIngredients);
   const ingredientsLoaded =
     Array.isArray(ingredients) && ingredients.length > 0;
 
+  // индекс для быстрых сопоставлений id -> name (нужен клиентскому фильтру)
+  const ingredientsIndex = useMemo(() => {
+    const map = {};
+    (ingredients || []).forEach((x) => {
+      if (x?._id) map[String(x._id)] = String(x.name || x.title || x.ttl || '');
+    });
+    return map;
+  }, [ingredients]);
+
   const getIngredientName = (id) => {
     if (!id) return '';
-    const ing = (ingredients || []).find((x) => String(x._id) === String(id));
-    return ing?.name || '';
+    return ingredientsIndex[String(id)] || '';
   };
 
   // анти-дубликатор, как в Filters.jsx
@@ -45,7 +53,6 @@ const FiltersProfile = () => {
     if (selectedIngredient && !ingredientsLoaded) return;
 
     // если ничего не выбрано и нет title — просто показываем текущую ленту
-    // (её грузит хук useLoadProfileRecipes)
     if (!titleFromQuery && !selectedCategory && !selectedIngredient) return;
 
     const key = `${profileType}|${titleFromQuery}|${selectedCategory}|${selectedIngredient}|1`;
@@ -64,6 +71,7 @@ const FiltersProfile = () => {
         category: selectedCategory,
         ingredient: selectedIngredient, // id для бэка
         ingredientName, // name для локального фильтра (fallback)
+        ingredientsIndex, // словарь id->name для разборов вложенных структур
       }),
     );
 
@@ -76,13 +84,13 @@ const FiltersProfile = () => {
     selectedCategory,
     selectedIngredient,
     ingredientsLoaded,
+    ingredientsIndex,
   ]);
 
   const handleReset = () => {
     setSelectedCategory('');
     setSelectedIngredient('');
 
-    const ingredientName = '';
     dispatch(
       fetcher({
         page: 1,
@@ -91,7 +99,8 @@ const FiltersProfile = () => {
         title: titleFromQuery,
         category: '',
         ingredient: '',
-        ingredientName,
+        ingredientName: '',
+        ingredientsIndex,
       }),
     );
   };
