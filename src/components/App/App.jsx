@@ -63,15 +63,7 @@ export default function App() {
               element={<RecipeViewPage />}
             ></Route>
 
-            <Route
-              path="/recipes/*"
-              element={
-                <PrivateRoute
-                  redirectTo="/auth/login"
-                  component={<NotFound />}
-                />
-              }
-            />
+            <Route path="/recipes/*" element={<NotFound />} />
 
             <Route
               path="/add-recipe"
