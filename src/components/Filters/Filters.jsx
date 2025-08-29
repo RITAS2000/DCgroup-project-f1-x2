@@ -21,7 +21,7 @@ const Filters = ({ title }) => {
   const itemsLen = useSelector((s) => s.recipes.items?.length) || 0;
   const totalFromSearch = totalItems || itemsLen;
 
-  // ⬇️ НОВОЕ: общее число рецептов ленты (показываем до начала поиска)
+  // общее число рецептов ленты (показываем до начала поиска)
   const feedTotal = useSelector((s) => s.recipes.feedTotal) || 0;
 
   const ingredients = useSelector(selectIngredients);
@@ -29,6 +29,9 @@ const Filters = ({ title }) => {
     Array.isArray(ingredients) && ingredients.length > 0;
 
   const queryTitle = (title ?? query?.title ?? '').trim();
+
+  // НОВОЕ: bump из SearchBox — «штамп» клика по кнопке
+  const bump = Number(query?.bump) || 0;
 
   // есть ли активный поиск
   const hasSearch =
@@ -39,7 +42,7 @@ const Filters = ({ title }) => {
   // число для отображения
   const displayTotal = hasSearch ? totalFromSearch : feedTotal;
 
-  // не допускаем повторного одинакового запроса
+  // не допускаем повторного одинакового запроса, но учитываем bump
   const lastKeyRef = useRef('');
 
   useEffect(() => {
@@ -49,7 +52,8 @@ const Filters = ({ title }) => {
     // нет ни текста, ни фильтров — не ищем
     if (!queryTitle && !selectedCategory && !selectedIngredient) return;
 
-    const key = `${queryTitle}|${selectedCategory}|${selectedIngredient}|1`;
+    // включили bump в ключ: новый клик по Search даст новый запрос
+    const key = `${queryTitle}|${selectedCategory}|${selectedIngredient}|1|${bump}`;
     if (key === lastKeyRef.current) return; // параметры не изменились
 
     dispatch(
@@ -68,6 +72,7 @@ const Filters = ({ title }) => {
     selectedCategory,
     selectedIngredient,
     ingredientsLoaded,
+    bump, // важно!
   ]);
 
   const handleReset = () => {
@@ -113,6 +118,7 @@ const Filters = ({ title }) => {
             onChange={setSelectedCategory}
           />
 
+          {/* сюда и уходит/хранится _id */}
           <IngredientsSelect
             selectedIngredient={selectedIngredient}
             onChange={setSelectedIngredient}
