@@ -19,8 +19,16 @@ const UnauthorizedHandler = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const tokenMissing = !(stateToken || localStorage.getItem('token'));
+    const persisted = localStorage.getItem('persist:token');
+    let token = null;
 
+    if (persisted) {
+      const parsed = JSON.parse(persisted);
+      token = parsed.token?.replace(/"/g, '');
+      console.log('Persisted token is', token);
+    }
+
+    const tokenMissing = !(stateToken || token);
     if (
       tokenMissing ||
       recipesError?.status === 401 ||
@@ -28,12 +36,12 @@ const UnauthorizedHandler = () => {
     ) {
       if (!tokenMissing) dispatch(logout());
       dispatch(clearAuth());
-      localStorage.removeItem('token');
+      localStorage.removeItem('persist:token');
       toast.error('Session has expired. Please log in again.');
     }
     if (usersError?.status === 404) {
       dispatch(clearAuth());
-      localStorage.removeItem('token');
+      localStorage.removeItem('persist:token');
       toast.error('Session has expired. Please log in again.');
     }
   }, [
