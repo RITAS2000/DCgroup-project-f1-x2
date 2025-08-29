@@ -121,7 +121,12 @@ const AddRecipePage = () => {
                   className={css.hiddenInput}
                 />
 
-                <label htmlFor={photoId} className={css.uploadBox}>
+                <label
+                  htmlFor={photoId}
+                  className={`${css.uploadBox} ${
+                    values.thumb ? css.uploaded : ''
+                  }`}
+                >
                   {values.thumb ? (
                     <img
                       src={URL.createObjectURL(values.thumb)}
