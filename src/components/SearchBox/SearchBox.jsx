@@ -24,8 +24,8 @@ export default function SearchBox({ resetRef }) {
         return;
       }
 
-      // ❗️Только кладём title в Redux — сам запрос выполнит Filters
-      dispatch(setQuery({ title: q }));
+      // добавляем bump — явный «триггер» нового поиска даже с тем же текстом
+      dispatch(setQuery({ title: q, bump: Date.now() }));
     } catch (e) {
       toast.error(String(e));
     } finally {
@@ -63,6 +63,7 @@ export default function SearchBox({ resetRef }) {
     </Formik>
   );
 }
+
 // import s from './SearchBox.module.css';
 // import { Formik, Field, Form, ErrorMessage } from 'formik';
 // import * as Yup from 'yup';
