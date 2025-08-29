@@ -158,6 +158,27 @@ button:active {
     text-decoration-skip-ink: none;
     padding-left: 5px;
 }
+.registerLink::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  bottom: -2px; 
+  width: 0;
+  height: 2px;
+  background-color: #28a745; 
+  transition: width 0.8s ease;
+}
+.registerLink:hover,
+.registerLink:focus {
+  color: #28a745;
+  text-shadow: 0 0 8px rgba(40, 167, 69, 0.6);
+}
+
+.registerLink:hover::after,
+.registerLink:focus::after {
+  width: calc(100% - 5px); 
+}
+
 
 .error {
     position: absolute;
