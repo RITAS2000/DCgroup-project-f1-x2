@@ -1,12 +1,7 @@
 .modal {
-  position: relative;
-  background: #fff6e5;
-  padding: 32px 24px;
-  border-radius: 32px;
   width: 100%;
   max-width: 420px;
   text-align: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .title {
