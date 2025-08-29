@@ -23,21 +23,21 @@ export default function RecipeViewPage() {
   }, [recipeId]);
 
   return (
-    <>
-      {recipeDetails && (
-        <Container variant="light">
-          <RecipeDetails details={recipeDetails} ingredients={ingredients} />
-        </Container>
-      )}
-    </>
     // <>
-    //   {recipeDetails ? (
+    //   {recipeDetails && (
     //     <Container variant="light">
     //       <RecipeDetails details={recipeDetails} ingredients={ingredients} />
     //     </Container>
-    //   ) : (
-    //     <NotFoundPage />
     //   )}
     // </>
+    <>
+      {recipeDetails ? (
+        <Container variant="light">
+          <RecipeDetails details={recipeDetails} ingredients={ingredients} />
+        </Container>
+      ) : (
+        <NotFoundPage />
+      )}
+    </>
   );
 }
