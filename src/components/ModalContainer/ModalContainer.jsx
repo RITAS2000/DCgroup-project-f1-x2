@@ -8,6 +8,7 @@ import ModalNotAuthorized from '../ModalNotAuthorized/ModalNotAuthorized.jsx';
 import ModalLogoutConfirm from '../ModalLogoutConfirm/ModalLogoutConfirm.jsx';
 import ModalRecipeSaved from '../ModalRecipeSaved/ModalRecipeSaved.jsx';
 import ModalErrorSaving from '../ModalErrorSaving/ModalErrorSaving.jsx';
+import ModalConfirmDelete from '../ModalConfirmDelete/ModalConfirmDelete.jsx';
 
 export default function ReModalContainer() {
   const isOpen = useSelector(selectIsModalOpen);
@@ -21,6 +22,7 @@ export default function ReModalContainer() {
       {type === 'logoutConfirm' && <ModalLogoutConfirm />}
       {type === 'recipeSaved' && <ModalRecipeSaved />}
       {type === 'errorSaving' && <ModalErrorSaving />}
+      {type === 'confirmDelete' && <ModalConfirmDelete />}
     </ModalReUse>
   );
 }

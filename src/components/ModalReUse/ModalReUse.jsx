@@ -10,6 +10,7 @@ export default function ModalReUse({ children }) {
   const handleClose = useCallback(() => dispatch(closeModal()), [dispatch]);
 
   useEffect(() => {
+    console.log('[ModalReUse] RENDERED');
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') handleClose();
     };
