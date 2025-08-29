@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Layout from '../Layout/Layout.jsx';
 import { ToastContainer } from 'react-toastify';
@@ -12,6 +12,8 @@ import RestrictedRoute from '../RestrictedRoute.jsx';
 import NotFound from '../../pages/NotFound/NotFound.jsx';
 import UnauthorizedHandler from '../UnauthorizedHandler/UnauthorizedHandler.jsx';
 import ReModalContainer from '../ModalContainer/ModalContainer.jsx';
+import { selectUser } from '../../redux/auth/selectors.js';
+import { useDispatch } from 'react-redux';
 
 const MainPage = lazy(() => import('../../pages/MainPage/MainPage.jsx'));
 const AuthPage = lazy(() => import('../../pages/AuthPage/AuthPage.jsx'));
@@ -29,6 +31,25 @@ const RecipeViewPage = lazy(() =>
 );
 
 export default function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const persisted = localStorage.getItem('persist:token');
+    if (persisted) {
+      try {
+        const parsed = JSON.parse(persisted);
+        const token = parsed.token?.replace(/"/g, '');
+        const name = parsed.name;
+        console.log('Persisted token is', token);
+        console.log('Persisted name is', name);
+        if (token && name) {
+          dispatch(selectUser({ token, name }));
+        }
+      } catch (err) {
+        console.error('Failed to parse persisted user', err);
+      }
+    }
+  }, [dispatch]);
+
   return (
     <>
       <UnauthorizedHandler />
@@ -88,7 +109,6 @@ export default function App() {
           autoClose={2500}
           theme="colored"
         />
-       
       </Layout>
     </>
   );

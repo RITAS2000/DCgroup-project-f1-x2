@@ -1,8 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// axios.defaults.baseURL = 'http://localhost:3000/'; // треба було первирити функціонал
-
 axios.defaults.baseURL = 'https://dcgroup-react-node-b.onrender.com/';
 
 const setAuthHeader = (token) => {
@@ -11,16 +9,14 @@ const setAuthHeader = (token) => {
 
 const clearAuthHeader = () => {
   delete axios.defaults.headers.common.Authorization;
-  // localStorage.removeItem('persist:token');
+  localStorage.removeItem('persist:token');
 };
 
 export const register = createAsyncThunk(
   'auth/register',
   async (values, thunkAPI) => {
     try {
-      console.log('Registering with:', values);
       const res = await axios.post('/api/auth/register', values);
-      // setAuthHeader(res.data.token);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -33,9 +29,7 @@ export const login = createAsyncThunk(
   async (values, thunkAPI) => {
     try {
       const res = await axios.post('/api/auth/login', values);
-      console.log('Login response:', res);
-
-      const token = res.data.data.accessToken; // 🔹 визначаємо token
+      const token = res.data.data.accessToken;
       console.log('Extracted token:', token);
       setAuthHeader(token);
       return res.data;
