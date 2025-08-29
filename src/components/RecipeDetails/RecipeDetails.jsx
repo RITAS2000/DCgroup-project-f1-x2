@@ -1,3 +1,4 @@
+import { getImageUrl } from '../../api/recipes.js';
 import SaveRecipeButton from '../SaveRecipeButton/SaveRecipeButton.jsx';
 import css from './RecipeDetails.module.css';
 
@@ -16,18 +17,21 @@ export default function RecipeDetails({ details, ingredients }) {
         {/* <img className={css.image} alt={details.title} src={details.thumb} /> */}
 
         {details.thumb && (
-          <picture>
-            <source
-              media="(min-width: 768px)"
-              srcSet={details.thumb.replace('preview/', 'preview/large/')}
-            />
-            <img
-              className={css.image}
-              alt={details.title}
-              src={details.thumb}
-            />
-          </picture>
+            <div className={css.imageWrapper}>
+                <picture>
+                    <source
+                      media="(min-width: 768px)"
+                      srcSet={getImageUrl(details.thumb.replace('preview/', 'preview/large/'))}
+                    />
+                    <img
+                      className={css.image}
+                      alt={details.title}
+                      src={getImageUrl( details.thumb)}
+                    />
+                </picture>
+            </div>
         )}
+
 
         <h2 className={css.title}>{details.title}</h2>
       </div>
@@ -61,6 +65,7 @@ export default function RecipeDetails({ details, ingredients }) {
             {details.ingredients.map((ingredient) => (
               <li key={ingredient.id} className={css.text}>
                 {ingredients.find((ing) => ing._id === ingredient.id)?.name ||
+                  ingredient.name ||
                   'Unknown'}{' '}
                 — {ingredient.measure}
               </li>
