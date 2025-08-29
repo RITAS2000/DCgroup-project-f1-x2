@@ -31,11 +31,11 @@ const ModalConfirmDelete = () => {
       <h2 className={css.title}>Delete recipe?</h2>
       <p className={css.text}>Are you sure you want to delete this recipe?</p>
       <div className={css.actions}>
-        <button onClick={handleConfirm} className={css.confirmBtn}>
-          Delete
-        </button>
         <button onClick={handleCancel} className={css.cancelBtn}>
           Cancel
+        </button>
+        <button onClick={handleConfirm} className={css.confirmBtn}>
+          Delete
         </button>
       </div>
     </div>

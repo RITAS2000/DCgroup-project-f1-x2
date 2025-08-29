@@ -1,34 +1,57 @@
 .modal {
   width: 100%;
-  max-width: 420px;
+  max-width: 362px;
   text-align: center;
+  height: auto;
+}
+
+@media screen and (min-width: 768px) {
+  .modal {
+    max-width: 420px;
+  }
 }
 
 .title {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
   font-size: 16px;
-  margin-bottom: 24px;
-  color: #333;
+  line-height: 155%;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .actions {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 16px;
 }
 
+@media screen and (min-width: 768px) {
+  .actions {
+    flex-direction: row-reverse;
+  }
+}
+
 .confirmBtn {
-  padding: 10px 24px;
-  border-radius: 12px;
-  background-color: #d00000;
-  color: white;
+  border-radius: 8px;
+  padding: 16px;
+  width: 314px;
+  height: 54px;
+  background-color: #c80000;
+  color: #fff;
   border: none;
   font-weight: 600;
+  font-size: 18px;
   transition: background-color 0.8s ease, color 0.8s ease;
 }
 
@@ -38,40 +61,27 @@
 }
 
 .cancelBtn {
-  padding: 10px 24px;
-  border-radius: 12px;
-  background-color: #fff;
-  border: 2px solid #000;
+  font-family: 'Montserrat', sans-serif;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 16px;
+  width: 314px;
+  height: 54px;
   font-weight: 600;
+  background-color: #faf3e0;
+  font-size: 18px;
   transition: background-color 0.8s ease, color 0.8s ease;
 }
 
-.cancelBtn:hover,
-.cancelBtn:focus {
-  background-color: #f1f1f1;
-  color: #000;
+.cancelBtn:hover {
+  background-color: lightgrey;
 }
 
-@media (max-width: 480px) {
-  .modal {
-    padding: 24px 16px;
-  }
+.cancelBtn:focus {
+  outline: none;
+}
 
-  .title {
-    font-size: 20px;
-  }
-
-  .text {
-    font-size: 14px;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .confirmBtn,
-  .cancelBtn {
-    width: 100%;
-  }
+.cancelBtn:active {
+  border: 1px solid lightgray;
+  box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px white;
 }
