@@ -23,7 +23,10 @@ export default function RecipeCard({
   };
 
   const isLoggedIn = useSelector(selectIsLoggedIn);
+
+
   const [isSavedRecipe, setIsSavedRecipe] = useState(false); //стан для кнопки чи збережений рецепт
+
 
   const dispatch = useDispatch();
 
@@ -65,7 +68,7 @@ export default function RecipeCard({
         <h3 className={css.title}>{title}</h3>
         <div className={css.time_container}>
           <svg width="24" height="24">
-            <use xlinkHref="../../../public/sprite/symbol-defs.svg#icon-clock"></use>
+            <use xlinkHref="/sprite/symbol-defs.svg#icon-clock"></use>
           </svg>
           <p className={css.time}>{time}</p>
         </div>
