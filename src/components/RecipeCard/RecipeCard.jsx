@@ -86,7 +86,7 @@ export default function RecipeCard({
           onClick={handleAddToSavedRecipes}
         >
           <svg width="24" height="24">
-            <use xlinkHref="../../../public/sprite/symbol-defs.svg#icon-bookmark-outline"></use>
+            <use xlinkHref="/sprite/symbol-defs.svg#icon-bookmark-outline"></use>
           </svg>
         </button>
       </div>
