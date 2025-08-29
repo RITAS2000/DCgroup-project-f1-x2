@@ -13,6 +13,7 @@ import {
 import { setRecipeType } from '../../redux/userPro/slice';
 import UserRecipeCard from '../UserRecipeCard/UserRecipeCard';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
+import { ClockLoader } from 'react-spinners';
 import s from './UserRecipesList.module.css';
 
 export default function UserRecipesList({ type }) {
@@ -39,30 +40,39 @@ export default function UserRecipesList({ type }) {
   };
 
   return (
-    <>
-      {error && <div className={s.error}>⚠ {error}</div>}
-      <div className={s.recipe_container}>
-        <ul className={s.recipe_list}>
-          {recipes.map((it) => (
-            <li key={it.id ?? it._id}>
-              <UserRecipeCard
-                item={it}
-                mode={type}
-                onRemoved={(id) => dispatch(deleteOwn(id))}
-                recipeId={it.recipe?._id || it._id}
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className={s.wrapper}>
+      {loading ? (
+        <div className={s.loaderWrap}>
+          <ClockLoader color="#3d2218" size={100} />
+        </div>
+      ) : (
+        <>
+          {error && <div className={s.error}>⚠ {error}</div>}
 
-      {!loading && !recipes.length && !error && (
-        <div className={s.empty}>No recipes yet.</div>
-      )}
+          <div className={s.recipe_container}>
+            <ul className={s.recipe_list}>
+              {recipes.map((it) => (
+                <li key={it.id ?? it._id}>
+                  <UserRecipeCard
+                    item={it}
+                    mode={type}
+                    onRemoved={(id) => dispatch(deleteOwn(id))}
+                    recipeId={it.recipe?._id || it._id}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
 
-      {hasNext && !error && (
-        <LoadMoreBtn onClick={loadMore} loading={loading} />
+          {!recipes.length && !error && (
+            <div className={s.empty}>No recipes yet.</div>
+          )}
+
+          {hasNext && !error && (
+            <LoadMoreBtn onClick={loadMore} loading={loading} />
+          )}
+        </>
       )}
-    </>
+    </div>
   );
 }

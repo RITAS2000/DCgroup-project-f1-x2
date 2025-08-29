@@ -7,6 +7,7 @@ import {
   deleteRecipe,
 } from '../../api/recipes';
 import s from './UserRecipeCard.module.css';
+import { toast } from 'react-toastify';
 
 const SPRITE = '/sprite/symbol-defs.svg';
 
@@ -41,6 +42,7 @@ export default function UserRecipeCard({
       if (isSaved) {
         await deleteFavorite(id);
         setIsSaved(false);
+        toast.success('Recipe removed from favorites!');
         if (isFavoritesTab && typeof onRemoved === 'function') {
           onRemoved(id);
         }
@@ -66,6 +68,7 @@ export default function UserRecipeCard({
     setPending(true);
     try {
       await deleteRecipe(id);
+      toast.success('Recipe deleted successfully!');
       if (typeof onRemoved === 'function') onRemoved(id);
     } catch {
       if (typeof onRemoved === 'function') onRemoved(id);

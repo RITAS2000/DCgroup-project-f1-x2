@@ -3,6 +3,13 @@
   align-items: center;
 }
 
+.loaderWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
 .recipe_list {
   display: flex;
   flex-wrap: wrap;
