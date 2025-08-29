@@ -42,7 +42,6 @@ const UnauthorizedHandler = () => {
       localStorage.removeItem('token');
       toast.error('Session has expired. Please log in again.');
     }
-    if (!isAllowed) navigate('/');
   }, [
     recipesError,
     usersError,
