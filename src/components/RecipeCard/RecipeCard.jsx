@@ -18,8 +18,8 @@ export default function RecipeCard({
     navigate(`/recipes/${id}`);
   };
 
- const isLoggedIn = useSelector(selectIsLoggedIn);
-  
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
   const dispatch = useDispatch();
 
   //бажання зберегти рецепт
@@ -37,7 +37,7 @@ export default function RecipeCard({
         <h3 className={css.title}>{title}</h3>
         <div className={css.time_container}>
           <svg width="24" height="24">
-            <use xlinkHref="../../../public/sprite/symbol-defs.svg#icon-clock"></use>
+            <use xlinkHref="/sprite/symbol-defs.svg#icon-clock"></use>
           </svg>
           {/* <svg
             width="24"
