@@ -1,24 +1,18 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import {
-  getImageUrl,
-  deleteFavorite,
-  addFavorite,
-  deleteRecipe,
-} from '../../api/recipes';
+import { useDispatch } from 'react-redux';
+import { removeRecipeFromList } from '../../redux/userPro/slice';
+import { openModal } from '../../redux/modal/slice';
+import { getImageUrl, deleteFavorite } from '../../api/recipes';
 import s from './UserRecipeCard.module.css';
 import { toast } from 'react-toastify';
 
 const SPRITE = '/sprite/symbol-defs.svg';
 
-export default function UserRecipeCard({
-  item,
-  mode = 'own',
-  onRemoved,
-  onRemovedError,
-}) {
+export default function UserRecipeCard({ item, mode = 'own', onRemovedError }) {
   const navigate = useNavigate();
   const loc = useLocation();
+  const dispatch = useDispatch();
   const [pending, setPending] = useState(false);
 
   const r = item?.recipe ?? item ?? {};
@@ -32,46 +26,28 @@ export default function UserRecipeCard({
 
   const isFavoritesTab =
     /\/profile\/favorites/.test(loc.pathname) || mode === 'favorites';
-  const [isSaved, setIsSaved] = useState(!!isFavoritesTab);
 
-  async function toggleSave(id) {
+  function handleDelete(id) {
     if (!id || pending) return;
 
-    try {
-      setPending(true);
-      if (isSaved) {
-        await deleteFavorite(id);
-        setIsSaved(false);
-        toast.success('Recipe removed from favorites!');
-        if (isFavoritesTab && typeof onRemoved === 'function') {
-          onRemoved(id);
-        }
-      } else {
-        await addFavorite(id);
-        setIsSaved(true);
-      }
-    } catch (err) {
-      if (typeof onRemovedError === 'function') onRemovedError(id, err);
-      alert('Operation failed. Please try again.');
-    } finally {
-      setPending(false);
-    }
+    dispatch(
+      openModal({
+        type: 'confirmDelete',
+        props: { recipeId: id },
+      }),
+    );
   }
 
-  async function handleDelete(id) {
+  async function handleRemoveFavorite(id) {
     if (!id || pending) return;
-    const confirmAction = window.confirm(
-      'Are you sure you want to delete this recipe?',
-    );
-    if (!confirmAction) return;
 
     setPending(true);
     try {
-      await deleteRecipe(id);
-      toast.success('Recipe deleted successfully!');
-      if (typeof onRemoved === 'function') onRemoved(id);
-    } catch {
-      if (typeof onRemoved === 'function') onRemoved(id);
+      await deleteFavorite(id);
+      toast.success('Recipe removed from favorites!');
+      dispatch(removeRecipeFromList(id));
+    } catch (err) {
+      if (typeof onRemovedError === 'function') onRemovedError(id, err);
     } finally {
       setPending(false);
     }
@@ -132,9 +108,7 @@ export default function UserRecipeCard({
           <button
             type="button"
             className={s.deleteBtn}
-            onClick={() => {
-              handleDelete(recipeId);
-            }}
+            onClick={() => handleDelete(recipeId)}
             disabled={pending}
             aria-label="Delete recipe"
           >
@@ -153,11 +127,11 @@ export default function UserRecipeCard({
         {isFavoritesTab && (
           <button
             type="button"
-            className={`${s.favBtn} ${isSaved ? s.favBtnActive : ''}`}
-            onClick={() => toggleSave(recipeId)}
-            aria-label={isSaved ? 'Remove from favorites' : 'Save to favorites'}
-            aria-pressed={isSaved ? 'true' : 'false'}
-            disabled={pending || !recipeId}
+            className={s.favBtn}
+            onClick={() => handleRemoveFavorite(recipeId)}
+            disabled={pending}
+            aria-label="Remove from favorites"
+            aria-pressed="true"
           >
             <svg width="24" height="24" style={{ color: '#fff' }}>
               <use href={`${SPRITE}#icon-bookmark-outline`} />

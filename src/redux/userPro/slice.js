@@ -13,6 +13,7 @@ const initialState = {
   currentRequestId: null,
   hasNext: false,
   type: 'own',
+  shouldReload: false,
 };
 
 const dedupeById = (arr) => {
@@ -83,6 +84,14 @@ const userProfileSlice = createSlice({
         state.error = null;
       }
     },
+    setShouldReload: (state, action) => {
+      state.shouldReload = action.payload ?? true;
+    },
+    removeRecipeFromList: (state, action) => {
+      const id = String(action.payload);
+      state.items = state.items.filter((it) => String(it.id ?? it._id) !== id);
+      state.totalItems = Math.max(state.totalItems - 1, 0);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -97,17 +106,24 @@ const userProfileSlice = createSlice({
         state.items = state.items.filter(
           (it) => String(it.id ?? it._id) !== id,
         );
+        state.totalItems = Math.max(state.totalItems - 1, 0);
       })
       .addCase(deleteOwn.fulfilled, (state, action) => {
         const id = String(action.payload);
         state.items = state.items.filter(
           (it) => String(it.id ?? it._id) !== id,
         );
+        state.totalItems = Math.max(state.totalItems - 1, 0);
       });
   },
 });
 
-export const { resetProfile, setRecipeType } = userProfileSlice.actions;
+export const {
+  resetProfile,
+  setRecipeType,
+  setShouldReload,
+  removeRecipeFromList,
+} = userProfileSlice.actions;
 export const selectUserProfile = (state) => state.userProfile;
 export const selectUserRecipes = (state) => state.userProfile.items;
 export const selectUserProfileLoading = (state) => state.userProfile.loading;
@@ -116,5 +132,7 @@ export const selectUserProfilePage = (state) => state.userProfile.page;
 export const selectUserProfileTotalPages = (state) =>
   state.userProfile.totalPages;
 export const selectUserProfileHasNext = (state) => state.userProfile.hasNext;
+export const selectUserProfileShouldReload = (state) =>
+  state.userProfile.shouldReload;
 
 export default userProfileSlice.reducer;

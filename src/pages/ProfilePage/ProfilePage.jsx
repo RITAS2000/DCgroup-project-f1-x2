@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import s from './ProfilePage.module.css';
 
 import { selectUserProfileTotalItems } from '../../redux/userPro/selectors';
-import { useLoadProfileRecipes } from '../../hooks/useLoadProfileRecipes'; // 👈 підключаєш
+import { useLoadProfileRecipes } from '../../hooks/useLoadProfileRecipes';
 
 import ProfileNavigation from '../../components/ProfileNavigation/ProfileNavigation.jsx';
 import UserRecipesList from '../../components/UserRecipeList/UserRecipesList.jsx';
@@ -13,6 +13,8 @@ export default function ProfilePage() {
   const { recipeType } = useParams();
   const totalItems = useSelector(selectUserProfileTotalItems);
   const allowedTypes = ['own', 'favorites'];
+
+  const { isLoading } = useLoadProfileRecipes(recipeType);
 
   useLoadProfileRecipes(recipeType);
 
@@ -27,7 +29,9 @@ export default function ProfilePage() {
         <ProfileNavigation active={recipeType} />
         <div className={s.filtersRow}>
           <p className={s.count}>
-            {totalItems} recipe{totalItems !== 1 ? 's' : ''}
+            {isLoading
+              ? '...'
+              : `${totalItems} recipe${totalItems !== 1 ? 's' : ''}`}
           </p>
 
           <FiltersProfile />

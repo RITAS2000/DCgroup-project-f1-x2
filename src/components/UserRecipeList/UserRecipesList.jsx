@@ -1,16 +1,16 @@
 import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOwn, fetchSaved } from '../../redux/userPro/thunks';
-import { deleteOwn } from '../../redux/userPro/actions';
 import {
   selectUserRecipes,
   selectUserProfileLoading,
   selectUserProfileError,
   selectUserProfilePage,
   selectUserProfileHasNext,
-} from '../../redux/userPro/selectors';
-
-import { setRecipeType } from '../../redux/userPro/slice';
+  selectUserProfileShouldReload,
+  setRecipeType,
+  setShouldReload,
+} from '../../redux/userPro/slice';
 import UserRecipeCard from '../UserRecipeCard/UserRecipeCard';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import { ClockLoader } from 'react-spinners';
@@ -24,6 +24,7 @@ export default function UserRecipesList({ type }) {
   const error = useSelector(selectUserProfileError);
   const page = useSelector(selectUserProfilePage);
   const hasNext = useSelector(selectUserProfileHasNext);
+  const shouldReload = useSelector(selectUserProfileShouldReload);
 
   const fetcher = useMemo(
     () => (type === 'favorites' ? fetchSaved : fetchOwn),
@@ -32,8 +33,12 @@ export default function UserRecipesList({ type }) {
 
   useEffect(() => {
     dispatch(setRecipeType(type));
-    dispatch(fetcher({ page: 1, replace: true }));
-  }, [dispatch, type, fetcher]);
+
+    if (shouldReload || !recipes.length) {
+      dispatch(fetcher({ page: 1, replace: true }));
+      dispatch(setShouldReload(false));
+    }
+  }, [dispatch, type, fetcher, shouldReload, recipes.length]);
 
   const loadMore = () => {
     dispatch(fetcher({ page: page + 1 }));
@@ -47,18 +52,11 @@ export default function UserRecipesList({ type }) {
         </div>
       ) : (
         <>
-          {error && <div className={s.error}>⚠ {error}</div>}
-
           <div className={s.recipe_container}>
             <ul className={s.recipe_list}>
               {recipes.map((it) => (
                 <li key={it.id ?? it._id}>
-                  <UserRecipeCard
-                    item={it}
-                    mode={type}
-                    onRemoved={(id) => dispatch(deleteOwn(id))}
-                    recipeId={it.recipe?._id || it._id}
-                  />
+                  <UserRecipeCard item={it} mode={type} />
                 </li>
               ))}
             </ul>
