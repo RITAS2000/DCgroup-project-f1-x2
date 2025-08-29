@@ -1,3 +1,4 @@
+import { getImageUrl } from '../../api/recipes.js';
 import SaveRecipeButton from '../SaveRecipeButton/SaveRecipeButton.jsx';
 import css from './RecipeDetails.module.css';
 
@@ -20,12 +21,12 @@ export default function RecipeDetails({ details, ingredients }) {
                 <picture>
                     <source
                       media="(min-width: 768px)"
-                      srcSet={details.thumb.replace('preview/', 'preview/large/')}
+                      srcSet={getImageUrl(details.thumb.replace('preview/', 'preview/large/'))}
                     />
                     <img
                       className={css.image}
                       alt={details.title}
-                      src={details.thumb}
+                      src={getImageUrl( details.thumb)}
                     />
                 </picture>
             </div>
