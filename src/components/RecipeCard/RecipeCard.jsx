@@ -22,31 +22,42 @@ export default function RecipeCard({
     navigate(`/recipes/${id}`);
   };
 
- const isLoggedIn = useSelector(selectIsLoggedIn);
- const [isSavedRecipe, setIsSavedRecipe] = useState(false); //стан для кнопки чи збережений рецепт
-  
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const [isSavedRecipe, setIsSavedRecipe] = useState(false); //стан для кнопки чи збережений рецепт
+
   const dispatch = useDispatch();
 
   //бажання зберегти рецепт
   const handleAddToSavedRecipes = async (e) => {
-    e.preventDefault();
-    if (!isLoggedIn) {
-      dispatch(openModal({ type: 'errorSaving' }));
-    }
-    try {
+  e.preventDefault();
+  if (!isLoggedIn) {
+    dispatch(openModal({ type: 'errorSaving' }));
+    return;
+  }
+
+  try {
+    if (!isSavedRecipe) {
       const response = await axios.post(
-        'https://dcgroup-react-node-b.onrender.com/api/recipes/saved', // URL бекенду
-        { recipeId: id }, // дані, які відправляємо
+        'https://dcgroup-react-node-b.onrender.com/api/recipes/saved',
+        { recipeId: id },
       );
       toast.success('Recipe added to saved recipes!');
       console.log('Saved recipe response:', response.data);
       setIsSavedRecipe(true);
-    } catch (error) {
-      console.error('Error saving recipe:', error);
-      toast.error('Failed to save recipe.');
+    } else {
+      const deleteRecipe = await axios.delete(
+        `https://dcgroup-react-node-b.onrender.com/api/recipes/saved/${id}`
+       
+      );
+      toast.success('Recipe removed from saved recipes!');
+      console.log('Deleted recipe response:', deleteRecipe.data);
+      setIsSavedRecipe(false);
     }
-  };
-
+  } catch {
+    
+    toast.error('Failed !');
+  }
+};
   return (
     <div className={css.card}>
       <img className={css.image} src={thumb} alt={title} />
@@ -67,8 +78,10 @@ export default function RecipeCard({
         <button className={css.btn_learn} onClick={handleLearnMore}>
           Learn more
         </button>
-        <button className={`${css.btn_save} ${isSavedRecipe ? css.saved : ''}`}
-          onClick={handleAddToSavedRecipes}>
+        <button
+          className={`${css.btn_save} ${isSavedRecipe ? css.saved : ''}`}
+          onClick={handleAddToSavedRecipes}
+        >
           <svg width="24" height="24">
             <use xlinkHref="../../../public/sprite/symbol-defs.svg#icon-bookmark-outline"></use>
           </svg>
