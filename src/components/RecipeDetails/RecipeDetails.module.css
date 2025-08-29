@@ -10,32 +10,41 @@
     }
 }
 
-
-
-  .image {
+.imageWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: auto;
-    border-radius: 8px;
     margin-bottom: 32px;
-    display: block;
-    object-fit: cover;
   }
 
+    @media screen and (min-width: 1400px) {
+    .imageWrapper {
+      background-color: #2B2D30;
+      border-radius: 8px;
+    }
+  }
+
+  .image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
 
   @media screen and (min-width: 768px) and (max-width: 1399px) {
     .image {
-      width: 100%;
       max-width: 808px;
-      height: auto;
     }
   }
   @media screen and (min-width: 1400px) {
     .image {
-      width: 100%;
       max-width: 1226px;
       max-height: 624px;
+      object-fit: contain;
+      border-radius: 0;
     }
   }
+
 
 
 .title {
