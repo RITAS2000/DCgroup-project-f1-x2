@@ -77,19 +77,7 @@ export default function UserRecipeCard({
   return (
     <article className={s.card} data-rc="v2">
       <div className={s.thumbWrap}>
-        {img ? (
-          <img
-            className={s.thumb}
-            src={img}
-            alt={heading}
-            loading="lazy"
-            onError={(e) => {
-              e.currentTarget.src = getImageUrl('/images/placeholder.png');
-            }}
-          />
-        ) : (
-          <div className={s.thumbFallback} aria-label="No image available" />
-        )}
+        <img className={s.image} src={img} alt={heading} />
       </div>
 
       <div className={s.headerRow}>
@@ -135,8 +123,14 @@ export default function UserRecipeCard({
             disabled={pending}
             aria-label="Delete recipe"
           >
-            <svg width="24" height="24">
-              <use href={`${SPRITE}#icon-delete`} />
+            <svg
+              className={s.trash}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+              <path d="M3 6h18" />
+              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
             </svg>
           </button>
         )}

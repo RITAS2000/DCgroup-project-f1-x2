@@ -180,3 +180,10 @@
 .deleteBtn:hover {
   background-color: #b40000;
 }
+
+.trash {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+}
