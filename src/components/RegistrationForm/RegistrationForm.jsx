@@ -180,7 +180,7 @@ export default function RegistrationForm() {
               <div className={css.box}>
                 <p className={css.registerHint}>
                   Already have an account?
-                  <Link to="/auth/login" className={css.registerLink}>
+                  <Link to="/auth/login" className={`${css.registerLink} ${css.pulseLink}`}>
                     Log in
                   </Link>
                 </p>
