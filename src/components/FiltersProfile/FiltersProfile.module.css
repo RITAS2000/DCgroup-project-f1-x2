@@ -1,0 +1,10 @@
+.filtersBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 18px;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}

@@ -1,0 +1,201 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 32px;
+    padding: 48px 32px;
+    max-width: 362px;
+    width: 100%;
+    margin: 91px 0;
+    
+    background-color: #faf3e0;;
+}
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 27px;
+    max-width: 298px;
+    width: 100%;
+    height: 199px;
+
+    background-color: #faf3e0;;
+
+}
+.label {
+    width: 100%;
+}
+.title{
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 32px;
+    text-align: center;
+    color: #000;
+
+}
+.text {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000;
+    margin-bottom: 4px;
+    
+}
+.input {
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    outline: none;
+    padding: 8px;
+    width: 100%;
+    max-width: 298px;
+    
+    height: 41px;
+    transition: border-color 0.8s ease, box-shadow 0.8s ease, background 0.8s ease;
+ }
+
+.input:focus,
+.input:hover {
+  border: 1.5px solid #9b6c43;
+  box-shadow: 0 0 0 4px rgba(78, 70, 180, 0.2);
+  background: #fff;
+}
+
+.inputError {
+  border: 1.5px solid #c80000;
+}
+.input::placeholder {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.55;
+    color: #9f9f9f;
+    transition: color 0.8s ease;
+}
+.inputError::placeholder {
+    color: #c80000;
+}
+
+.input:focus::placeholder {
+    color: #000;
+}
+.button {
+    border-radius: 8px;
+    padding: 8px;
+    width: 100%;
+    max-width: 298px;
+    height: 36px;
+    border: none;
+
+    background-color: #9b6c43;
+    font-weight: 600;
+    font-size: 16px;
+    color: #fff;
+    transition: background 0.8s ease, box-shadow 0.8s ease;
+}
+.button:hover,
+.button:focus {
+  background: #6d554b;
+  outline: none;
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
+}
+
+.button:active {
+  background: #9b6c43;
+  box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
+}
+
+
+.button:disabled {
+  background: #9b6c43;
+  opacity: 0.3;
+  cursor: not-allowed;
+  box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
+}
+.titlehint {
+    font-weight: 400;
+        font-size: 16px;
+        line-height: 1.55;
+        text-align: center;
+        color: #000;
+}
+.link {
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-skip-ink: none;
+    padding-left: 5px;
+}
+.error {
+    position: absolute;
+    color: #c80000;
+    font-size: 14px;
+
+}
+.passWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.toggleBtn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #000;
+    transition: color 0.2s ease;
+}
+
+
+
+@media screen and (min-width: 768px) {
+    .container{
+        max-width: 522px;
+        width: 100%;
+        margin: 262px 91px;
+    }
+    .form {
+        max-width: 458px;
+        width: 100%;
+    }
+    .input {
+        max-width: 458px;
+        width: 100%;
+    }
+    .button{
+        max-width: 458px;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+@media screen and (min-width: 1440px) {
+    .container {
+        max-width: 420px;
+        width: 100%;
+        margin: 177px 402px 157px 402px;
+    }
+    .form {
+        max-width: 356px;
+        width: 100%;
+    }
+    .input {
+        max-width: 356px;
+        width: 100%;
+    }
+    .button {
+        max-width: 356px;
+    }
+}

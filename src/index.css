@@ -1,68 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&display=swap');
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --black: #000;
+  --gray: #595d62;
+  --white: #fff;
+  --light-brown: #9b6c43;
+  --light-beige: #faf3e0;
+  --light-gray: #d9d9d9;
+  --darck-brown: #3d2218;
+  --background: #fbfcf8;
+  --brown: #6d554b;
+  --light-gray-2: #d3d3d3;
+  --light-gray-3: #c5c5c5;
+  --gray-3: #9f9f9f;
+  --social-media-background: rgba(255, 255, 255, 0);
+  --gray-2: #575757;
+  --black-2: #070707;
+  --beige: #e3caa5;
+  --beige-2: #edd9aa;
+  --white-55: rgba(255, 255, 255, 0.55);
+  --white-80: rgba(255, 255, 255, 0.8);
+  --black-60: rgba(0, 0, 0, 0.6);
+  --black-50: rgba(0, 0, 0, 0.5);
+  --dark-brown-65-: rgba(61, 34, 24, 0.65);
+  --icon-gray: #3a3a3a;
+  --light-beige-2: #fffbe9;
+  --dark-gray: #323232;
+  --light-beige-3: #e1d7c6;
+  --red: #c80000;
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  color: currentColor;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+body {
+  background-color: #fbfcf8;
 }

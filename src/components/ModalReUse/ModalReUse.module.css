@@ -1,0 +1,66 @@
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal {
+    position: relative;
+    background: #faf3e0;
+    padding: 56px 24px;
+    border-radius: 32px;
+    width: auto;
+    text-align: center;
+}
+
+
+
+@media (min-width: 768px) {
+    .modal {
+        max-width: 568px;
+        padding: 56px 32px;
+    }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 16px;
+  right: 32px;
+  cursor: pointer;
+  color: black;
+  line-height: 0;
+  background: none;
+  border: none;
+  transition: transform 0.8s ease, color 0.8s ease;
+}
+.closeBtn:hover {
+  transform: scale(1.2);
+}
+
+.icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+@media (min-width: 768px) {
+.closeBtn {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background-color: inherit;
+        top: 16px;
+        right: 32px;
+        width: 24px;
+        height: 24px;
+}
+}

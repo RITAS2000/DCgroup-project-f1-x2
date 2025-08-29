@@ -1,0 +1,23 @@
+.continer {
+    display: flex;
+    padding: 8.05px 12.1px 8.05px 12.5px;
+    align-items: center;
+    gap: 3.95px;
+}
+
+.logo {
+    width: 32px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: -0.03em;
+    color: #fff;
+}
+

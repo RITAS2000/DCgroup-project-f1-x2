@@ -1,0 +1,88 @@
+.filtersWrapper {
+  padding: 24px 0;
+}
+
+/* верхняя строка: заголовок */
+.topRow {
+  margin-bottom: 12px;
+}
+
+.topRow h2 {
+  margin: 0;
+  font-weight: 700;
+  /* подстрой под свой масштаб шрифтов */
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+/* нижняя строка: счётчик и кнопка Filters */
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* счётчик найденных рецептов */
+.count {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #111;
+}
+
+/* кнопка "Filters" с иконкой-воронкой */
+.filtersBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: transparent;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #111;
+}
+
+.filtersBtn:hover,
+.filtersBtn:focus-visible {
+  text-decoration: underline;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  display: inline-block;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* раскрывающаяся панель с селектами и Reset */
+.panel {
+  margin-top: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+/* Reset — как ссылочка с подчёркиванием */
+.resetButton {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: #111;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  width: max-content;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.resetButton:hover,
+.resetButton:focus-visible {
+  opacity: 0.85;
+}

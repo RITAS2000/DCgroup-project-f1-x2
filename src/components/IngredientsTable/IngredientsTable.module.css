@@ -1,0 +1,114 @@
+.table {
+  width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+  .table {
+    width: 431px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .table {
+    width: 332px;
+  }
+}
+
+.thead {
+}
+
+.th {
+  height: 52px;
+}
+
+@media only screen and (min-width: 768px) {
+  .th {
+    height: 36px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .th {
+    height: 20px;
+  }
+}
+
+.tr {
+}
+
+.th,
+.td {
+  text-align: left;
+  border-bottom: 1px solid var(--light-gray-3);
+  padding: 16px 0px;
+
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--black);
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+  width: 175px;
+}
+
+@media only screen and (min-width: 1440px) {
+  th:nth-child(1),
+  td:nth-child(1) {
+    width: 150px;
+  }
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 150px;
+}
+
+@media only screen and (min-width: 768px) {
+  .th,
+  .td {
+    padding: 8px 0px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .th,
+  .td {
+    padding: 0 0px;
+  }
+}
+
+.tdIcon,
+.thIcon {
+  border-bottom: 1px solid var(--light-gray-3);
+  text-align: left;
+}
+
+.tbody {
+}
+
+.trBody {
+}
+
+.td {
+  font-weight: 400;
+  line-height: 1.55;
+  height: 64px;
+}
+
+@media only screen and (min-width: 768px) {
+  .td {
+    height: 48px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .td {
+    height: 32px;
+  }
+}
+
+.btn {
+  border: none;
+  background-color: transparent;
+}

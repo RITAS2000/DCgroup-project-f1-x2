@@ -1,0 +1,243 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    border-radius: 32px;
+    padding: 48px 32px;
+    max-width: 362px;
+    width: 100%;
+    height: 711px;
+    margin: 56px 0;
+
+    background-color: #faf3e0;
+
+}
+
+.title {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 32px;
+    text-align: center;
+    color: #000;
+}
+
+.text {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.55;
+    text-align: center;
+    color: #000;
+}
+
+.form {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 298px;
+    width: 100%;
+    height: 391px;
+}
+
+.label {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.labelText {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000;
+}
+
+.input {
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    outline: none;
+    padding: 8px;
+    max-width: 298px;
+    width: 100%;
+    height: 41px;
+    transition: border-color 0.8s ease, box-shadow 0.8s ease, background 0.8s ease;
+}
+
+.input:focus,
+.input:hover {
+    border: 1.5px solid #9b6c43;
+    box-shadow: 0 0 0 4px rgba(78, 70, 180, 0.2);
+    background: #fff;
+}
+
+.inputError,
+.inputError:focus,
+.inputError:hover {
+    border-color: var(--red, #c80000) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.inputError::placeholder {
+    color: #c80000;
+}
+
+.input::placeholder {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.55;
+    color: #9f9f9f;
+    transition: color 0.8s ease;
+}
+
+
+.input:focus::placeholder {
+    color: #000;
+}
+
+.button {
+    display: block;
+    border-radius: 8px;
+    border: none;
+    padding: 8px;
+    max-width: 298px;
+    width: 100%;
+    height: 36px;
+    margin-top: 7px;
+
+    background-color: #9b6c43;
+    font-weight: 600;
+    font-size: 16px;
+    color: #fff;
+    transition: background 0.8s ease;
+}
+
+.button:hover,
+.button:focus {
+    background: #6d554b;
+    outline: none;
+}
+
+.button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
+}
+
+button:active {
+    background: #9b6c43;
+    box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
+}
+
+.button:disabled {
+    background: #9b6c43;
+    opacity: 0.3;
+    cursor: not-allowed;
+    box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
+}
+
+.registerHint {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.55;
+    text-align: center;
+    color: #000;
+}
+
+.registerLink {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-skip-ink: none;
+    padding-left: 5px;
+}
+
+.error {
+    position: absolute;
+    color: #c80000;
+    font-size: 14px;
+    bottom: -18px;
+}
+
+.passWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.toggleBtn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #fff;
+    border: none;
+    font-size: 18px;
+    font-size: 20px;
+    color: #000;
+
+}
+
+
+
+@media screen and (min-width: 768px) {
+    .container {
+        max-width: 522px;
+        width: 100%;
+        height: 621px;
+        margin: 152px auto;
+    }
+
+    .form {
+        max-width: 458px;
+        width: 100%;
+        height: 351px;
+    }
+
+    .input {
+        max-width: 458px;
+        width: 100%;
+    }
+
+    .button {
+        max-width: 458px;
+    }
+
+}
+
+
+
+
+
+
+@media screen and (min-width: 1440px) {
+    .container {
+        max-width: 420px;
+        width: 100%;
+        height: 646px;
+        margin: 52px auto 34px auto;
+    }
+
+    .form {
+        max-width: 356px;
+        width: 100%;
+        height: 351px;
+    }
+
+    .input {
+        max-width: 356px;
+        width: 100%;
+    }
+
+    .button {
+        max-width: 356px;
+
+    }
+
+}

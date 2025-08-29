@@ -1,0 +1,9 @@
+.link {
+  border-bottom: none;
+}
+
+@media (min-width: 768px) {
+  .isActive {
+    border-bottom: 1px solid #fff;
+  }
+}

@@ -1,0 +1,53 @@
+.hero {
+  padding: 128px 16px 98px;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.9)),
+    url('../../images/Hero-mobil.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.hero .content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 24px;
+  z-index: 2;
+  position: relative;
+}
+
+.hero .content .title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 40px;
+  color: #fff;
+}
+
+@media screen and (min-width: 768px) {
+  .hero {
+    padding: 128px 16px 128px;
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.9)),
+      url('../../images/Hero-tablet.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  .hero .content .title {
+    font-size: 48px;
+    line-height: 1.1;
+    max-width: 493px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .hero {
+      background: linear-gradient(to left, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.9)),
+        url('../../images/Hero-deck.jpg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+  
+}
+

@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+        gap: 32px;
+    }
+}
+
+.link {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #fff;
+}
+
+.isActive {
+    border-bottom: 1px solid #fff;
+}

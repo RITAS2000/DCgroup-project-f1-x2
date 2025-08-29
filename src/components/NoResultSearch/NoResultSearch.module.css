@@ -1,0 +1,133 @@
+.wrapper {
+  max-width: 361px;
+  margin: 48px auto;
+  /* margin-bottom: 48px; */
+}
+
+/* .wordquery {
+  word-break: break-word;
+} */
+
+/* .header {
+  margin-bottom: 48px;
+} */
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+}
+
+.title span {
+  font-weight: bold;
+  word-break: break-word;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 208px;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background: #fff6e5;
+  padding: 40px 24px;
+  border-radius: 16px;
+  /* width: 598px; */
+  /* height: 207px; */
+  text-align: center;
+}
+
+.mesagetext {
+  margin-bottom: 15px;
+  font-weight: 600;
+  max-width: 313px;
+  font-size: 24px;
+  text-align: center;
+  color: #000;
+}
+
+.resetSearch {
+  font-weight: 600;
+  padding: 16px 48px;
+  max-width: 313px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.resetSearch:focus,
+.resetSearch:hover {
+  background: #6d554b;
+  transition: background-color 0.8s ease, box-shadow 0.8s ease;
+  color: #fff;
+  border: 1.5px solid #9b6c43;
+}
+
+.resetSearch:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
+}
+.resetSearch:active {
+  background: #9b6c43;
+  box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
+}
+.resetSearch:disabled {
+  background: #9b6c43;
+  opacity: 0.3;
+  cursor: not-allowed;
+  box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
+}
+
+@media (min-width: 768px) {
+  .wrapper {
+    max-width: 704px;
+  }
+
+  .title span {
+    display: inline-block;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .title {
+    font-size: 40px;
+  }
+
+  .message {
+    max-width: 522px;
+    margin: 0 auto;
+  }
+
+  .mesagetext {
+    max-width: 350px;
+  }
+
+  .resetSearch {
+    padding: 16px 128px;
+    max-width: 474px;
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .wrapper {
+    max-width: 1193px;
+  }
+
+  .message {
+    max-width: 598px;
+  }
+
+  .resetSearch {
+    padding: 16px 166px;
+    max-width: 550px;
+  }
+}
