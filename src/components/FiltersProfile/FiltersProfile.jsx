@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CategorySelect from '../CategorySelect/CategorySelect.jsx';
 import IngredientsSelect from '../IngredientsSelect/IngredientsSelect.jsx';
@@ -40,10 +40,13 @@ const FiltersProfile = () => {
     return map;
   }, [ingredients]);
 
-  const getIngredientName = (id) => {
-    if (!id) return '';
-    return ingredientsIndex[String(id)] || '';
-  };
+  const getIngredientName = useCallback(
+    (id) => {
+      if (!id) return '';
+      return ingredientsIndex[String(id)] || '';
+    },
+    [ingredientsIndex],
+  );
 
   // анти-дубликатор, как в Filters.jsx
   const lastKeyRef = useRef('');
@@ -85,6 +88,7 @@ const FiltersProfile = () => {
     selectedIngredient,
     ingredientsLoaded,
     ingredientsIndex,
+    getIngredientName,
   ]);
 
   const handleReset = () => {
