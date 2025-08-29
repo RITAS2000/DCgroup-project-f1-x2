@@ -22,8 +22,8 @@ export default function UserRecipeCard({
 
   const r = item?.recipe ?? item ?? {};
   const recipeId = item?.recipeId ?? item?.id ?? r?._id;
-  const heading = r.title || r.name || 'Recipe';
-  const desc = r.description || r.desc || '';
+  const heading = (r.title || r.name || 'Recipe') ?? '';
+  const desc = (r.description || r.desc || '') ?? '';
   const time = r.time ?? r.cookTime ?? r.totalTime ?? '';
   const cals = r.cals ?? r.calories ?? r.calory;
   const rawImg = r.photo || r.thumb || r.image || r.img || '';
