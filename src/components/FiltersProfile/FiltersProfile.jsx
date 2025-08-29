@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CategorySelect from '../CategorySelect/CategorySelect.jsx';
 import IngredientsSelect from '../IngredientsSelect/IngredientsSelect.jsx';
@@ -12,49 +12,49 @@ const SPRITE = '/sprite/symbol-defs.svg';
 const FiltersProfile = () => {
   const dispatch = useDispatch();
 
-  // какая вкладка профиля активна: 'own' | 'favorites'
+  // вкладка профиля: 'own' | 'favorites'
   const profileType = useSelector(selectUserProfileType);
   const fetcher = profileType === 'favorites' ? fetchSaved : fetchOwn;
 
-  // локальные значения селектов
+  // локальный выбор
   const [selectedCategory, setSelectedCategory] = useState('');
-  // тут у нас _id ингредиента из селекта
+  // ⚠️ храним _id ингредиента (бек ждёт id)
   const [selectedIngredient, setSelectedIngredient] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  // заголовок из глобального поиска (если задан)
+  // из стора берём title (если задан поиском на главной)
   const query = useSelector((s) => s.recipes.query);
   const titleFromQuery = (query?.title || '').trim();
 
-  // справочник ингредиентов
+  // справочник ингредиентов (для сопоставления id -> name при локальном фильтре)
   const ingredients = useSelector(selectIngredients);
   const ingredientsLoaded =
     Array.isArray(ingredients) && ingredients.length > 0;
 
-  // 🔁 маппим _id -> name (для профиля бек ожидает ИМЯ ингредиента)
-  const ingredientName = useMemo(() => {
-    if (!selectedIngredient) return '';
-    const found = (ingredients || []).find(
-      (i) => String(i?._id) === String(selectedIngredient),
-    );
-    return found?.name || '';
-  }, [selectedIngredient, ingredients]);
+  const getIngredientName = (id) => {
+    if (!id) return '';
+    const ing = (ingredients || []).find((x) => String(x._id) === String(id));
+    return ing?.name || '';
+  };
 
-  // защита от повторных идентичных запросов
+  // анти-дубликатор, как в Filters.jsx
   const lastKeyRef = useRef('');
 
   useEffect(() => {
-    // если выбран ингредиент, но справочник еще не подгрузился — ждем
+    // ждём загрузки справочника, если выбран ингредиент
     if (selectedIngredient && !ingredientsLoaded) return;
 
-    // если нет вообще никаких критериев — ничего не делаем
-    // (первичную ленту грузит useLoadProfileRecipes)
-    if (!titleFromQuery && !selectedCategory && !ingredientName) return;
+    // если ничего не выбрано и нет title — просто показываем текущую ленту
+    // (её грузит хук useLoadProfileRecipes)
+    if (!titleFromQuery && !selectedCategory && !selectedIngredient) return;
 
-    const key = `${profileType}|${titleFromQuery}|${selectedCategory}|${ingredientName}|1`;
+    const key = `${profileType}|${titleFromQuery}|${selectedCategory}|${selectedIngredient}|1`;
     if (key === lastKeyRef.current) return;
 
-    // ⚠️ отправляем в бек ИМЯ ингредиента, а не _id
+    // имя ингредиента для локальной фильтрации (бек принимает id)
+    const ingredientName = getIngredientName(selectedIngredient);
+
+    // запрос к профилю (own/saved) с фильтрами
     dispatch(
       fetcher({
         page: 1,
@@ -62,7 +62,8 @@ const FiltersProfile = () => {
         replace: true,
         title: titleFromQuery,
         category: selectedCategory,
-        ingredient: ingredientName, // <-- имя
+        ingredient: selectedIngredient, // id для бэка
+        ingredientName, // name для локального фильтра (fallback)
       }),
     );
 
@@ -73,7 +74,6 @@ const FiltersProfile = () => {
     profileType,
     titleFromQuery,
     selectedCategory,
-    ingredientName,
     selectedIngredient,
     ingredientsLoaded,
   ]);
@@ -81,7 +81,8 @@ const FiltersProfile = () => {
   const handleReset = () => {
     setSelectedCategory('');
     setSelectedIngredient('');
-    // перезагружаем ленту без фильтров (но с возможным title)
+
+    const ingredientName = '';
     dispatch(
       fetcher({
         page: 1,
@@ -90,9 +91,9 @@ const FiltersProfile = () => {
         title: titleFromQuery,
         category: '',
         ingredient: '',
+        ingredientName,
       }),
     );
-    lastKeyRef.current = ''; // сбрасываем ключ, чтобы следующий выбор отработал
   };
 
   return (
@@ -123,7 +124,7 @@ const FiltersProfile = () => {
             selectedIngredient={selectedIngredient}
             onChange={setSelectedIngredient}
           />
-          {/* По ТЗ — без кнопки Apply (авто-запрос в useEffect) */}
+          {/* Кнопки Apply нет — авто-запрос по ТЗ */}
         </div>
       )}
     </>

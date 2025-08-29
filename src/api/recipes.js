@@ -8,9 +8,7 @@ function normalizePagedResponse(raw) {
     items: Array.isArray(items) ? items : [],
     page: Number(raw?.data?.page ?? 1),
     perPage: Number(raw?.data?.perPage ?? PAGE_SIZE),
-    totalItems: Number(
-      raw?.data?.totalItems ?? (Array.isArray(items) ? items.length : 0),
-    ),
+    totalItems: Number(raw?.data?.totalItems ?? items.length ?? 0),
     totalPages: Number(raw?.data?.totalPages ?? 1),
   };
 }
@@ -20,7 +18,7 @@ export async function getOwnRecipes({
   limit = PAGE_SIZE,
   title = '',
   category = '',
-  ingredient = '',
+  ingredient = '', // id
   signal,
 } = {}) {
   const params = { page, perPage: limit };
@@ -28,14 +26,10 @@ export async function getOwnRecipes({
   if (category) params.category = category;
   if (ingredient) params.ingredient = ingredient;
 
-  // небольшое анти-кеширование, чтобы избежать 304 с пустым телом
-  params._t = Date.now();
+  // анти-кеш, чтобы не получать 304 Not Modified c прежним телом
+  if (title || category || ingredient) params._t = Date.now();
 
-  const res = await api.get('/api/recipes/own', {
-    params,
-    signal,
-    headers: { 'Cache-Control': 'no-cache' },
-  });
+  const res = await api.get('/api/recipes/own', { params, signal });
   return normalizePagedResponse(res.data);
 }
 
@@ -44,7 +38,7 @@ export async function getSavedRecipes({
   limit = PAGE_SIZE,
   title = '',
   category = '',
-  ingredient = '',
+  ingredient = '', // id
   signal,
 } = {}) {
   const params = { page, perPage: limit };
@@ -52,14 +46,9 @@ export async function getSavedRecipes({
   if (category) params.category = category;
   if (ingredient) params.ingredient = ingredient;
 
-  // анти-кеширование
-  params._t = Date.now();
+  if (title || category || ingredient) params._t = Date.now();
 
-  const res = await api.get('/api/recipes/saved', {
-    params,
-    signal,
-    headers: { 'Cache-Control': 'no-cache' },
-  });
+  const res = await api.get('/api/recipes/saved', { params, signal });
   return normalizePagedResponse(res.data);
 }
 
