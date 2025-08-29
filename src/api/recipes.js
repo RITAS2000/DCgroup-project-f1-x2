@@ -16,24 +16,39 @@ function normalizePagedResponse(raw) {
 export async function getOwnRecipes({
   page = 1,
   limit = PAGE_SIZE,
+  title = '',
+  category = '',
+  ingredient = '', // id
   signal,
 } = {}) {
-  const res = await api.get('/api/recipes/own', {
-    params: { page, perPage: limit },
-    signal,
-  });
+  const params = { page, perPage: limit };
+  if (title) params.title = title;
+  if (category) params.category = category;
+  if (ingredient) params.ingredient = ingredient;
+
+  // анти-кеш, чтобы не получать 304 Not Modified c прежним телом
+  if (title || category || ingredient) params._t = Date.now();
+
+  const res = await api.get('/api/recipes/own', { params, signal });
   return normalizePagedResponse(res.data);
 }
 
 export async function getSavedRecipes({
   page = 1,
   limit = PAGE_SIZE,
+  title = '',
+  category = '',
+  ingredient = '', // id
   signal,
 } = {}) {
-  const res = await api.get('/api/recipes/saved', {
-    params: { page, perPage: limit },
-    signal,
-  });
+  const params = { page, perPage: limit };
+  if (title) params.title = title;
+  if (category) params.category = category;
+  if (ingredient) params.ingredient = ingredient;
+
+  if (title || category || ingredient) params._t = Date.now();
+
+  const res = await api.get('/api/recipes/saved', { params, signal });
   return normalizePagedResponse(res.data);
 }
 
