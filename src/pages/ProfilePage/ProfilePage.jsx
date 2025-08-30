@@ -32,8 +32,9 @@ export default function ProfilePage() {
               ? '...'
               : `${totalItems} recipe${totalItems !== 1 ? 's' : ''}`}
           </p>
-
-          <FiltersProfile />
+          <div className={s.filtersColumn}>
+            <FiltersProfile />
+          </div>
         </div>
       </header>
 
