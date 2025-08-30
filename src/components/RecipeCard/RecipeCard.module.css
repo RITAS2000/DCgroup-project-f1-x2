@@ -182,3 +182,36 @@
     border: 1px solid lightgray;
     box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px white;
 }
+
+@media (max-width: 360px) {
+  .card {
+    max-width: 100%; /* займатиме всю ширину */
+    border-radius: 8px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .time_container svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .descr_cont {
+    font-size: 13px;
+    flex-direction: column; /* перенос опису вниз */
+    align-items: flex-start;
+  }
+
+  .btn_cont {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .btn_learn {
+    width: 100%;
+    font-size: 12px;
+  }
+}

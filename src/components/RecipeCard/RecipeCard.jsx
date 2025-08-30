@@ -8,6 +8,7 @@ import { selectIsLoggedIn } from '../../redux/auth/selectors.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '../../redux/modal/slice.js';
 import { useState } from 'react';
+import { ClockLoader } from 'react-spinners';
 
 export default function RecipeCard({
   id,
@@ -23,7 +24,7 @@ export default function RecipeCard({
   };
 
   const isLoggedIn = useSelector(selectIsLoggedIn);
-
+  const [isLoading, setIsLoading] = useState(false); //loader state
 
   const [isSavedRecipe, setIsSavedRecipe] = useState(false); //стан для кнопки чи збережений рецепт
 
@@ -40,6 +41,7 @@ export default function RecipeCard({
 
   try {
     if (!isSavedRecipe) {
+      setIsLoading(true);
       const response = await axios.post(
         'https://dcgroup-react-node-b.onrender.com/api/recipes/saved',
         { recipeId: id },
@@ -48,6 +50,7 @@ export default function RecipeCard({
       console.log('Saved recipe response:', response.data);
       setIsSavedRecipe(true);
     } else {
+      setIsLoading(true);
       const deleteRecipe = await axios.delete(
         `https://dcgroup-react-node-b.onrender.com/api/recipes/saved/${id}`
        
@@ -57,8 +60,11 @@ export default function RecipeCard({
       setIsSavedRecipe(false);
     }
   } catch {
-    
-    toast.error('Failed !');
+    dispatch(openModal({type: 'notAuthorized'}));
+    // toast.error('Failed !');
+  }
+  finally{
+    setIsLoading(false);
   }
 };
   return (
@@ -84,10 +90,14 @@ export default function RecipeCard({
         <button
           className={`${css.btn_save} ${isSavedRecipe ? css.saved : ''}`}
           onClick={handleAddToSavedRecipes}
-        >
-          <svg width="24" height="24">
+        >{isLoading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
+          <ClockLoader color="#3d2218" size={24} />
+        </div>
+      ) : (<svg width="24" height="24">
             <use xlinkHref="/sprite/symbol-defs.svg#icon-bookmark-outline"></use>
-          </svg>
+          </svg>)}
+          
         </button>
       </div>
     </div>

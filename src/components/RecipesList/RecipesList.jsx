@@ -18,6 +18,7 @@ import {
   selectSearchQuery,
 } from '../../redux/recipes/selectors';
 import { searchRecipes } from '../../redux/recipes/operations';
+import { BarLoader } from 'react-spinners';
 
 // единый baseURL
 axios.defaults.baseURL =
@@ -41,6 +42,7 @@ export default function RecipesList({ onResetAll }) {
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [loadingFeed, setLoadingFeed] = useState(false);
+
   const lastCardRef = useRef(null);
   const scrollAfterLoad = useRef(false);
 
@@ -153,7 +155,11 @@ export default function RecipesList({ onResetAll }) {
 
         {/* якорь для плавного скролла после догрузки */}
         <div ref={endSearchRef} />
-
+        {loadingFeed && (
+          <div>
+            <BarLoader color="#9b6c43" />
+          </div>
+        )}
         {canLoadMore && !searching && (
           <LoadMoreBtn
             onClick={() => {
@@ -193,6 +199,11 @@ export default function RecipesList({ onResetAll }) {
           },
         )}
       </ul>
+      {loadingFeed && (
+        <div>
+          <BarLoader color="#9b6c43" />
+        </div>
+      )}
 
       {recipes.length > 0 && !loadingFeed && hasNextPage && (
         <LoadMoreBtn onClick={handleLoadMoreFeed} />
