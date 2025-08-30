@@ -1,4 +1,12 @@
+.relativeWrapper {
+  position: relative;
+  margin-left: auto;
+  display: inline-block;
+}
+
+/* ===== КНОПКА Filters (мобільний сценарій) ===== */
 .filtersBtn {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -7,4 +15,245 @@
   background: transparent;
   border: none;
   cursor: pointer;
+  outline: none;
+  text-decoration: none;
+}
+.filtersBtn::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: #000;
+  transform: scaleX(0);
+  opacity: 0;
+  transform-origin: center;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.isOpen::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+.filtersBtn:not(.isOpen):hover::after,
+.filtersBtn:not(.isOpen):focus-visible::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* ===== ПАНЕЛЬ ===== */
+.panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 320px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 16px 12px;
+  display: grid;
+  row-gap: 24px;
+  z-index: 40;
+}
+.panelHidden {
+  display: none;
+}
+
+@media (min-width: 1440px) {
+  .panel {
+    width: 480px;
+    padding: 20px 18px;
+    row-gap: 14px;
+  }
+}
+
+/* меню react-select поверх картки */
+.panel :global(.select__menu) {
+  z-index: 50;
+}
+
+/* ===== Reset filters (підкреслення як у кнопки) ===== */
+.resetButton {
+  justify-self: start;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding-bottom: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: color 0.15s ease;
+}
+.resetButton::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: #000;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+
+.resetButton:hover::after,
+.resetButton:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ===== Іконка-хрестик у кнопці ===== */
+.iconBlack {
+  --color1: #000;
+}
+
+/* ===== ОБГОРТКА КОЖНОГО СЕЛЕКТА ===== */
+.selectWrap {
+  position: relative;
+  width: 100%;
+}
+
+/* Чеврон (наш, не системний) */
+.chevron {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  transition: transform 0.18s ease;
+  pointer-events: none; /* клік проходить у select */
+  color: #000;
+}
+/* Обертання при відкритому меню (react-select і нативний select) */
+.selectWrap :global(.select__control--menu-is-open) ~ .chevron,
+.selectWrap :global(.select__control[aria-expanded='true']) ~ .chevron,
+.selectWrap :global(select[aria-expanded='true']) ~ .chevron {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* ===== УНІФІКАЦІЯ ПОЛІВ ===== */
+/* 1) react-select — загальний вигляд */
+.selectWrap :global(.select__control) {
+  height: 33px;
+  min-height: 33px;
+  border: 1px solid var(--light-gray, #d9d9d9);
+  border-radius: 4px;
+  background: var(--white, #fff);
+  box-shadow: none;
+}
+.selectWrap :global(.select__control--is-focused) {
+  border-color: var(--light-gray, #d9d9d9);
+  box-shadow: none;
+}
+.selectWrap :global(.select__value-container) {
+  padding: 4px 32px 4px 8px;
+}
+.selectWrap :global(.select__indicators) {
+  padding-right: 8px;
+}
+
+/* react-select — кольори тексту */
+.selectWrap :global(.select__placeholder) {
+  color: #9aa2a9;
+} /* плейсхолдер у полі */
+.selectWrap :global(.select__single-value) {
+  color: #111;
+} /* вибране значення у полі */
+
+/* Список опцій у меню — чорні */
+.selectWrap :global(.select__menu .select__option),
+.selectWrap :global(.select__menu .select__option--is-focused),
+.selectWrap :global(.select__menu .select__option--is-selected) {
+  color: #111;
+}
+/* якщо у меню є "заголовок/disabled" — він сірий */
+.selectWrap :global(.select__menu .select__option--is-disabled) {
+  color: #9aa2a9;
+}
+
+/* 2) Нативний <select> (у т.ч. із чужим модульним класом) */
+.selectWrap select,
+.selectWrap :global(select[class^='_select_']),
+.selectWrap :global(select[class*=' _select_']) {
+  box-sizing: border-box;
+  width: 100%;
+  height: 33px;
+  border: 1px solid var(--light-gray, #d9d9d9);
+  border-radius: 4px;
+  padding: 4px 32px 4px 8px;
+  background: var(--white, #fff);
+  font: 400 16px/1.2 'Montserrat', sans-serif;
+  color: #111; /* значення після вибору — чорне */
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+/* коли як значення вибраний “плейсхолдер” (option value="" або disabled) — робимо текст сірим у полі */
+.selectWrap:has(select option:checked[value='']) select,
+.selectWrap:has(select option:checked:disabled) select {
+  color: #9aa2a9;
+}
+/* у випадаючому списку сам плейсхолдер (disabled) — сірим */
+.selectWrap select option {
+  color: #111;
+} /* опції у списку — чорні */
+.selectWrap select option[disabled],
+.selectWrap select option[aria-disabled='true'] {
+  color: #9aa2a9;
+}
+
+/* Прибрати системну стрілку в старому Edge/IE */
+.selectWrap :global(select::-ms-expand) {
+  display: none;
+}
+
+/* ===== ДЕСКТОП ≥1440px — рядок і розміри полів ===== */
+@media (min-width: 1440px) {
+  .filtersBtn {
+    display: none;
+  }
+
+  .panel {
+    position: static;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: 24px;
+  }
+  .panelHidden {
+    display: flex;
+  }
+
+  .rowReset {
+    order: 1;
+    margin-right: 8px;
+    font-size: 14px;
+  }
+  .rowCat {
+    order: 2;
+    width: 296px;
+  } /* 296 × 33 як у макеті */
+  .rowIngr {
+    order: 3;
+    width: 296px;
+  }
+
+  .rowCat :global(.select__control),
+  .rowIngr :global(.select__control) {
+    width: 100%;
+  }
+  .rowCat select,
+  .rowIngr select {
+    width: 100%;
+  }
 }
