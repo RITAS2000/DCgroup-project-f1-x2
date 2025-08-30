@@ -6,7 +6,7 @@ import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn.jsx';
 import RecipeCard from '../RecipeCard/RecipeCard.jsx';
 import css from './RecipesList.module.css';
 import NoResultSearch from '../NoResultSearch/NoResultSearch.jsx'; // 🟢 додав
-import { clearResults, setFeedTotal } from '../../redux/recipes/slice.js'; // 🟢 setFeedTotal
+import { setFeedTotal } from '../../redux/recipes/slice.js'; // 🟢 setFeedTotal
 
 import {
   selectRecipes,
