@@ -309,9 +309,15 @@ const AddRecipePage = () => {
                               (ing) => ing.name === name,
                             );
 
-                            push({ id: selectedIngredient._id, name, measure });
-                            setFieldValue('ingredientsName', '');
-                            setFieldValue('measure', '');
+                            if (name && measure) {
+                              push({
+                                id: selectedIngredient._id,
+                                name,
+                                measure,
+                              });
+                              setFieldValue('ingredientsName', '');
+                              setFieldValue('measure', '');
+                            }
                           }}
                         >
                           Add new Ingredient
