@@ -36,14 +36,14 @@
 .loginBtn:focus {
   color: var(--white);
   background-color: var(--light-brown);
-  border: none;
+border: 1px solid transparent;
 }
 
 .registerBtn:hover,
 .registerBtn:focus {
   color: var(--white);
   background-color: var(--light-brown);
-  border: none;
+  border: 1px solid transparent;
 }
 
 @media (max-width: 767px) {

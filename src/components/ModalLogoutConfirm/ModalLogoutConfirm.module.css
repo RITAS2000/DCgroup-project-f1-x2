@@ -37,13 +37,13 @@
 .cancelBtn:focus {
   color: var(--white);
   background-color: var(--light-brown);
-  border: none;
+  border: 1px solid transparent;
 }
 
 .logoutBtn {
   color: var(--white);
   background-color: var(--red);
-  border: none;
+  border: 1px solid transparent;  
 }
 
 @media (max-width: 767px) {

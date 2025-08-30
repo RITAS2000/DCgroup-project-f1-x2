@@ -19,6 +19,7 @@
   justify-content: center;
 }
 .goProfileBtn {
+  box-sizing: border-box;
   border-radius: 8px;
   border: 1px solid #000000;
   width: 100%;
@@ -30,5 +31,5 @@
 .goProfileBtn:focus {
   color: var(--white);
   background-color: var(--light-brown);
-  border: none;
+  border: 1px solid transparent;
 }
