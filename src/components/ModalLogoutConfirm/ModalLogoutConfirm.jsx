@@ -26,8 +26,8 @@ const ModalLogoutConfirm = () => {
 
   return (
     <>
-      <h2 className={css.title}>Log out</h2>
-      <p className={css.text}>Are you sure you want to log out?</p>
+      <h2 className={css.title}>Are you sure?</h2>
+      <p className={css.text}>We will miss you</p>
       <div className={css.action}>
         <button className={css.logoutBtn} onClick={handleConfirm}>
           Log out

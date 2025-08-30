@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { openModal } from '../../redux/modal/slice';
 import { getImageUrl, deleteFavorite } from '../../api/recipes';
-import { setShouldReload } from '../../redux/userPro/slice';
+import { removeRecipeFromList } from '../../redux/userPro/slice';
 import { ClockLoader } from 'react-spinners';
 import s from './UserRecipeCard.module.css';
 import { toast } from 'react-toastify';
@@ -15,11 +15,8 @@ export default function UserRecipeCard({ item, mode = 'own', onRemovedError }) {
   const loc = useLocation();
   const dispatch = useDispatch();
 
-  // Якщо у сторі нема поля deletingIds — повернеться порожній масив,
-  // і кнопка поводитиметься як звичайно.
-  const deletingIds = useSelector((st) => st.userProfile?.deletingIds || []);
-
-  const [pending, setPending] = useState(false); // для видалення зі "Saved"
+  // спінер ТІЛЬКИ для видалення зі збережених
+  const [pendingFav, setPendingFav] = useState(false);
 
   const r = item?.recipe ?? item ?? {};
   const recipeId = item?.recipeId ?? item?.id ?? r?._id;
@@ -32,25 +29,27 @@ export default function UserRecipeCard({ item, mode = 'own', onRemovedError }) {
 
   const isFavoritesTab =
     /\/profile\/favorites/.test(loc.pathname) || mode === 'favorites';
-  const isDeleting = deletingIds.includes(String(recipeId));
 
+  // Власні рецепти — як і було: відкриваємо модалку підтвердження
   function handleDelete(id) {
-    if (!id || pending || isDeleting) return;
+    if (!id) return;
     dispatch(openModal({ type: 'confirmDelete', props: { recipeId: id } }));
   }
 
+  // Зі збережених — показуємо спінер прямо в кнопці
   async function handleRemoveFavorite(id) {
-    if (!id || pending) return;
-    setPending(true);
+    if (!id || pendingFav) return;
+
+    setPendingFav(true);
     try {
       await deleteFavorite(id);
       toast.success('Recipe removed from favorites!');
-      // тригеримо глобальний рефетч + показ годинника в списку
-      dispatch(setShouldReload(true));
+      // одразу прибираємо картку без перезавантаження сторінки
+      dispatch(removeRecipeFromList(id));
     } catch (err) {
       if (typeof onRemovedError === 'function') onRemovedError(id, err);
     } finally {
-      setPending(false);
+      setPendingFav(false);
     }
   }
 
@@ -110,22 +109,17 @@ export default function UserRecipeCard({ item, mode = 'own', onRemovedError }) {
             type="button"
             className={s.deleteBtn}
             onClick={() => handleDelete(recipeId)}
-            disabled={pending || isDeleting}
             aria-label="Delete recipe"
           >
-            {isDeleting ? (
-              <ClockLoader size={16} color="#fff" />
-            ) : (
-              <svg
-                className={s.trash}
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                <path d="M3 6h18" />
-                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-              </svg>
-            )}
+            <svg
+              className={s.trash}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+              <path d="M3 6h18" />
+              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            </svg>
           </button>
         )}
 
@@ -134,13 +128,17 @@ export default function UserRecipeCard({ item, mode = 'own', onRemovedError }) {
             type="button"
             className={s.favBtn}
             onClick={() => handleRemoveFavorite(recipeId)}
-            disabled={pending}
+            disabled={pendingFav}
             aria-label="Remove from favorites"
             aria-pressed="true"
           >
-            <svg width="24" height="24" style={{ color: '#fff' }}>
-              <use href={`${SPRITE}#icon-bookmark-outline`} />
-            </svg>
+            {pendingFav ? (
+              <ClockLoader color="#3d2218" size={24} />
+            ) : (
+              <svg width="24" height="24" style={{ color: '#fff' }}>
+                <use href={`${SPRITE}#icon-bookmark-outline`} />
+              </svg>
+            )}
           </button>
         )}
       </div>
