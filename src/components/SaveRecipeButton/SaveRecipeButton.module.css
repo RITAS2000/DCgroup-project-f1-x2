@@ -30,6 +30,10 @@
 
 }
 
+.saveButton:disabled {
+    cursor: not-allowed;
+}
+
 @media screen and (min-width: 768px) {
     .saveButton {
         padding: 16px;
@@ -37,7 +41,6 @@
         max-height: 56px;
   }
 }
-
 
 .icon {
     margin-left: 16px;
