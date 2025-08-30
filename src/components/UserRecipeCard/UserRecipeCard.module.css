@@ -194,7 +194,8 @@
   transition: background-color 0.8s ease;
 }
 
-.deleteBtn:hover {
+.deleteBtn:hover,
+.deleteBtn:focus {
   background-color: #b40000;
 }
 

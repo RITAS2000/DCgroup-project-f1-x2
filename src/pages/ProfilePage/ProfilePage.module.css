@@ -1,7 +1,13 @@
 .wrap {
   padding: 48px 16px;
-  max-width: 1200px;
+  max-width: 1225px;
   margin: 0 auto;
+}
+
+@media screen and (min-width: 1440px) {
+  .wrap {
+    padding: 48px 0;
+  }
 }
 
 .header {
