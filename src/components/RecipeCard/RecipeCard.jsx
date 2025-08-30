@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '../../redux/modal/slice.js';
 import { useState } from 'react';
 import { ClockLoader } from 'react-spinners';
+import { getImageUrl } from '../../api/recipes.js';
 
 export default function RecipeCard({
   id,
@@ -53,7 +54,7 @@ export default function RecipeCard({
       setIsLoading(true);
       const deleteRecipe = await axios.delete(
         `https://dcgroup-react-node-b.onrender.com/api/recipes/saved/${id}`
-       
+
       );
       toast.success('Recipe removed from saved recipes!');
       console.log('Deleted recipe response:', deleteRecipe.data);
@@ -67,9 +68,25 @@ export default function RecipeCard({
     setIsLoading(false);
   }
 };
+
+const rawImg = thumb || '';
+const imgSrc = rawImg ? getImageUrl(rawImg) : '/images/placeholder.png';
+
+
   return (
     <div className={css.card}>
-      <img className={css.image} src={thumb} alt={title} />
+      <img className={css.image} src={getImageUrl(imgSrc)} alt={title}
+         onError={(e) => {
+                const img = e.currentTarget;
+                img.onerror = null;
+                const pic = img.closest('picture');
+                if (pic) {
+                  const srcEl = pic.querySelector('source');
+                  if (srcEl) srcEl.srcset = '';
+                }
+                img.src = '/images/placeholder.png';
+              }}
+      />
       <div className={css.title_container}>
         <h3 className={css.title}>{title}</h3>
         <div className={css.time_container}>
@@ -97,7 +114,7 @@ export default function RecipeCard({
       ) : (<svg width="24" height="24">
             <use xlinkHref="/sprite/symbol-defs.svg#icon-bookmark-outline"></use>
           </svg>)}
-          
+
         </button>
       </div>
     </div>
