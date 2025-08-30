@@ -10,6 +10,9 @@ import { openModal } from '../../redux/modal/slice.js';
 import { useState } from 'react';
 import { ClockLoader } from 'react-spinners';
 
+import { addSavedRecipe, removeSavedRecipe } from '../../redux/recipes/slice.js';
+import { selectSavedRecipesIds } from '../../redux/recipes/selectors.js';
+
 export default function RecipeCard({
   id,
   thumb,
@@ -19,17 +22,17 @@ export default function RecipeCard({
   calories,
 }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
+  const savedIds = useSelector(selectSavedRecipesIds);
+  const isSavedRecipe = savedIds.includes(id);
+
+  const [isLoading, setIsLoading] = useState(false);//loader state
+
   const handleLearnMore = () => {
     navigate(`/recipes/${id}`);
   };
-
-  const isLoggedIn = useSelector(selectIsLoggedIn);
-  const [isLoading, setIsLoading] = useState(false); //loader state
-
-  const [isSavedRecipe, setIsSavedRecipe] = useState(false); //стан для кнопки чи збережений рецепт
-
-
-  const dispatch = useDispatch();
 
   //бажання зберегти рецепт
   const handleAddToSavedRecipes = async (e) => {
@@ -46,18 +49,20 @@ export default function RecipeCard({
         'https://dcgroup-react-node-b.onrender.com/api/recipes/saved',
         { recipeId: id },
       );
+      dispatch(addSavedRecipe({ _id: id, thumb, title, time, description, calories }));
       toast.success('Recipe added to saved recipes!');
       console.log('Saved recipe response:', response.data);
-      setIsSavedRecipe(true);
+      
     } else {
       setIsLoading(true);
-      const deleteRecipe = await axios.delete(
+      await axios.delete(
         `https://dcgroup-react-node-b.onrender.com/api/recipes/saved/${id}`
        
       );
+      dispatch(removeSavedRecipe(id));
       toast.success('Recipe removed from saved recipes!');
-      console.log('Deleted recipe response:', deleteRecipe.data);
-      setIsSavedRecipe(false);
+      console.log('Deleted recipe response:');
+      
     }
   } catch {
     dispatch(openModal({type: 'notAuthorized'}));
