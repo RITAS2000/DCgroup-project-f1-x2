@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import { ClockLoader } from 'react-spinners';
 
 import css from './AddRecipePage.module.css';
 import { FeedbackSchema } from './FeedbackSchema.js';
@@ -43,6 +44,7 @@ const AddRecipePage = () => {
 
   const categories = useSelector(selectCategories);
   const ingredients = useSelector(selectIngredients);
+  const loading = useSelector((state) => state.addRecipe.loading);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -307,9 +309,15 @@ const AddRecipePage = () => {
                               (ing) => ing.name === name,
                             );
 
-                            push({ id: selectedIngredient._id, name, measure });
-                            setFieldValue('ingredientsName', '');
-                            setFieldValue('measure', '');
+                            if (name && measure) {
+                              push({
+                                id: selectedIngredient._id,
+                                name,
+                                measure,
+                              });
+                              setFieldValue('ingredientsName', '');
+                              setFieldValue('measure', '');
+                            }
                           }}
                         >
                           Add new Ingredient
@@ -346,13 +354,22 @@ const AddRecipePage = () => {
                   />
                 </div>
                 <div className={css.btnWrapper}>
-                  <button
-                    className={css.btn}
-                    type="submit"
-                    // onClick={() => dispatch(openModal({ type: 'recipeSaved' }))}
-                  >
-                    Publish Recipe
-                  </button>
+                  {loading ? (
+                    <ClockLoader
+                      className={css.btnSpiner}
+                      color="#3d2218"
+                      size={44}
+                    />
+                  ) : (
+                    <button
+                      className={css.btn}
+                      type="submit"
+                      disabled={loading}
+                      // onClick={() => dispatch(openModal({ type: 'recipeSaved' }))}
+                    >
+                      Publish Recipe
+                    </button>
+                  )}
                 </div>
               </div>
             </Form>

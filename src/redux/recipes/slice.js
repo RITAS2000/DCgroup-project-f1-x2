@@ -14,6 +14,7 @@ const initialState = {
 
   // ⬇️ ДОБАВЛЕНО: общее число рецептов ленты (для отображения на старте)
   feedTotal: 0,
+  savedRecipes: [],
 };
 
 const dedupeById = (arr) => {
@@ -29,6 +30,21 @@ const recipesSlice = createSlice({
     setQuery(state, { payload }) {
       // не затираем существующие поля, а дозаписываем
       state.query = { ...state.query, ...(payload || {}) };
+    },
+    addSavedRecipe(state, { payload }) {
+      if (!state.savedRecipes.find((r) => r._id === payload._id)) {
+        state.savedRecipes.push(payload);
+      }
+    },
+
+    // ✅ видалити збережений рецепт
+    removeSavedRecipe(state, { payload: recipeId }) {
+      state.savedRecipes = state.savedRecipes.filter((r) => r._id !== recipeId);
+    },
+
+    // ✅ (опціонально) встановити всі збережені рецепти при завантаженні користувача
+    setSavedRecipes(state, { payload }) {
+      state.savedRecipes = payload || [];
     },
     clearResults(state) {
       state.items = [];
@@ -98,5 +114,12 @@ const recipesSlice = createSlice({
   },
 });
 
-export const { setQuery, clearResults, setFeedTotal } = recipesSlice.actions;
+export const {
+  setQuery,
+  clearResults,
+  setFeedTotal,
+  addSavedRecipe,
+  removeSavedRecipe,
+  setSavedRecipes,
+} = recipesSlice.actions;
 export default recipesSlice.reducer;

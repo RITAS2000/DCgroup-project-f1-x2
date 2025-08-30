@@ -18,6 +18,7 @@ import {
   selectSearchQuery,
 } from '../../redux/recipes/selectors';
 import { searchRecipes } from '../../redux/recipes/operations';
+import { BarLoader } from 'react-spinners';
 
 // единый baseURL
 axios.defaults.baseURL =
@@ -41,6 +42,8 @@ export default function RecipesList({ onResetAll }) {
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [loadingFeed, setLoadingFeed] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false); // кнопка LoadMore
+
   const lastCardRef = useRef(null);
   const scrollAfterLoad = useRef(false);
 
@@ -48,8 +51,9 @@ export default function RecipesList({ onResetAll }) {
   const endSearchRef = useRef(null); // якорь внизу списка поиска
   const pendingScroll = useRef(false); // флаг, что ждём прокрутку после догрузки
 
-  const fetchRecipes = async (pageNum) => {
+  const fetchRecipes = async (pageNum,isLoadMore = false) => {
     try {
+       if (isLoadMore) setLoadingMore(true); 
       setLoadingFeed(true);
       const response = await axios.get('/api/recipes', {
         params: { page: pageNum, perPage: 12 },
@@ -78,16 +82,18 @@ export default function RecipesList({ onResetAll }) {
       console.error('Помилка при завантаженні рецептів:', error);
     } finally {
       setLoadingFeed(false);
+      setLoadingMore(false);
     }
   };
 
   // грузим ленту только вне режима поиска
   useEffect(() => {
-    if (!searchMode) fetchRecipes(page);
+    if (!searchMode) fetchRecipes(page, false);
   }, [page, searchMode]);
 
   const handleLoadMoreFeed = () => {
     scrollAfterLoad.current = true;
+    fetchRecipes(page +1, true);
     setPage((prev) => prev + 1);
   };
 
@@ -153,7 +159,11 @@ export default function RecipesList({ onResetAll }) {
 
         {/* якорь для плавного скролла после догрузки */}
         <div ref={endSearchRef} />
-
+        {loadingMore && (
+          <div>
+            <BarLoader color="#9b6c43" />
+          </div>
+        )}
         {canLoadMore && !searching && (
           <LoadMoreBtn
             onClick={() => {
@@ -193,6 +203,11 @@ export default function RecipesList({ onResetAll }) {
           },
         )}
       </ul>
+      {loadingMore && (
+        <div>
+          <BarLoader color="#9b6c43" />
+        </div>
+      )}
 
       {recipes.length > 0 && !loadingFeed && hasNextPage && (
         <LoadMoreBtn onClick={handleLoadMoreFeed} />
