@@ -107,7 +107,7 @@ export default function LoginForm() {
 
             <p className={css.titlehint}>
               Don’t have an account?{" "}
-              <Link to="/auth/register" className={css.link}>
+              <Link to="/auth/register" className={`${css.link} ${css.pulseLink}`}>
                 Register
               </Link>
             </p>

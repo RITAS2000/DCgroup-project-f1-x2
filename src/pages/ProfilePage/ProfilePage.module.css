@@ -33,9 +33,11 @@
 .filtersRow {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
+  gap: 16px;
   max-width: 361px;
+  position: relative;
 }
 
 @media screen and (min-width: 768px) {
@@ -50,7 +52,9 @@
   }
 }
 
-.count {
-  font-size: 24px;
-  font-weight: 600;
+.filtersColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative;
 }

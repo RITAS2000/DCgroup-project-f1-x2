@@ -127,27 +127,23 @@
     text-decoration-skip-ink: none;
     padding-left: 5px;
 }
-.link::after {
-  content: "";
-  position: absolute;
-  left: 5px;
-  bottom: -2px;
-  width: 0;
-  height: 2px;
-  background-color: #28a745;
-  transition: width 0.8s ease;
+.pulseLink {
+  display: inline-block;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  padding-left: 5px;
+  animation: pulseColor 1.5s infinite alternate ease-in-out;
 }
 
-.link:hover,
-.link:focus {
-  color: #28a745;
-  text-shadow: 0 0 8px rgba(40, 167, 69, 0.6);
+@keyframes pulseColor {
+  from {
+    color: #333;  
+  }
+  to {
+    color: #1c682e;
+  }
 }
 
-.link:hover::after,
-.link:focus::after {
-  width: calc(100% - 5px);
-}
 .error {
     position: absolute;
     color: #c80000;

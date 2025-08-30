@@ -8,6 +8,16 @@
   height: 48px;
   background: var(--white);
   width: 100%;
+  outline: none;
+
+  transition: 0.8s ease;
+  transition-property: border, box-shadow;
+}
+
+.select:hover,
+.select:focus {
+  border: 1.5px solid var(--light-brown);
+  box-shadow: 0 0 0 4px rgba(78, 70, 180, 0.2);
 }
 
 .selectWrapper {

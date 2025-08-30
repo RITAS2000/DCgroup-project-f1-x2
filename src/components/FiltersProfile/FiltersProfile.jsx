@@ -25,6 +25,7 @@ const FiltersProfile = () => {
   // из стора берём title (если задан поиском на главной)
   const query = useSelector((s) => s.recipes.query);
   const titleFromQuery = (query?.title || '').trim();
+  const panelRef = useRef(null);
 
   // справочник ингредиентов
   const ingredients = useSelector(selectIngredients);
@@ -91,6 +92,19 @@ const FiltersProfile = () => {
     getIngredientName,
   ]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (e) => {
+      if (panelRef.current && !panelRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
+
   const handleReset = () => {
     setSelectedCategory('');
     setSelectedIngredient('');
@@ -110,7 +124,7 @@ const FiltersProfile = () => {
   };
 
   return (
-    <>
+    <div className={css.relativeWrapper}>
       <button
         type="button"
         className={css.filtersBtn}
@@ -118,12 +132,14 @@ const FiltersProfile = () => {
       >
         <span>Filters</span>
         <svg className={css.icon} aria-hidden="true" width="24" height="24">
-          <use href={`${SPRITE}#icon-filter`} />
+          <use
+            href={`${SPRITE}#${isOpen ? 'icon-close-circle' : 'icon-filter'}`}
+          />
         </svg>
       </button>
 
       {isOpen && (
-        <div className={css.panel}>
+        <div className={css.panel} ref={panelRef}>
           <button className={css.resetButton} onClick={handleReset}>
             Reset filters
           </button>
@@ -140,7 +156,7 @@ const FiltersProfile = () => {
           {/* Кнопки Apply нет — авто-запрос по ТЗ */}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

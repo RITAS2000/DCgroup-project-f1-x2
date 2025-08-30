@@ -158,27 +158,22 @@ button:active {
     text-decoration-skip-ink: none;
     padding-left: 5px;
 }
-.registerLink::after {
-  content: "";
-  position: absolute;
-  left: 5px;
-  bottom: -2px; 
-  width: 0;
-  height: 2px;
-  background-color: #28a745; 
-  transition: width 0.8s ease;
-}
-.registerLink:hover,
-.registerLink:focus {
-  color: #28a745;
-  text-shadow: 0 0 8px rgba(40, 167, 69, 0.6);
+.pulseLink {
+  display: inline-block;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  padding-left: 5px;
+  animation: pulseColor 1.5s infinite alternate ease-in-out;
 }
 
-.registerLink:hover::after,
-.registerLink:focus::after {
-  width: calc(100% - 5px); 
+@keyframes pulseColor {
+  from {
+    color: #333;  
+  }
+  to {
+    color: #1c682e; 
+  }
 }
-
 
 .error {
     position: absolute;
