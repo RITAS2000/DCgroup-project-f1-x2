@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { removeRecipeFromList } from '../../redux/userPro/slice';
+import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '../../redux/modal/slice';
 import { getImageUrl, deleteFavorite } from '../../api/recipes';
+import { setShouldReload } from '../../redux/userPro/slice';
+import { ClockLoader } from 'react-spinners';
 import s from './UserRecipeCard.module.css';
 import { toast } from 'react-toastify';
 
@@ -13,7 +14,12 @@ export default function UserRecipeCard({ item, mode = 'own', onRemovedError }) {
   const navigate = useNavigate();
   const loc = useLocation();
   const dispatch = useDispatch();
-  const [pending, setPending] = useState(false);
+
+  // Якщо у сторі нема поля deletingIds — повернеться порожній масив,
+  // і кнопка поводитиметься як звичайно.
+  const deletingIds = useSelector((st) => st.userProfile?.deletingIds || []);
+
+  const [pending, setPending] = useState(false); // для видалення зі "Saved"
 
   const r = item?.recipe ?? item ?? {};
   const recipeId = item?.recipeId ?? item?.id ?? r?._id;
@@ -26,26 +32,21 @@ export default function UserRecipeCard({ item, mode = 'own', onRemovedError }) {
 
   const isFavoritesTab =
     /\/profile\/favorites/.test(loc.pathname) || mode === 'favorites';
+  const isDeleting = deletingIds.includes(String(recipeId));
 
   function handleDelete(id) {
-    if (!id || pending) return;
-
-    dispatch(
-      openModal({
-        type: 'confirmDelete',
-        props: { recipeId: id },
-      }),
-    );
+    if (!id || pending || isDeleting) return;
+    dispatch(openModal({ type: 'confirmDelete', props: { recipeId: id } }));
   }
 
   async function handleRemoveFavorite(id) {
     if (!id || pending) return;
-
     setPending(true);
     try {
       await deleteFavorite(id);
       toast.success('Recipe removed from favorites!');
-      dispatch(removeRecipeFromList(id));
+      // тригеримо глобальний рефетч + показ годинника в списку
+      dispatch(setShouldReload(true));
     } catch (err) {
       if (typeof onRemovedError === 'function') onRemovedError(id, err);
     } finally {
@@ -109,18 +110,22 @@ export default function UserRecipeCard({ item, mode = 'own', onRemovedError }) {
             type="button"
             className={s.deleteBtn}
             onClick={() => handleDelete(recipeId)}
-            disabled={pending}
+            disabled={pending || isDeleting}
             aria-label="Delete recipe"
           >
-            <svg
-              className={s.trash}
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-              <path d="M3 6h18" />
-              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-            </svg>
+            {isDeleting ? (
+              <ClockLoader size={16} color="#fff" />
+            ) : (
+              <svg
+                className={s.trash}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                <path d="M3 6h18" />
+                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+            )}
           </button>
         )}
 
