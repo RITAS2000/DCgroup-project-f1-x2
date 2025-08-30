@@ -1,74 +1,61 @@
-.backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.modal {
-  position: relative;
-  background: #faf3e0;
-  padding: 56px 32px;
-  border-radius: 20px;
-  max-width: 420px;
-  text-align: center;
-}
-
-.closeBtn {
-  position: absolute;
-  top: 16px;
-  right: 32px;
-  cursor: pointer;
-  color: black;
-  line-height: 0;
-  background: none;
-  border: none;
-  transition: transform 0.8s ease, color 0.8s ease;
-}
-.closeBtn:hover {
-  transform: scale(1.2);
-}
-.icon {
-  display: block;
-  width: 24px;
-  height: 24px;
-}
 .title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
   margin-bottom: 20px;
 }
 .text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 155%;
+  text-align: center;
   margin-bottom: 20px;
 }
 .action {
   display: flex;
-  gap: 27px;
   align-items: center;
   justify-content: center;
 }
 
 .loginBtn,
 .registerBtn {
-  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 100%;
+  font-weight: 600;
+  font-size: 18px;
+  border-radius: 8px;
   border: 1px solid #000000;
-  width: 164px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  width: 100%;
+  padding-top: 16px;
+  padding-bottom: 16px;
   transition: background-color 0.8s ease, color 0.8s ease;
 }
 .loginBtn:hover,
 .loginBtn:focus {
-  color: white;
-  background-color: #9b6c43;
+  color: var(--white);
+  background-color: var(--light-brown);
+  border: none;
 }
 
 .registerBtn:hover,
 .registerBtn:focus {
-  color: white;
-  background-color: #9b6c43;
+  color: var(--white);
+  background-color: var(--light-brown);
+  border: none;
+}
+
+@media (max-width: 767px) {
+  .action {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .action {
+    flex-direction: row;
+    gap: 27px;
+  }
 }
