@@ -111,4 +111,19 @@ td:nth-child(2) {
 .btn {
   border: none;
   background-color: transparent;
+  border-radius: 8px;
+
+  transition: background-color 0.8s ease;
+}
+
+.btn:hover,
+.btn:focus {
+  background-color: var(--light-brown);
+}
+
+.deleteIcon {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
 }
