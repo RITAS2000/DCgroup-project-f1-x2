@@ -9,6 +9,7 @@ import {
 // import { toast } from 'react-toastify';
 import { clearAuth } from '../../redux/auth/slice.js';
 import toast from 'react-hot-toast';
+import { setSavedRecipes } from '../../redux/recipes/slice.js'; // 🟢 додав
 
 const UnauthorizedHandler = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const UnauthorizedHandler = () => {
     ) {
       if (!tokenMissing) dispatch(logout());
       dispatch(clearAuth());
+      dispatch(setSavedRecipes([])); // 🟢 очищаємо зафарбовані збережені рецепти
       dispatch(logout());
       localStorage.removeItem('persist:token');
       toast.error('Your session has expired. Please log in again.');

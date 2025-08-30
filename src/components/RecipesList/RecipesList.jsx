@@ -7,6 +7,9 @@ import RecipeCard from '../RecipeCard/RecipeCard.jsx';
 import css from './RecipesList.module.css';
 import NoResultSearch from '../NoResultSearch/NoResultSearch.jsx'; // 🟢 додав
 import { clearResults, setFeedTotal } from '../../redux/recipes/slice.js'; // 🟢 setFeedTotal
+// 🟢 додав 2 імпорти
+import { setSavedRecipes } from '../../redux/recipes/slice.js';
+import { getSavedRecipes } from '../../api/recipes.js';
 
 import {
   selectRecipes,
@@ -37,6 +40,19 @@ export default function RecipesList({ onResetAll }) {
   const totalPages = useSelector(selectRecipesTotalPages);
   const query = useSelector(selectSearchQuery);
 
+  // 🟢 додав useEffect
+  useEffect(() => {
+    const fetchSaved = async () => {
+      try {
+        const res = await getSavedRecipes(); // функція з api.js
+        dispatch(setSavedRecipes(res.items)); // кладемо у Redux
+      } catch (err) {
+        console.error('Помилка при завантаженні збережених рецептів:', err);
+      }
+    };
+    fetchSaved();
+  }, [dispatch]);
+
   // --- обычная лента ---
   const [recipes, setRecipes] = useState([]);
   const [page, setPage] = useState(1);
@@ -51,9 +67,9 @@ export default function RecipesList({ onResetAll }) {
   const endSearchRef = useRef(null); // якорь внизу списка поиска
   const pendingScroll = useRef(false); // флаг, что ждём прокрутку после догрузки
 
-  const fetchRecipes = async (pageNum,isLoadMore = false) => {
+  const fetchRecipes = async (pageNum, isLoadMore = false) => {
     try {
-       if (isLoadMore) setLoadingMore(true); 
+      if (isLoadMore) setLoadingMore(true);
       setLoadingFeed(true);
       const response = await axios.get('/api/recipes', {
         params: { page: pageNum, perPage: 12 },
@@ -93,7 +109,7 @@ export default function RecipesList({ onResetAll }) {
 
   const handleLoadMoreFeed = () => {
     scrollAfterLoad.current = true;
-    fetchRecipes(page +1, true);
+    fetchRecipes(page + 1, true);
     setPage((prev) => prev + 1);
   };
 

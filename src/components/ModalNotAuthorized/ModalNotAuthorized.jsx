@@ -9,7 +9,7 @@ const ModalNotAuthorized = () => {
   const dispatch = useDispatch();
 
   const handleNavigate = (path) => {
-    dispatch(logout());
+    // dispatch(logout());
     dispatch(closeModal());
     navigate(path);
   };
