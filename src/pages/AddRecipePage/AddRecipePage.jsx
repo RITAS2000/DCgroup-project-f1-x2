@@ -20,7 +20,6 @@ import { selectCategories } from '../../redux/categorie/selectors.js';
 import { fetchIngredients } from '../../redux/ingredient/operations.js';
 import { selectIngredients } from '../../redux/ingredient/selectors.js';
 import { openModal } from '../../redux/modal/slice.js';
-import { openLogout } from '../../redux/modal/logoutSlice.js';
 import { clearAuth } from '../../redux/auth/slice.js';
 
 const useIsTabletOrAbove = () => {
@@ -98,14 +97,8 @@ const AddRecipePage = () => {
       if (err?.status === 401 || err?.status === 404) {
         dispatch(clearAuth()); // очистити токен
         localStorage.removeItem('persist:token');
-        dispatch(
-          openLogout({
-            type: 'sessionExpired',
-            props: {
-              message: 'Your session has expired. Please log in again.',
-            },
-          }),
-        );
+        toast.error('Your session has expired. Please log in again.');
+        navigate('/auth/login');
         return;
       }
       // до сюди

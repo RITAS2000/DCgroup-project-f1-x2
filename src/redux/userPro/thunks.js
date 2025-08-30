@@ -7,7 +7,8 @@ import {
 } from '../../api/recipes';
 import { getErrorMessage } from '../../utils/errors';
 import { clearAuth } from '../auth/slice';
-import { openLogout } from '../modal/logoutSlice';
+import { logout } from '../auth/operations.js';
+import toast from 'react-hot-toast';
 
 const norm = (v) =>
   String(v ?? '')
@@ -106,7 +107,6 @@ export const fetchOwn = createAsyncThunk(
     { rejectWithValue, signal, dispatch },
   ) => {
     try {
-
       // бек може повертати totalPages/totalItems, але ми все одно
       // перерахуємо їх після локальної фільтрації
 
@@ -134,14 +134,9 @@ export const fetchOwn = createAsyncThunk(
       if (err?.response?.status === 401 || err?.response?.status === 404) {
         dispatch(clearAuth());
         localStorage.removeItem('persist:token');
-        dispatch(
-          openLogout({
-            type: 'sessionExpired',
-            props: {
-              message: 'Your session has expired. Please log in again.',
-            },
-          }),
-        );
+        dispatch(logout());
+        localStorage.removeItem('persist:token');
+        toast.error('Your session has expired. Please log in again.');
         return rejectWithValue('Session expired');
       }
       return rejectWithValue(getErrorMessage(err));
@@ -189,14 +184,9 @@ export const fetchSaved = createAsyncThunk(
       if (err?.response?.status === 401 || err?.response?.status === 404) {
         dispatch(clearAuth());
         localStorage.removeItem('persist:token');
-        dispatch(
-          openLogout({
-            type: 'sessionExpired',
-            props: {
-              message: 'Your session has expired. Please log in again.',
-            },
-          }),
-        );
+        dispatch(logout());
+        localStorage.removeItem('persist:token');
+        toast.error('Your session has expired. Please log in again.');
         return rejectWithValue('Session expired');
       }
       return rejectWithValue(getErrorMessage(err));
@@ -214,14 +204,9 @@ export const removeSaved = createAsyncThunk(
       if (err?.response?.status === 401 || err?.response?.status === 404) {
         dispatch(clearAuth());
         localStorage.removeItem('persist:token');
-        dispatch(
-          openLogout({
-            type: 'sessionExpired',
-            props: {
-              message: 'Your session has expired. Please log in again.',
-            },
-          }),
-        );
+        dispatch(logout());
+        localStorage.removeItem('persist:token');
+        toast.error('Your session has expired. Please log in again.');
         return rejectWithValue('Session expired');
       }
       return rejectWithValue(getErrorMessage(err));
@@ -239,14 +224,9 @@ export const deleteOwn = createAsyncThunk(
       if (err?.response?.status === 401 || err?.response?.status === 404) {
         dispatch(clearAuth());
         localStorage.removeItem('persist:token');
-        dispatch(
-          openLogout({
-            type: 'sessionExpired',
-            props: {
-              message: 'Your session has expired. Please log in again.',
-            },
-          }),
-        );
+        dispatch(logout());
+        localStorage.removeItem('persist:token');
+        toast.error('Your session has expired. Please log in again.');
         return rejectWithValue('Session expired');
       }
       return rejectWithValue(getErrorMessage(err));
