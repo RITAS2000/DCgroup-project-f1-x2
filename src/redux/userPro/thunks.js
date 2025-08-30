@@ -6,8 +6,9 @@ import {
   deleteRecipe,
 } from '../../api/recipes';
 import { getErrorMessage } from '../../utils/errors';
+import { clearAuth } from '../auth/slice';
+import { openLogout } from '../modal/logoutSlice';
 
-// ===== helpers =====
 const norm = (v) =>
   String(v ?? '')
     .trim()
@@ -15,15 +16,12 @@ const norm = (v) =>
 
 const pickRecipe = (item) => item?.recipe ?? item ?? {};
 
-// Собираем ВСЕ возможные имена ингредиентов из рецепта
 function extractIngredientNames(recipeObj, ingredientsIndex) {
   const names = new Set();
-
   const push = (x) => {
     const s = norm(x);
     if (s) names.add(s);
   };
-
   const index = ingredientsIndex || {};
 
   const containers =
@@ -92,7 +90,6 @@ function matchLocally(
   return titleOk && categoryOk && ingredientOk;
 }
 
-// ===== thunks =====
 export const fetchOwn = createAsyncThunk(
   'profile/fetchOwn',
   async (
@@ -106,17 +103,15 @@ export const fetchOwn = createAsyncThunk(
       ingredientName = '',
       ingredientsIndex = {},
     } = {},
-    { rejectWithValue, signal },
+    { rejectWithValue, signal, dispatch },
   ) => {
     try {
-      // бек може повертати totalPages/totalItems, але ми все одно
-      // перерахуємо їх після локальної фільтрації
       const { items } = await getOwnRecipes({
         page,
         limit,
         title,
         category,
-        ingredient, // id
+        ingredient,
         signal,
       });
 
@@ -131,8 +126,21 @@ export const fetchOwn = createAsyncThunk(
         totalItems: filtered.length,
         replace,
       };
-    } catch (e) {
-      return rejectWithValue(getErrorMessage(e));
+    } catch (err) {
+      if (err?.response?.status === 401 || err?.response?.status === 404) {
+        dispatch(clearAuth());
+        localStorage.removeItem('persist:token');
+        dispatch(
+          openLogout({
+            type: 'sessionExpired',
+            props: {
+              message: 'Your session has expired. Please log in again.',
+            },
+          }),
+        );
+        return rejectWithValue('Session expired');
+      }
+      return rejectWithValue(getErrorMessage(err));
     }
   },
 );
@@ -150,7 +158,7 @@ export const fetchSaved = createAsyncThunk(
       ingredientName = '',
       ingredientsIndex = {},
     } = {},
-    { rejectWithValue, signal },
+    { rejectWithValue, signal, dispatch },
   ) => {
     try {
       const { items } = await getSavedRecipes({
@@ -158,7 +166,7 @@ export const fetchSaved = createAsyncThunk(
         limit,
         title,
         category,
-        ingredient, // id
+        ingredient,
         signal,
       });
 
@@ -173,32 +181,71 @@ export const fetchSaved = createAsyncThunk(
         totalItems: filtered.length,
         replace,
       };
-    } catch (e) {
-      return rejectWithValue(getErrorMessage(e));
+    } catch (err) {
+      if (err?.response?.status === 401 || err?.response?.status === 404) {
+        dispatch(clearAuth());
+        localStorage.removeItem('persist:token');
+        dispatch(
+          openLogout({
+            type: 'sessionExpired',
+            props: {
+              message: 'Your session has expired. Please log in again.',
+            },
+          }),
+        );
+        return rejectWithValue('Session expired');
+      }
+      return rejectWithValue(getErrorMessage(err));
     }
   },
 );
 
 export const removeSaved = createAsyncThunk(
   'profile/removeSaved',
-  async (recipeId, { rejectWithValue, signal }) => {
+  async (recipeId, { rejectWithValue, signal, dispatch }) => {
     try {
       await deleteFavorite(recipeId, signal);
       return recipeId;
-    } catch (e) {
-      return rejectWithValue(getErrorMessage(e));
+    } catch (err) {
+      if (err?.response?.status === 401 || err?.response?.status === 404) {
+        dispatch(clearAuth());
+        localStorage.removeItem('persist:token');
+        dispatch(
+          openLogout({
+            type: 'sessionExpired',
+            props: {
+              message: 'Your session has expired. Please log in again.',
+            },
+          }),
+        );
+        return rejectWithValue('Session expired');
+      }
+      return rejectWithValue(getErrorMessage(err));
     }
   },
 );
 
 export const deleteOwn = createAsyncThunk(
   'profile/deleteOwn',
-  async (recipeId, { rejectWithValue, signal }) => {
+  async (recipeId, { rejectWithValue, signal, dispatch }) => {
     try {
       await deleteRecipe(recipeId, signal);
       return recipeId;
-    } catch (e) {
-      return rejectWithValue(getErrorMessage(e));
+    } catch (err) {
+      if (err?.response?.status === 401 || err?.response?.status === 404) {
+        dispatch(clearAuth());
+        localStorage.removeItem('persist:token');
+        dispatch(
+          openLogout({
+            type: 'sessionExpired',
+            props: {
+              message: 'Your session has expired. Please log in again.',
+            },
+          }),
+        );
+        return rejectWithValue('Session expired');
+      }
+      return rejectWithValue(getErrorMessage(err));
     }
   },
 );
