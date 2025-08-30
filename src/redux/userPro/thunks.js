@@ -26,7 +26,6 @@ function extractIngredientNames(recipeObj, ingredientsIndex) {
 
   const index = ingredientsIndex || {};
 
-  // возможные контейнеры
   const containers =
     recipeObj?.ingredients ||
     recipeObj?.ingredientsList ||
@@ -34,17 +33,14 @@ function extractIngredientNames(recipeObj, ingredientsIndex) {
     [];
 
   (containers || []).forEach((it) => {
-    // строка
     if (typeof it === 'string') {
       push(it);
       return;
     }
-    // прямые поля
     push(it?.name);
     push(it?.title);
     push(it?.ttl);
 
-    // вложенные варианты
     push(it?.ingredient?.name);
     push(it?.ingredient?.title);
     push(it?.ingredient?.ttl);
@@ -53,7 +49,6 @@ function extractIngredientNames(recipeObj, ingredientsIndex) {
     push(it?.product?.title);
     push(it?.product?.ttl);
 
-    // id → сопоставляем по справочнику
     const possibleIds = [
       it?.id,
       it?._id,
@@ -69,7 +64,7 @@ function extractIngredientNames(recipeObj, ingredientsIndex) {
     });
   });
 
-  return names; // уже нормализованные строки
+  return names;
 }
 
 function matchLocally(
@@ -78,21 +73,17 @@ function matchLocally(
 ) {
   const r = pickRecipe(item);
 
-  // title
   const t = norm(title);
   const titleOk = !t ? true : norm(r.title || r.name).includes(t);
 
-  // category
   const c = norm(category);
   const rc = norm(r.category || r.categoryName);
   const categoryOk = !c ? true : rc === c || rc.includes(c);
 
-  // ingredient
   const iName = norm(ingredientName);
   let ingredientOk = true;
   if (iName) {
     const found = extractIngredientNames(r, ingredientsIndex);
-    // допускаем включение с обеих сторон (на случай "salmon fillet")
     ingredientOk = [...found].some(
       (n) => n.includes(iName) || iName.includes(n),
     );
@@ -118,8 +109,9 @@ export const fetchOwn = createAsyncThunk(
     { rejectWithValue, signal },
   ) => {
     try {
-      // запрос на бэк со всеми переданными фильтрами (как требует ТЗ)
-      const { items, totalPages, totalItems } = await getOwnRecipes({
+      // бек може повертати totalPages/totalItems, але ми все одно
+      // перерахуємо їх після локальної фільтрації
+      const { items } = await getOwnRecipes({
         page,
         limit,
         title,
@@ -128,7 +120,6 @@ export const fetchOwn = createAsyncThunk(
         signal,
       });
 
-      // Fallback: если бэк не отфильтровал — фильтруем локально
       const filtered = (items || []).filter((it) =>
         matchLocally(it, { title, category, ingredientName, ingredientsIndex }),
       );
@@ -162,8 +153,7 @@ export const fetchSaved = createAsyncThunk(
     { rejectWithValue, signal },
   ) => {
     try {
-      // запрос на бэк со всеми переданными фильтрами (как требует ТЗ)
-      const { items, totalPages, totalItems } = await getSavedRecipes({
+      const { items } = await getSavedRecipes({
         page,
         limit,
         title,
@@ -172,7 +162,6 @@ export const fetchSaved = createAsyncThunk(
         signal,
       });
 
-      // Fallback: локальная фильтрация, поддерживающая разные формы данных
       const filtered = (items || []).filter((it) =>
         matchLocally(it, { title, category, ingredientName, ingredientsIndex }),
       );

@@ -1,13 +1,23 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { BarLoader } from 'react-spinners';
+
 import CategorySelect from '../CategorySelect/CategorySelect.jsx';
 import IngredientsSelect from '../IngredientsSelect/IngredientsSelect.jsx';
+
 import { selectIngredients } from '../../redux/ingredient/selectors.js';
 import { fetchOwn, fetchSaved } from '../../redux/userPro/thunks.js';
 import { selectUserProfileType } from '../../redux/userPro/selectors.js';
+import {
+  setShouldReload,
+  selectUserProfileShouldReload,
+  selectUserProfileLoading, // <-- список завантажується (годинник)
+} from '../../redux/userPro/slice';
+
 import css from './FiltersProfile.module.css';
 
 const SPRITE = '/sprite/symbol-defs.svg';
+const BRAND = '#3d2218';
 
 const FiltersProfile = () => {
   const dispatch = useDispatch();
@@ -15,8 +25,14 @@ const FiltersProfile = () => {
   const wrapperRef = useRef(null);
   const btnRef = useRef(null);
 
+  const shouldReload = useSelector(selectUserProfileShouldReload);
   const profileType = useSelector(selectUserProfileType);
   const fetcher = profileType === 'favorites' ? fetchSaved : fetchOwn;
+
+  // loaders
+  const listLoading = useSelector(selectUserProfileLoading); // <- перемикання вкладок / фетч списку
+  const catLoading = useSelector((s) => s.categories?.loading) ?? false;
+  const ingrLoading = useSelector((s) => s.ingredients?.loading) ?? false;
 
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedIngredient, setSelectedIngredient] = useState('');
@@ -44,6 +60,7 @@ const FiltersProfile = () => {
 
   const lastKeyRef = useRef('');
 
+  // ===== основний фетч на зміну фільтрів
   useEffect(() => {
     if (selectedIngredient && !ingredientsLoaded) return;
     if (!titleFromQuery && !selectedCategory && !selectedIngredient) return;
@@ -79,6 +96,43 @@ const FiltersProfile = () => {
     getIngredientName,
   ]);
 
+  // ===== перезавантаження після модалки
+  useEffect(() => {
+    if (!shouldReload) return;
+    if (selectedIngredient && !ingredientsLoaded) {
+      dispatch(setShouldReload(false));
+      return;
+    }
+
+    const ingredientName = getIngredientName(selectedIngredient);
+
+    dispatch(
+      fetcher({
+        page: 1,
+        limit: 12,
+        replace: true,
+        title: titleFromQuery,
+        category: selectedCategory,
+        ingredient: selectedIngredient,
+        ingredientName,
+        ingredientsIndex,
+      }),
+    );
+
+    dispatch(setShouldReload(false));
+  }, [
+    shouldReload,
+    dispatch,
+    fetcher,
+    titleFromQuery,
+    selectedCategory,
+    selectedIngredient,
+    ingredientsIndex,
+    getIngredientName,
+    ingredientsLoaded,
+  ]);
+
+  // відкриття/закриття
   const toggle = useCallback(() => {
     setIsOpen((prev) => {
       const next = !prev;
@@ -87,6 +141,7 @@ const FiltersProfile = () => {
     });
   }, []);
 
+  // клік поза
   useEffect(() => {
     if (!isOpen) return;
     const onDocClick = (e) => {
@@ -114,6 +169,10 @@ const FiltersProfile = () => {
       }),
     );
   };
+
+  // показувати бар і при локальному лоадингу, і при завантаженні списку
+  const catBusy = catLoading || listLoading;
+  const ingrBusy = ingrLoading || listLoading;
 
   return (
     <div className={css.relativeWrapper} ref={wrapperRef}>
@@ -147,43 +206,62 @@ const FiltersProfile = () => {
         <div
           className={`${css.selectWrap} ${css.rowCat}`}
           data-has-value={Boolean(selectedCategory)}
+          aria-busy={catBusy}
         >
-          <CategorySelect
-            selectedCategory={selectedCategory}
-            onChange={setSelectedCategory}
-          />
-          <svg
-            className={css.chevron}
-            aria-hidden="true"
-            width="20"
-            height="20"
-          >
-            <use href={`${SPRITE}#icon-chevron-down`} />
-          </svg>
+          {catBusy ? (
+            <div className={css.barWrap}>
+              <BarLoader color={BRAND} width="100%" height={4} />
+            </div>
+          ) : (
+            <>
+              <CategorySelect
+                selectedCategory={selectedCategory}
+                onChange={setSelectedCategory}
+              />
+              <svg
+                className={css.chevron}
+                aria-hidden="true"
+                width="20"
+                height="20"
+              >
+                <use href={`${SPRITE}#icon-chevron-down`} />
+              </svg>
+            </>
+          )}
         </div>
 
         {/* Ingredient */}
         <div
           className={`${css.selectWrap} ${css.rowIngr}`}
           data-has-value={Boolean(selectedIngredient)}
+          aria-busy={ingrBusy}
         >
-          <IngredientsSelect
-            selectedIngredient={selectedIngredient}
-            onChange={setSelectedIngredient}
-          />
-          <svg
-            className={css.chevron}
-            aria-hidden="true"
-            width="20"
-            height="20"
-          >
-            <use href={`${SPRITE}#icon-chevron-down`} />
-          </svg>
+          {ingrBusy ? (
+            <div className={css.barWrap}>
+              <BarLoader color={BRAND} width="100%" height={4} />
+            </div>
+          ) : (
+            <>
+              <IngredientsSelect
+                selectedIngredient={selectedIngredient}
+                onChange={setSelectedIngredient}
+              />
+              <svg
+                className={css.chevron}
+                aria-hidden="true"
+                width="20"
+                height="20"
+              >
+                <use href={`${SPRITE}#icon-chevron-down`} />
+              </svg>
+            </>
+          )}
         </div>
 
         <button
           className={`${css.resetButton} ${css.rowReset}`}
           onClick={handleReset}
+          disabled={catBusy || ingrBusy}
         >
           Reset filters
         </button>
