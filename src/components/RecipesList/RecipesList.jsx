@@ -9,11 +9,10 @@ import NoResultSearch from '../NoResultSearch/NoResultSearch.jsx'; // 🟢 до�
 
 import { setFeedTotal } from '../../redux/recipes/slice.js'; // 🟢 setFeedTotal
 
-import { clearResults, setFeedTotal } from '../../redux/recipes/slice.js'; // 🟢 setFeedTotal
+// import { clearResults } from '../../redux/recipes/slice.js'; // 🟢 setFeedTotal
 // 🟢 додав 2 імпорти
 import { setSavedRecipes } from '../../redux/recipes/slice.js';
 import { getSavedRecipes } from '../../api/recipes.js';
-
 
 import {
   selectRecipes,
