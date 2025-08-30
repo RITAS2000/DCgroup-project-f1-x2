@@ -1,4 +1,4 @@
-import { Field, ErrorMessage, useFormikContext } from 'formik';
+import { Field, ErrorMessage } from 'formik';
 
 import css from './CategoryAndIngredientsSelect.module.css';
 

@@ -16,6 +16,13 @@ export const addRecipe = createAsyncThunk(
       });
       return response.data;
     } catch (e) {
+      if (e.response) {
+        // Це обов'язково: записуємо статус у state
+        return thunkAPI.rejectWithValue({
+          status: e.response.status,
+          message: e.response.data.message,
+        });
+      }
       return thunkAPI.rejectWithValue(e.message);
     }
   },
