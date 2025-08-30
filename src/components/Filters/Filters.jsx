@@ -57,10 +57,16 @@ const Filters = ({ title, resetKey }) => {
           onClick={() => setIsOpen((prev) => !prev)}
         >
           <span>Filters</span>
-          <svg className={css.icon} aria-hidden="true">
-            <use href={`${SPRITE}#${isOpen ? 'icon-close-circle' : 'icon-filter'}`} />
-            
-          </svg>
+                  <svg
+                    className={`${css.icon} ${isOpen ? css.iconBlack : ''}`}
+                    aria-hidden="true"
+                    width="24"
+                    height="24"
+                  >
+                    <use
+                      href={`${SPRITE}#${isOpen ? 'icon-close-circle' : 'icon-filter'}`}
+                    />
+                  </svg>
         </button>
       </div>
 

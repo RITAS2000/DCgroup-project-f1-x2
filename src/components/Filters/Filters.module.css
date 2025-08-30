@@ -63,10 +63,10 @@
   padding: 0;
   background: transparent;
   border: 0;
-  color: #111;
-  font-size: 14px;
+  color: var(--black);
+  font-size: 12px;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 100%;
   width: max-content;
   cursor: pointer;
   text-decoration: underline;
@@ -75,4 +75,7 @@
 .resetButton:hover,
 .resetButton:focus-visible {
   opacity: 0.85;
+}
+.iconBlack {
+  --color1: #000;
 }
