@@ -2,7 +2,6 @@ import css from '../ModalNotAuthorized/ModalNotAuthorized.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '../../redux/modal/slice.js';
-import { logout } from '../../redux/auth/operations.js';
 
 const ModalNotAuthorized = () => {
   const navigate = useNavigate();
