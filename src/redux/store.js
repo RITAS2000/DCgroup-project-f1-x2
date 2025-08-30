@@ -7,6 +7,7 @@ import recipesReducer from './recipes/slice.js';
 import ingredientsReducer from './ingredient/slice.js';
 import categoriesReducer from './categorie/slice.js';
 import burgerReducer from './modal/burgerSlice.js';
+import modalLogoutReducer from './modal/logoutSlice.js';
 import {
   persistStore,
   persistReducer,
@@ -37,6 +38,7 @@ export const store = configureStore({
     ingredients: ingredientsReducer,
     categories: categoriesReducer,
     burger: burgerReducer,
+    logoutModal: modalLogoutReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
