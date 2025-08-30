@@ -7,31 +7,43 @@ export default function RecipeDetails({ details, ingredients }) {
   console.log('details', details);
   console.log('ingredients', ingredients);
 
-  // const descriptionWithParagraphs = details.instructions.replaceAll('\n', '\n\n');
-
   const paragraphs = details.instructions.split(/\n+/).filter(Boolean);
+
+  // compute image src with placeholder fallback
+  const rawImg = details?.thumb || details?.photo || '';
+  const imgSrc = rawImg ? getImageUrl(rawImg) : '/images/placeholder.png';
 
   return (
     <div className={css.box}>
       <div className={css.holder}>
-        {/* <img className={css.image} alt={details.title} src={details.thumb} /> */}
+        <div className={css.imageWrapper}>
+          <picture>
+            {details?.thumb ? (
+              <source
+                media="(min-width: 768px)"
+                srcSet={getImageUrl(details.thumb.replace('preview/', 'preview/large/'))}
+              />
+            ) : null}
 
-        {details.thumb && (
-            <div className={css.imageWrapper}>
-                <picture>
-                    <source
-                      media="(min-width: 768px)"
-                      srcSet={getImageUrl(details.thumb.replace('preview/', 'preview/large/'))}
-                    />
-                    <img
-                      className={css.image}
-                      alt={details.title}
-                      src={getImageUrl( details.thumb)}
-                    />
-                </picture>
-            </div>
-        )}
-
+            <img
+              className={css.image}
+              alt={details.title}
+              src={imgSrc}
+              loading="lazy"
+              onError={(e) => {
+                const img = e.currentTarget;
+                img.onerror = null;
+                // clear any <source> to avoid browser repeatedly trying srcSet
+                const pic = img.closest('picture');
+                if (pic) {
+                  const srcEl = pic.querySelector('source');
+                  if (srcEl) srcEl.srcset = '';
+                }
+                img.src = '/images/placeholder.png';
+              }}
+            />
+          </picture>
+        </div>
 
         <h2 className={css.title}>{details.title}</h2>
       </div>

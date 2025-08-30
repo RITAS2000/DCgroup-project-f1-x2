@@ -16,28 +16,45 @@
     align-items: center;
     width: 100%;
     margin-bottom: 32px;
+    max-width: 361px;
+    border-radius: 8px;
+    background-color: #2B2D30;
+    height: 276px;
+    overflow: hidden;
+    max-height: 276px;
+    height: 100%;
   }
+
+  @media screen and (min-width: 768px) {
+    .imageWrapper {
+        max-width: 704px;
+        max-height: 624px;
+    }
+}
 
     @media screen and (min-width: 1400px) {
     .imageWrapper {
-      background-color: #2B2D30;
-      border-radius: 8px;
-      height: 624px;
-    }
+      max-width: 1225px;
+        }
   }
 
   .image {
     max-width: 100%;
-    height: auto;
-    border-radius: 8px;
+    max-height: 276px;
+    height: 100%;
+  }
+
+  @media screen and (min-width: 768px) {
+    .image {
+      max-height: 624px;
+      width: 704px;
+      object-fit: contain;
+    }
   }
 
   @media screen and (min-width: 1400px) {
     .image {
-      max-width: 1226px;
-      max-height: 624px;
-      object-fit: contain;
-      border-radius: 0;
+      width: 1225px;
     }
   }
 
