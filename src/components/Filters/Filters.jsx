@@ -8,7 +8,7 @@ import css from './Filters.module.css';
 
 const SPRITE = '/sprite/symbol-defs.svg';
 
-const Filters = ({ title }) => {
+const Filters = ({ title, resetKey }) => {
   const dispatch = useDispatch();
 
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -74,6 +74,12 @@ const Filters = ({ title }) => {
     ingredientsLoaded,
     bump, // важно!
   ]);
+
+  // ⚡️ слухаємо resetKey з MainPage
+  useEffect(() => {
+    setSelectedCategory('');
+    setSelectedIngredient('');
+  }, [resetKey]);
 
   const handleReset = () => {
     setSelectedCategory('');
