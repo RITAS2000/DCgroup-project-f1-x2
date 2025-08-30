@@ -60,8 +60,8 @@ export default function RecipeCard({
       setIsSavedRecipe(false);
     }
   } catch {
-    
-    toast.error('Failed !');
+    dispatch(openModal({type: 'notAuthorized'}));
+    // toast.error('Failed !');
   }
   finally{
     setIsLoading(false);
