@@ -6,10 +6,14 @@ import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn.jsx';
 import RecipeCard from '../RecipeCard/RecipeCard.jsx';
 import css from './RecipesList.module.css';
 import NoResultSearch from '../NoResultSearch/NoResultSearch.jsx'; // 🟢 додав
+
+import { setFeedTotal } from '../../redux/recipes/slice.js'; // 🟢 setFeedTotal
+
 import { clearResults, setFeedTotal } from '../../redux/recipes/slice.js'; // 🟢 setFeedTotal
 // 🟢 додав 2 імпорти
 import { setSavedRecipes } from '../../redux/recipes/slice.js';
 import { getSavedRecipes } from '../../api/recipes.js';
+
 
 import {
   selectRecipes,
