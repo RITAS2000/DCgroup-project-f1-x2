@@ -1,101 +1,83 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Select, { components as RS } from 'react-select';
+import { BarLoader } from 'react-spinners';
+
 import { fetchIngredients } from '../../redux/ingredient/operations.js';
 import {
   selectIngredients,
   selectIngredientsLoading,
   selectIngredientsError,
 } from '../../redux/ingredient/selectors.js';
+
 import css from './IngredientsSelect.module.css';
 
-const IngredientsSelect = ({ selectedIngredient, onChange }) => {
+const SPRITE = '/sprite/symbol-defs.svg';
+const BRAND = '#3d2218';
+
+const DropdownIndicator = (props) => {
+  const { menuIsOpen } = props.selectProps;
+  return (
+    <RS.DropdownIndicator {...props}>
+      <svg
+        className={`${css.chevron} ${menuIsOpen ? css.chevronRotated : ''}`}
+        width="20"
+        height="20"
+        aria-hidden="true"
+      >
+        <use href={`${SPRITE}#icon-chevron-down`} />
+      </svg>
+    </RS.DropdownIndicator>
+  );
+};
+
+export default function IngredientsSelect({ selectedIngredient, onChange }) {
   const dispatch = useDispatch();
   const ingredients = useSelector(selectIngredients);
   const loading = useSelector(selectIngredientsLoading);
   const error = useSelector(selectIngredientsError);
 
-  // ❗️анти-дубликатор для StrictMode
   const requestedRef = useRef(false);
 
   useEffect(() => {
-    // если уже загружено — ничего не делаем
     if (ingredients?.length) return;
-
-    if (requestedRef.current) return; // защита от двойного запуска в dev
+    if (requestedRef.current) return;
     requestedRef.current = true;
-
     dispatch(fetchIngredients());
   }, [dispatch, ingredients?.length]);
 
-  return (
-    <div className={css.ingredientsSelectWrapper}>
-      {loading && <span className={css.hint}>Loading…</span>}
-      {error && <span className={css.hint}>Error: {String(error)}</span>}
-      {!error && (
-        <select
-          id="filter-ingredient"
-          aria-label="Ingredient"
-          value={selectedIngredient || ''}
-          onChange={(e) => onChange(e.target.value)} // передаём _id
-          disabled={loading}
-          className={css.select}
-        >
-          <option value="">Ingredient</option>
-          {(ingredients || []).map((ing) => (
-            <option key={ing._id} value={ing._id}>
-              {ing.name}
-            </option>
-          ))}
-        </select>
-      )}
-    </div>
+  const options = useMemo(
+    () => (ingredients || []).map((i) => ({ value: i._id, label: i.name })),
+    [ingredients]
   );
-};
 
-export default IngredientsSelect;
-// import React, { useEffect } from 'react';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { fetchIngredients } from '../../redux/ingredient/operations.js';
-// import {
-//   selectIngredients,
-//   selectIngredientsLoading,
-//   selectIngredientsError,
-// } from '../../redux/ingredient/selectors.js';
-// import css from './IngredientsSelect.module.css';
+  if (loading) {
+    return (
+      <div className={css.barWrap}>
+        <BarLoader color={BRAND} width="100%" height={4} />
+      </div>
+    );
+  }
 
-// const IngredientsSelect = ({ selectedIngredient, onChange }) => {
-//   const dispatch = useDispatch();
-//   const ingredients = useSelector(selectIngredients);
-//   const loading = useSelector(selectIngredientsLoading);
-//   const error = useSelector(selectIngredientsError);
+  if (error) return <span className={css.hint}>Error: {String(error)}</span>;
 
-//   useEffect(() => {
-//     dispatch(fetchIngredients());
-//   }, [dispatch]);
-
-//   return (
-//     <div className={css.ingredientsSelectWrapper}>
-//       {loading && <span className={css.hint}>Loading…</span>}
-//       {error && <span className={css.hint}>Error: {String(error)}</span>}
-//       {!error && (
-//         <select
-//           id="filter-ingredient"
-//           aria-label="Ingredient"
-//           value={selectedIngredient || ''}
-//           onChange={(e) => onChange(e.target.value)} // передаём _id
-//           disabled={loading}
-//           className={css.select}
-//         >
-//           <option value="">Ingredient</option>
-//           {(ingredients || []).map((ing) => (
-//             <option key={ing._id} value={ing._id}>
-//               {ing.name}
-//             </option>
-//           ))}
-//         </select>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default IngredientsSelect;
+  return (
+    <Select
+      className={css.reactSelect}
+      classNamePrefix="select"
+      placeholder="Ingredient"
+      options={options}
+      value={
+        selectedIngredient
+          ? options.find((o) => o.value === selectedIngredient) || null
+          : null
+      }
+      onChange={(opt) => onChange(opt?.value || '')}
+      menuPortalTarget={document.body}
+      menuPosition="absolute"
+      menuPlacement="auto"
+      components={{ IndicatorSeparator: null, DropdownIndicator }}
+      isClearable={false}
+    />
+  );
+}
