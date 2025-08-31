@@ -14,9 +14,6 @@
   }
 }
 
-.thead {
-}
-
 .th {
   height: 52px;
 }
@@ -31,9 +28,6 @@
   .th {
     height: 20px;
   }
-}
-
-.tr {
 }
 
 .th,
@@ -82,12 +76,6 @@ td:nth-child(2) {
 .thIcon {
   border-bottom: 1px solid var(--light-gray-3);
   text-align: left;
-}
-
-.tbody {
-}
-
-.trBody {
 }
 
 .td {

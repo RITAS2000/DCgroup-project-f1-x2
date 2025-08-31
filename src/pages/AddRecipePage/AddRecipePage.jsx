@@ -358,7 +358,6 @@ const AddRecipePage = () => {
                       className={css.btn}
                       type="submit"
                       disabled={loading}
-                      // onClick={() => dispatch(openModal({ type: 'recipeSaved' }))}
                     >
                       Publish Recipe
                     </button>
