@@ -29,8 +29,6 @@ export default function UserRecipesList({ type }) {
   );
 
   useEffect(() => {
-    // ✅ только фиксируем активный тип;
-    // загрузкой занимается хук useLoadProfileRecipes и фильтры
     dispatch(setRecipeType(type));
   }, [dispatch, type]);
 

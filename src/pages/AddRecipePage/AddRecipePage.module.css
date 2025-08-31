@@ -1,8 +1,3 @@
-@media only screen and (min-width: 1440px) {
-}
-@media only screen and (min-width: 768px) {
-}
-
 .container {
   margin: 48px 0;
 }
@@ -19,9 +14,6 @@
     font-size: 48px;
     line-height: 1.1;
   }
-}
-
-.form {
 }
 
 @media only screen and (min-width: 1440px) {
@@ -82,9 +74,6 @@
   }
 }
 
-.photoIcon {
-}
-
 .hiddenInput {
   display: none;
 }
@@ -115,9 +104,6 @@
   .previewImage {
     width: 100%;
   }
-}
-
-.placeholder {
 }
 
 .uploadIcon {
@@ -205,9 +191,6 @@
   transition-property: border, box-shadow;
 }
 
-.descrWrapper {
-}
-
 .textarea {
   resize: none;
   border: 1px solid var(--light-gray);
@@ -222,9 +205,6 @@
 
   transition: 0.8s ease;
   transition-property: border, box-shadow;
-}
-
-.timeWrapper {
 }
 
 .calorCategWrapper {
@@ -263,9 +243,6 @@
   transition-property: border, box-shadow;
 }
 
-.categoryWrapper {
-}
-
 .ingredientsWrapper {
   margin-bottom: 24px;
 }
@@ -293,9 +270,6 @@
   }
 }
 
-.ingredientsFieldset {
-}
-
 .ingredientsAmountWrapper {
   margin-bottom: 16px;
 }
@@ -310,14 +284,6 @@
 
 .btnAndTableWrapper {
   position: relative;
-}
-
-@media only screen and (min-width: 768px) {
-  .btnAndTableWrapper {
-  }
-}
-
-.ingredientsArr {
 }
 
 .ingredientsBtn,
@@ -407,9 +373,6 @@
   }
 }
 
-.btnWrapper {
-}
-
 .input:hover,
 .input:focus,
 .textarea:hover,
@@ -419,6 +382,3 @@
   border: 1.5px solid var(--light-brown);
   box-shadow: 0 0 0 4px rgba(78, 70, 180, 0.2);
 }
-
-/* transition: 0.8s ease;
-transition-property: border, box-shadow; */

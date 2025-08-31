@@ -18,7 +18,7 @@ export async function getOwnRecipes({
   limit = PAGE_SIZE,
   title = '',
   category = '',
-  ingredient = '', // id
+  ingredient = '',
   signal,
 } = {}) {
   const params = { page, perPage: limit };
@@ -26,7 +26,6 @@ export async function getOwnRecipes({
   if (category) params.category = category;
   if (ingredient) params.ingredient = ingredient;
 
-  // анти-кеш, чтобы не получать 304 Not Modified c прежним телом
   if (title || category || ingredient) params._t = Date.now();
 
   const res = await api.get('/api/recipes/own', { params, signal });
@@ -38,7 +37,7 @@ export async function getSavedRecipes({
   limit = PAGE_SIZE,
   title = '',
   category = '',
-  ingredient = '', // id
+  ingredient = '',
   signal,
 } = {}) {
   const params = { page, perPage: limit };

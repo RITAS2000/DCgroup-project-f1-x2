@@ -15,7 +15,6 @@ export default function UserRecipeCard({ item, mode = 'own', onRemovedError }) {
   const loc = useLocation();
   const dispatch = useDispatch();
 
-  // спінер ТІЛЬКИ для видалення зі збережених
   const [pendingFav, setPendingFav] = useState(false);
 
   const r = item?.recipe ?? item ?? {};
@@ -30,13 +29,11 @@ export default function UserRecipeCard({ item, mode = 'own', onRemovedError }) {
   const isFavoritesTab =
     /\/profile\/favorites/.test(loc.pathname) || mode === 'favorites';
 
-  // Власні рецепти — як і було: відкриваємо модалку підтвердження
   function handleDelete(id) {
     if (!id) return;
     dispatch(openModal({ type: 'confirmDelete', props: { recipeId: id } }));
   }
 
-  // Зі збережених — показуємо спінер прямо в кнопці
   async function handleRemoveFavorite(id) {
     if (!id || pendingFav) return;
 
@@ -44,7 +41,6 @@ export default function UserRecipeCard({ item, mode = 'own', onRemovedError }) {
     try {
       await deleteFavorite(id);
       toast.success('Recipe removed from favorites!');
-      // одразу прибираємо картку без перезавантаження сторінки
       dispatch(removeRecipeFromList(id));
     } catch (err) {
       if (typeof onRemovedError === 'function') onRemovedError(id, err);

@@ -12,7 +12,6 @@ const initialState = {
   query: { title: '', category: '', ingredient: '' },
   searchMode: false,
 
-  // ⬇️ ДОБАВЛЕНО: общее число рецептов ленты (для отображения на старте)
   feedTotal: 0,
   savedRecipes: [],
 };
@@ -28,7 +27,6 @@ const recipesSlice = createSlice({
   initialState,
   reducers: {
     setQuery(state, { payload }) {
-      // не затираем существующие поля, а дозаписываем
       state.query = { ...state.query, ...(payload || {}) };
     },
     addSavedRecipe(state, { payload }) {
@@ -37,12 +35,10 @@ const recipesSlice = createSlice({
       }
     },
 
-    // ✅ видалити збережений рецепт
     removeSavedRecipe(state, { payload: recipeId }) {
       state.savedRecipes = state.savedRecipes.filter((r) => r._id !== recipeId);
     },
 
-    // ✅ (опціонально) встановити всі збережені рецепти при завантаженні користувача
     setSavedRecipes(state, { payload }) {
       state.savedRecipes = payload || [];
     },
@@ -55,10 +51,8 @@ const recipesSlice = createSlice({
       state.error = null;
       state.searchMode = false;
       state.query = { title: '', category: '', ingredient: '' };
-      // feedTotal не трогаем — оно относится к ленте
     },
 
-    // ⬇️ ДОБАВЛЕНО: сохраняем общее число рецептов ленты
     setFeedTotal(state, { payload }) {
       state.feedTotal = Number(payload) || 0;
     },
@@ -78,13 +72,12 @@ const recipesSlice = createSlice({
 
       s.query = { title, category, ingredient };
 
-      // новая первая страница поиска — очищаем
       if (page === 1) {
         s.items = [];
         s.page = 1;
       }
     })
-      // 🔽 изменили сигнатуру, чтобы получить meta
+
       .addCase(searchRecipes.fulfilled, (s, { payload, meta }) => {
         s.loading = false;
         s.page = payload.page;
@@ -95,13 +88,11 @@ const recipesSlice = createSlice({
         const isNextPage = (meta?.arg?.page ?? 1) > 1;
 
         if (isNextPage) {
-          // 👇 ДОБАВЛЯЕМ результаты к уже найденным (инфинити-лента)
           s.items = dedupeById([
             ...(s.items || []),
             ...(payload.recipes || []),
           ]);
         } else {
-          // первая страница — просто устанавливаем
           s.items = payload.recipes || [];
         }
       })

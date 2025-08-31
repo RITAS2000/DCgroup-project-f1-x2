@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage, FieldArray } from 'formik';
 import { useId, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
@@ -95,9 +95,9 @@ const AddRecipePage = () => {
     } catch (err) {
       // я вставила  для реализаціі віклику модалки для релогіну
       if (err?.status === 401 || err?.status === 404) {
+        toast.error('Your session has expired. Please log in again.');
         dispatch(clearAuth()); // очистити токен
         localStorage.removeItem('persist:token');
-        toast.error('Your session has expired. Please log in again.');
         navigate('/auth/login');
         return;
       }
@@ -358,7 +358,6 @@ const AddRecipePage = () => {
                       className={css.btn}
                       type="submit"
                       disabled={loading}
-                      // onClick={() => dispatch(openModal({ type: 'recipeSaved' }))}
                     >
                       Publish Recipe
                     </button>

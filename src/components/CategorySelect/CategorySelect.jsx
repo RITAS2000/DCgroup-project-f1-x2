@@ -41,6 +41,7 @@ export default function CategorySelect({ selectedCategory, onChange }) {
 
   useEffect(() => {
     if (categories?.length) return;
+
     if (requestedRef.current) return;
     requestedRef.current = true;
     dispatch(fetchCategories());
@@ -50,6 +51,7 @@ export default function CategorySelect({ selectedCategory, onChange }) {
     () => (categories || []).map((c) => ({ value: c.name, label: c.name })),
     [categories]
   );
+
 
   if (loading) {
     return (
@@ -81,3 +83,7 @@ export default function CategorySelect({ selectedCategory, onChange }) {
     />
   );
 }
+
+};
+
+
