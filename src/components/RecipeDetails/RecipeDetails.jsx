@@ -4,8 +4,6 @@ import css from './RecipeDetails.module.css';
 
 export default function RecipeDetails({ details, ingredients }) {
   // const recipeId = details.id;
-  console.log('details', details);
-  console.log('ingredients', ingredients);
 
   const paragraphs = details.instructions.split(/\n+/).filter(Boolean);
 
@@ -21,7 +19,9 @@ export default function RecipeDetails({ details, ingredients }) {
             {details?.thumb ? (
               <source
                 media="(min-width: 768px)"
-                srcSet={getImageUrl(details.thumb.replace('preview/', 'preview/large/'))}
+                srcSet={getImageUrl(
+                  details.thumb.replace('preview/', 'preview/large/'),
+                )}
               />
             ) : null}
 

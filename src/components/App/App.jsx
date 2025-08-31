@@ -39,8 +39,7 @@ export default function App() {
         const parsed = JSON.parse(persisted);
         const token = parsed.token?.replace(/"/g, '');
         const name = parsed.name;
-        console.log('Persisted token is', token);
-        console.log('Persisted name is', name);
+
         if (token && name) {
           dispatch(selectUser({ token, name }));
         }

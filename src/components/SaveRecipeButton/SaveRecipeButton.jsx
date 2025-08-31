@@ -44,14 +44,12 @@ export default function SaveRecipeButton({ recipeId }) {
       try {
         if (isLoading) return;
         setIsLoading(true);
-        console.log('recipeId', recipeId);
 
         if (isLoggedIn) {
           await delSavedRecipes(recipeId);
           setIsSaved(false);
           toast.success('Recipe removed from saved');
         } else {
-          console.log('not logged in');
           dispatch(openModal({ type: 'errorSaving' }));
         }
       } catch (error) {
@@ -75,7 +73,6 @@ export default function SaveRecipeButton({ recipeId }) {
           setIsSaved(true);
           toast.success('Recipe saved');
         } else {
-          console.log('not logged in');
           dispatch(openModal({ type: 'errorSaving' }));
         }
       } catch (error) {
@@ -96,7 +93,13 @@ export default function SaveRecipeButton({ recipeId }) {
         disabled={isLoading}
       >
         {isLoading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
             <ClockLoader color="#3d2218" size={24} />
           </div>
         ) : (

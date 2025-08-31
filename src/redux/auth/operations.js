@@ -30,7 +30,6 @@ export const login = createAsyncThunk(
     try {
       const res = await axios.post('/api/auth/login', values);
       const token = res.data.data.accessToken;
-      console.log('Extracted token:', token);
       setAuthHeader(token);
       return res.data;
     } catch (error) {
