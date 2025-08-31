@@ -11,7 +11,6 @@ export const searchRecipes = createAsyncThunk(
   'recipes/search',
   async ({ title, category, ingredient, page = 1 }, { rejectWithValue }) => {
     try {
-      // Нормализуем параметры запроса (главное — title как СТРОКА)
       const t =
         typeof title === 'string'
           ? title
