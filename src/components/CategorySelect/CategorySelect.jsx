@@ -49,9 +49,8 @@ export default function CategorySelect({ selectedCategory, onChange }) {
 
   const options = useMemo(
     () => (categories || []).map((c) => ({ value: c.name, label: c.name })),
-    [categories]
+    [categories],
   );
-
 
   if (loading) {
     return (
@@ -83,7 +82,3 @@ export default function CategorySelect({ selectedCategory, onChange }) {
     />
   );
 }
-
-};
-
-

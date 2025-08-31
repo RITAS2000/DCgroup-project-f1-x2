@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
@@ -62,43 +62,46 @@ export default function RecipesList({ onResetAll }) {
   const endSearchRef = useRef(null);
   const pendingScroll = useRef(false);
 
-  const fetchRecipes = async (pageNum, isLoadMore = false) => {
-    try {
-      if (isLoadMore) setLoadingMore(true);
-      setLoadingFeed(true);
-      const response = await axios.get('/api/recipes', {
-        params: { page: pageNum, perPage: 12 },
-      });
-      const data = response.data?.data || {};
-      const recipesArray = data.data || [];
+  const fetchRecipes = useCallback(
+    async (pageNum, isLoadMore = false) => {
+      try {
+        if (isLoadMore) setLoadingMore(true);
+        setLoadingFeed(true);
+        const response = await axios.get('/api/recipes', {
+          params: { page: pageNum, perPage: 12 },
+        });
+        const data = response.data?.data || {};
+        const recipesArray = data.data || [];
 
-      if (typeof data.totalItems !== 'undefined') {
-        dispatch(setFeedTotal(data.totalItems));
-      } else {
-        dispatch(
-          setFeedTotal(Array.isArray(recipesArray) ? recipesArray.length : 0),
-        );
+        if (typeof data.totalItems !== 'undefined') {
+          dispatch(setFeedTotal(data.totalItems));
+        } else {
+          dispatch(
+            setFeedTotal(Array.isArray(recipesArray) ? recipesArray.length : 0),
+          );
+        }
+
+        setRecipes((prev) => {
+          const add = recipesArray.filter(
+            (r) => !prev.some((p) => p._id === r._id),
+          );
+          return [...prev, ...add];
+        });
+
+        setHasNextPage(Boolean(data.hasNextPage));
+      } catch (error) {
+        console.error('Помилка при завантаженні рецептів:', error);
+      } finally {
+        setLoadingFeed(false);
+        setLoadingMore(false);
       }
-
-      setRecipes((prev) => {
-        const add = recipesArray.filter(
-          (r) => !prev.some((p) => p._id === r._id),
-        );
-        return [...prev, ...add];
-      });
-
-      setHasNextPage(Boolean(data.hasNextPage));
-    } catch (error) {
-      console.error('Помилка при завантаженні рецептів:', error);
-    } finally {
-      setLoadingFeed(false);
-      setLoadingMore(false);
-    }
-  };
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     if (!searchMode) fetchRecipes(page, false);
-  }, [page, searchMode]);
+  }, [page, searchMode, fetchRecipes]);
 
   const handleLoadMoreFeed = () => {
     scrollAfterLoad.current = true;

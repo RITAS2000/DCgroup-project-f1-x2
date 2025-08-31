@@ -3,7 +3,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { setQuery, clearResults } from '../../redux/recipes/slice';
+import { setQuery } from '../../redux/recipes/slice';
 
 const Schema = Yup.object({
   q: Yup.string()
@@ -31,10 +31,6 @@ export default function SearchBox({ resetRef }) {
     } finally {
       actions.setSubmitting(false);
     }
-  };
-
-  const handleReset = () => {
-    dispatch(clearResults());
   };
 
   return (
