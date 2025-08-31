@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '../../redux/modal/slice.js';
 import { useState } from 'react';
 import { ClockLoader } from 'react-spinners';
+import { getImageUrl } from '../../api/recipes.js';
 
 // ✅ імпортуємо Redux-екшени
 import {
@@ -107,9 +108,22 @@ export default function RecipeCard({
     //   setIsLoading(false);
     // }
   };
+  const rawImg = thumb || '';
+  const imgSrc = rawImg ? getImageUrl(rawImg) : '/images/placeholder.png';
   return (
     <div className={css.card}>
-      <img className={css.image} src={thumb} alt={title} />
+      <img className={css.image} src={getImageUrl(imgSrc)} alt={title}
+         onError={(e) => {
+                const img = e.currentTarget;
+                img.onerror = null;
+                const pic = img.closest('picture');
+                if (pic) {
+                  const srcEl = pic.querySelector('source');
+                  if (srcEl) srcEl.srcset = '';
+                }
+                img.src = '/images/placeholder.png';
+              }}
+      />
       <div className={css.title_container}>
         <h3 className={css.title}>{title}</h3>
         <div className={css.time_container}>

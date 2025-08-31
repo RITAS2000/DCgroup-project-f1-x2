@@ -8,8 +8,6 @@ const CategoryAndIngredientsSelect = ({
   name,
   id,
 }) => {
-  // const { values } = useFormikContext();
-
   return (
     <div className={css.selectWrapper}>
       <Field className={css.select} as="select" name={name} id={id}>

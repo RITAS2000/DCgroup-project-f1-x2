@@ -29,7 +29,6 @@ const FiltersProfile = () => {
   const profileType = useSelector(selectUserProfileType);
   const fetcher = profileType === 'favorites' ? fetchSaved : fetchOwn;
 
-  // loaders
   const listLoading = useSelector(selectUserProfileLoading);
   const catLoading = useSelector((s) => s.categories?.loading) ?? false;
   const ingrLoading = useSelector((s) => s.ingredients?.loading) ?? false;
@@ -60,7 +59,6 @@ const FiltersProfile = () => {
 
   const lastKeyRef = useRef('');
 
-  // ===== основний фетч на зміну фільтрів
   useEffect(() => {
     if (selectedIngredient && !ingredientsLoaded) return;
     if (!titleFromQuery && !selectedCategory && !selectedIngredient) return;
@@ -96,7 +94,6 @@ const FiltersProfile = () => {
     getIngredientName,
   ]);
 
-  // ===== перезавантаження після модалки
   useEffect(() => {
     if (!shouldReload) return;
     if (selectedIngredient && !ingredientsLoaded) {
@@ -132,7 +129,6 @@ const FiltersProfile = () => {
     ingredientsLoaded,
   ]);
 
-  // відкриття/закриття
   const toggle = useCallback(() => {
     setIsOpen((prev) => {
       const next = !prev;
@@ -141,7 +137,6 @@ const FiltersProfile = () => {
     });
   }, []);
 
-  // клік поза
   useEffect(() => {
     if (!isOpen) return;
     const onDocClick = (e) => {
@@ -170,7 +165,6 @@ const FiltersProfile = () => {
     );
   };
 
-  // показувати бар і при локальному лоадингу, і при завантаженні списку
   const catBusy = catLoading || listLoading;
   const ingrBusy = ingrLoading || listLoading;
 
@@ -202,7 +196,6 @@ const FiltersProfile = () => {
         id="filters-panel"
         className={`${css.panel} ${!isOpen ? css.panelHidden : ''}`}
       >
-        {/* Category */}
         <div
           className={`${css.selectWrap} ${css.rowCat}`}
           data-has-value={Boolean(selectedCategory)}
@@ -230,7 +223,6 @@ const FiltersProfile = () => {
           )}
         </div>
 
-        {/* Ingredient */}
         <div
           className={`${css.selectWrap} ${css.rowIngr}`}
           data-has-value={Boolean(selectedIngredient)}
