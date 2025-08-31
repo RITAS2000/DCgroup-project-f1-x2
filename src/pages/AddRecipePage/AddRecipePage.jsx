@@ -95,9 +95,9 @@ const AddRecipePage = () => {
     } catch (err) {
       // я вставила  для реализаціі віклику модалки для релогіну
       if (err?.status === 401 || err?.status === 404) {
+        toast.error('Your session has expired. Please log in again.');
         dispatch(clearAuth()); // очистити токен
         localStorage.removeItem('persist:token');
-        toast.error('Your session has expired. Please log in again.');
         navigate('/auth/login');
         return;
       }
