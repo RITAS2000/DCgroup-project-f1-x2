@@ -1,16 +1,7 @@
 .wrapper {
   max-width: 361px;
   margin: 48px auto;
-  /* margin-bottom: 48px; */
 }
-
-/* .wordquery {
-  word-break: break-word;
-} */
-
-/* .header {
-  margin-bottom: 48px;
-} */
 
 .title {
   font-size: 24px;
@@ -39,8 +30,6 @@
   background: #fff6e5;
   padding: 40px 24px;
   border-radius: 16px;
-  /* width: 598px; */
-  /* height: 207px; */
   text-align: center;
 }
 
