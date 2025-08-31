@@ -6,9 +6,9 @@ import {
   selectAuthToken,
   selectUserProfileError,
 } from '../../redux/userPro/selectors.js';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { clearAuth } from '../../redux/auth/slice.js';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
 import { setSavedRecipes } from '../../redux/recipes/slice.js'; // 🟢 додав
 
 const UnauthorizedHandler = () => {
@@ -55,7 +55,6 @@ const UnauthorizedHandler = () => {
       usersError?.status === 401 ||
       usersError?.status === 404
     ) {
-      // ✅ Показати toast перед усіма очищеннями
       toast.error('Your session has expired. Please log in again.');
       if (!tokenMissing) dispatch(logout());
       dispatch(clearAuth());

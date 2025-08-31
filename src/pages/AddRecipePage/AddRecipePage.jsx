@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage, FieldArray } from 'formik';
 import { useId, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
