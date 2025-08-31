@@ -38,7 +38,6 @@
   }
 }
 
-/* Ряди всередині — без max-width, тягнуться на 100% */
 .headerRow {
   display: flex;
   justify-content: space-between;
@@ -127,7 +126,6 @@
   }
 }
 
-/* Кнопка — 100% ширини без max-width */
 .moreBtn {
   border: 1px solid #000;
   border-radius: 8px;
@@ -153,7 +151,6 @@
   box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px white;
 }
 
-/* модифікатори без фіксованих ширин */
 .moreBtnOwn {
   width: 100%;
   height: 40px;

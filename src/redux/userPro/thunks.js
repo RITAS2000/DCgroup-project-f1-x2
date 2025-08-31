@@ -107,9 +107,6 @@ export const fetchOwn = createAsyncThunk(
     { rejectWithValue, signal, dispatch },
   ) => {
     try {
-      // бек може повертати totalPages/totalItems, але ми все одно
-      // перерахуємо їх після локальної фільтрації
-
       const { items } = await getOwnRecipes({
         page,
         limit,
