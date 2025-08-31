@@ -22,17 +22,6 @@ const IngredientsTable = ({ ingredients, remove }) => {
                 onClick={() => remove(index)}
                 aria-label="Remove ingredient"
               >
-                {/* <svg className={css.deleteIcon} width="24" height="28"> */}
-                {/* <svg
-                  className={css.deleteIcon}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                > */}
-                {/* <use href="/sprite/symbol-defs.svg#icon-delete"></use> */}
-                {/* <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                  <path d="M3 6h18" />
-                  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                  General Code SVG Copy */}
                 <svg
                   width="24"
                   height="24"
@@ -43,11 +32,10 @@ const IngredientsTable = ({ ingredients, remove }) => {
                   <path
                     d="M12 16.3846L12 9.80769M4.875 7.06731H6.51923M19.125 7.06731H17.4808M14.7404 7.06731H9.25962M14.7404 7.06731V5.97115C14.7404 5.36576 14.2496 4.875 13.6442 4.875H10.3558C9.75038 4.875 9.25962 5.36576 9.25962 5.97115V7.06731M14.7404 7.06731H17.4808M9.25962 7.06731H6.51923M17.4808 7.06731V16.9327C17.4808 18.1435 16.4992 19.125 15.2885 19.125H8.71154C7.50076 19.125 6.51923 18.1435 6.51923 16.9327V7.06731"
                     stroke="black"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
-                {/* </svg> */}
               </button>
             </td>
           </tr>
