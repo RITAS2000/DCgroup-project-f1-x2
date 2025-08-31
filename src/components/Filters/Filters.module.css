@@ -3,34 +3,26 @@
   margin-top: 32px;
 }
 
-/* верхняя строка: заголовок */
 .topRow {
   margin-bottom: 16px;
 }
-
 .topRow h2 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 32px;
   line-height: 100%;
 }
-
-/* нижняя строка: счётчик и кнопка Filters */
 .bottomRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
-/* счётчик найденных рецептов */
 .count {
   font-weight: 600;
   font-size: 18px;
   line-height: 100%;
   color: var(--black);
 }
-
-/* кнопка "Filters" с иконкой-воронкой */
 .filtersBtn {
   display: inline-flex;
   align-items: center;
@@ -44,21 +36,22 @@
   line-height: 100%;
   color: var(--black);
 }
-
 .icon {
   width: 24px;
   height: 24px;
   flex: 0 0 24px;
 }
-
-/* раскрывающаяся панель с селектами и Reset */
+.iconBlack {
+  --color1: #000;
+}
 .panel {
-  margin-top: 16px;
+  margin-top: 29px;
   display: grid;
   gap: 12px;
 }
-
-/* Reset — как ссылочка с подчёркиванием */
+.panelHidden {
+  display: none;
+}
 .resetButton {
   padding: 0;
   background: transparent;
@@ -71,11 +64,80 @@
   cursor: pointer;
   text-decoration: underline;
 }
-
 .resetButton:hover,
 .resetButton:focus-visible {
   opacity: 0.85;
 }
-.iconBlack {
-  --color1: #000;
+
+.resetHidden {
+  display: none;
+}
+
+.panelSelect {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .filtersWrapper {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+/* ====== ДЕСКТОП (всё в одну линию) ====== */
+@media (min-width: 1440px) {
+  .filtersWrapper {
+    padding-left: 108px;
+    padding-right: 108px;
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'top top'
+      'count panel';
+    align-items: center;
+    row-gap: 16px;
+  }
+
+  .topRow {
+    grid-area: top;
+    margin-bottom: 0;
+  }
+
+  .filtersBtn {
+    display: none;
+  }
+
+  .bottomRow {
+    grid-area: count;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+  }
+
+  .panel {
+    grid-area: panel;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .panelHidden {
+    display: flex;
+  }
+
+  .panelSelect {
+    width: 180px;
+  }
+
+  .resetButton {
+    order: -1;
+    margin-right: 16px;
+    font-size: 14px;
+  }
+  .resetHidden {
+    display: inline-block;
+  }
 }

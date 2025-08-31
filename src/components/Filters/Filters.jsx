@@ -55,38 +55,48 @@ const Filters = ({ title, resetKey }) => {
           type="button"
           className={css.filtersBtn}
           onClick={() => setIsOpen((prev) => !prev)}
+          aria-expanded={isOpen}
+          aria-controls="filters-panel"
         >
           <span>Filters</span>
-                  <svg
-                    className={`${css.icon} ${isOpen ? css.iconBlack : ''}`}
-                    aria-hidden="true"
-                    width="24"
-                    height="24"
-                  >
-                    <use
-                      href={`${SPRITE}#${isOpen ? 'icon-close-circle' : 'icon-filter'}`}
-                    />
-                  </svg>
+          <svg
+            className={`${css.icon} ${isOpen ? css.iconBlack : ''}`}
+            aria-hidden="true"
+            width="24"
+            height="24"
+          >
+            <use
+              href={`${SPRITE}#${isOpen ? 'icon-close-circle' : 'icon-filter'}`}
+            />
+          </svg>
         </button>
       </div>
 
-      {isOpen && (
-        <div className={css.panel}>
+      <div
+        id="filters-panel"
+        className={`${css.panel} ${!isOpen ? css.panelHidden : ''}`}
+      >
+        <div className={css.panelSelect}>
           <CategorySelect
             selectedCategory={selectedCategory}
             onChange={setSelectedCategory}
           />
+        </div>
+
+        <div className={css.panelSelect}>
           <IngredientsSelect
             selectedIngredient={selectedIngredient}
             onChange={setSelectedIngredient}
           />
-          {hasSearch && (
-            <button className={css.resetButton} onClick={handleReset}>
-              Reset filters
-            </button>
-          )}
         </div>
-      )}
+
+        <button
+          className={`${css.resetButton} ${!hasSearch ? css.resetHidden : ''}`}
+          onClick={handleReset}
+        >
+          Reset filters
+        </button>
+      </div>
     </div>
   );
 };

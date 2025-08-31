@@ -7,28 +7,72 @@
   color: #6b7280;
 }
 
-/* такой же стиль, как у CategorySelect, чтобы было единообразно */
-.select {
+.barWrap {
   width: 100%;
-  height: 46px;
-  padding: 10px 14px;
-  border: 1px solid #d9d9d9;
+  padding: 4px 0;
+}
+
+.reactSelect {
+  width: 100%;
+}
+
+.select__control {
+  height: 33px;
+  min-height: 33px;
   border-radius: 8px;
-  background: #fff;
-  font-size: 16px;
-  line-height: 1.4;
-  color: #111;
-  outline: none;
-  appearance: none;
-  padding-right: 36px;
-  background-image: none;
+  border: 1px solid #d9d9d9;
+  box-shadow: none;
+  cursor: pointer;
 }
-
-.select:focus {
-  box-shadow: 0 0 0 4px rgba(78, 70, 180, 0.2);
-  border-color: #9b6c43;
-}
-
-.select:hover {
+.select__control:hover {
   border-color: #c9c9c9;
+}
+.select__control--is-focused {
+  border-color: #d9d9d9;
+  box-shadow: none;
+}
+
+.select__value-container {
+  padding: 4px 8px;
+}
+
+.select__placeholder {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 155%;
+  color: #595d62;
+  padding: 4px 8px;
+}
+
+.select__single-value {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 155%;
+  color: #111;
+  padding: 4px 8px;
+}
+.select__menu {
+  z-index: 50;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(17, 17, 17, 0.12);
+  margin-top: 6px;
+}
+
+.select__option {
+  padding: 8px 12px;
+  color: #111;
+}
+.select__option--is-focused {
+  background: #eee;
+}
+
+.chevron {
+  transition: transform 0.18s ease;
+  color: #111;
+}
+.chevronRotated {
+  transform: rotate(180deg);
 }
