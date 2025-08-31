@@ -32,6 +32,7 @@ export default function SaveRecipeButton({ recipeId }) {
         }
       } catch (error) {
         console.error('Error fetching saved recipes:', error);
+        toast.error('Error fetching saved recipes. Try to login.');
       }
     };
 
@@ -54,7 +55,8 @@ export default function SaveRecipeButton({ recipeId }) {
           dispatch(openModal({ type: 'errorSaving' }));
         }
       } catch (error) {
-        toast.error(`Error deleting saved recipe: ${error}`);
+        console.error('Error deleting saved recipe:', error);
+        toast.error(`Error deleting saved recipe. Try to login.`);
       } finally {
         setIsLoading(false);
       }
@@ -77,7 +79,8 @@ export default function SaveRecipeButton({ recipeId }) {
           dispatch(openModal({ type: 'errorSaving' }));
         }
       } catch (error) {
-        toast.error(`Error adding saved recipe: ${error}`);
+        console.error('Error adding saved recipe:', error);
+        toast.error(`Error adding saved recipe. Try to login.`);
       } finally {
         setIsLoading(false);
       }

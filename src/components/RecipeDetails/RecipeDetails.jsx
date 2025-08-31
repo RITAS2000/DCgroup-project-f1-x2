@@ -33,7 +33,6 @@ export default function RecipeDetails({ details, ingredients }) {
               onError={(e) => {
                 const img = e.currentTarget;
                 img.onerror = null;
-                // clear any <source> to avoid browser repeatedly trying srcSet
                 const pic = img.closest('picture');
                 if (pic) {
                   const srcEl = pic.querySelector('source');
