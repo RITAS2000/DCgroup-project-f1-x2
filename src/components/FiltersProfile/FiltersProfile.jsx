@@ -11,7 +11,7 @@ import { selectUserProfileType } from '../../redux/userPro/selectors.js';
 import {
   setShouldReload,
   selectUserProfileShouldReload,
-  selectUserProfileLoading, // <-- список завантажується (годинник)
+  selectUserProfileLoading,
 } from '../../redux/userPro/slice';
 
 import css from './FiltersProfile.module.css';
@@ -30,7 +30,7 @@ const FiltersProfile = () => {
   const fetcher = profileType === 'favorites' ? fetchSaved : fetchOwn;
 
   // loaders
-  const listLoading = useSelector(selectUserProfileLoading); // <- перемикання вкладок / фетч списку
+  const listLoading = useSelector(selectUserProfileLoading);
   const catLoading = useSelector((s) => s.categories?.loading) ?? false;
   const ingrLoading = useSelector((s) => s.ingredients?.loading) ?? false;
 
