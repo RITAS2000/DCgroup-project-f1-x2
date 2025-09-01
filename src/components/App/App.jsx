@@ -3,10 +3,6 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import Layout from '../Layout/Layout.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-import RecipeDetails from '../RecipeDetails/RecipeDetails.jsx';
-import RecipesList from '../RecipesList/RecipesList.jsx';
-
 import PrivateRoute from '../PrivateRoute.jsx';
 import RestrictedRoute from '../RestrictedRoute.jsx';
 import NotFound from '../../pages/NotFound/NotFound.jsx';
@@ -23,9 +19,6 @@ const AddRecipePage = lazy(() =>
 const ProfilePage = lazy(() =>
   import('../../pages/ProfilePage/ProfilePage.jsx'),
 );
-// const NotFoundPage = lazy(() =>
-//   import('../../pages/NotFoundPage/NotFoundPage.jsx'),
-// );
 const RecipeViewPage = lazy(() =>
   import('../../pages/RecipeViewPage/RecipeViewPage.jsx'),
 );
@@ -90,8 +83,6 @@ export default function App() {
                 <RestrictedRoute redirectTo="/" component={<AuthPage />} />
               }
             />
-
-            {/* <Route path="*" element={<NotFoundPage />} /> */}
           </Routes>
         </Suspense>
 
