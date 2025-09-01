@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModal } from '../../redux/modal/slice';
 import { selectModalProps } from '../../redux/modal/selectors';
-import { deleteRecipe } from '../../api/recipes';
 import { toast } from 'react-toastify';
-import { setShouldReload } from '../../redux/userPro/slice';
+import { deleteOwn } from '../../redux/userPro/thunks';
+import { removeRecipeFromList } from '../../redux/userPro/slice';
 import css from './ModalConfirmDelete.module.css';
 
 const ModalConfirmDelete = () => {
@@ -16,9 +16,11 @@ const ModalConfirmDelete = () => {
     if (!recipeId || submitting) return;
     setSubmitting(true);
     try {
-      await deleteRecipe(recipeId);
+      await dispatch(deleteOwn(recipeId)).unwrap();
+
+      dispatch(removeRecipeFromList(recipeId));
+
       toast.success('Recipe deleted successfully!');
-      dispatch(setShouldReload(true));
     } catch {
       toast.error('Failed to delete recipe.');
     } finally {

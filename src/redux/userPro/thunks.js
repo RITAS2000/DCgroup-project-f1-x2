@@ -14,7 +14,6 @@ const norm = (v) =>
   String(v ?? '')
     .trim()
     .toLowerCase();
-
 const pickRecipe = (item) => item?.recipe ?? item ?? {};
 
 function extractIngredientNames(recipeObj, ingredientsIndex) {
@@ -73,11 +72,11 @@ function matchLocally(
   const r = pickRecipe(item);
 
   const t = norm(title);
-  const titleOk = !t ? true : norm(r.title || r.name).includes(t);
+  const titleOk = !t || norm(r.title || r.name).includes(t);
 
   const c = norm(category);
   const rc = norm(r.category || r.categoryName);
-  const categoryOk = !c ? true : rc === c || rc.includes(c);
+  const categoryOk = !c || rc === c || rc.includes(c);
 
   const iName = norm(ingredientName);
   let ingredientOk = true;
@@ -90,6 +89,17 @@ function matchLocally(
 
   return titleOk && categoryOk && ingredientOk;
 }
+
+const handleAuthError = (err, dispatch, rejectWithValue) => {
+  if ([401, 404].includes(err?.response?.status)) {
+    toast.error('Your session has expired. Please log in again.');
+    dispatch(clearAuth());
+    dispatch(logout());
+    localStorage.removeItem('persist:token');
+    return rejectWithValue('Session expired');
+  }
+  return rejectWithValue(getErrorMessage(err));
+};
 
 export const fetchOwn = createAsyncThunk(
   'profile/fetchOwn',
@@ -107,7 +117,7 @@ export const fetchOwn = createAsyncThunk(
     { rejectWithValue, signal, dispatch },
   ) => {
     try {
-      const { items } = await getOwnRecipes({
+      const res = await getOwnRecipes({
         page,
         limit,
         title,
@@ -116,27 +126,33 @@ export const fetchOwn = createAsyncThunk(
         signal,
       });
 
-      const filtered = (items || []).filter((it) =>
+      const apiItems = res?.items || [];
+      const filtered = apiItems.filter((it) =>
         matchLocally(it, { title, category, ingredientName, ingredientsIndex }),
+      );
+
+      const clientFiltered = Boolean(
+        (title ?? '').trim() ||
+          (category ?? '').trim() ||
+          (ingredient ?? '').trim() ||
+          (ingredientName ?? '').trim(),
       );
 
       return {
         items: filtered,
         page,
-        totalPages: Math.max(1, Math.ceil(filtered.length / (limit || 12))),
-        totalItems: filtered.length,
+        limit,
         replace,
+        hasNext:
+          typeof res?.hasNext === 'boolean'
+            ? res.hasNext
+            : filtered.length === limit,
+        totalPages: res?.totalPages ?? null,
+        totalItems: res?.totalItems ?? null,
+        clientFiltered,
       };
     } catch (err) {
-      if (err?.response?.status === 401 || err?.response?.status === 404) {
-        toast.error('Your session has expired. Please log in again.');
-        dispatch(clearAuth());
-        dispatch(logout());
-        localStorage.removeItem('persist:token');
-
-        return rejectWithValue('Session expired');
-      }
-      return rejectWithValue(getErrorMessage(err));
+      return handleAuthError(err, dispatch, rejectWithValue);
     }
   },
 );
@@ -157,7 +173,7 @@ export const fetchSaved = createAsyncThunk(
     { rejectWithValue, signal, dispatch },
   ) => {
     try {
-      const { items } = await getSavedRecipes({
+      const res = await getSavedRecipes({
         page,
         limit,
         title,
@@ -166,27 +182,33 @@ export const fetchSaved = createAsyncThunk(
         signal,
       });
 
-      const filtered = (items || []).filter((it) =>
+      const apiItems = res?.items || [];
+      const filtered = apiItems.filter((it) =>
         matchLocally(it, { title, category, ingredientName, ingredientsIndex }),
+      );
+
+      const clientFiltered = Boolean(
+        (title ?? '').trim() ||
+          (category ?? '').trim() ||
+          (ingredient ?? '').trim() ||
+          (ingredientName ?? '').trim(),
       );
 
       return {
         items: filtered,
         page,
-        totalPages: Math.max(1, Math.ceil(filtered.length / (limit || 12))),
-        totalItems: filtered.length,
+        limit,
         replace,
+        hasNext:
+          typeof res?.hasNext === 'boolean'
+            ? res.hasNext
+            : filtered.length === limit,
+        totalPages: res?.totalPages ?? null,
+        totalItems: res?.totalItems ?? null,
+        clientFiltered,
       };
     } catch (err) {
-      if (err?.response?.status === 401 || err?.response?.status === 404) {
-        toast.error('Your session has expired. Please log in again.');
-        dispatch(clearAuth());
-        dispatch(logout());
-        localStorage.removeItem('persist:token');
-
-        return rejectWithValue('Session expired');
-      }
-      return rejectWithValue(getErrorMessage(err));
+      return handleAuthError(err, dispatch, rejectWithValue);
     }
   },
 );
@@ -198,15 +220,7 @@ export const removeSaved = createAsyncThunk(
       await deleteFavorite(recipeId, signal);
       return recipeId;
     } catch (err) {
-      if (err?.response?.status === 401 || err?.response?.status === 404) {
-        toast.error('Your session has expired. Please log in again.');
-        dispatch(clearAuth());
-        dispatch(logout());
-        localStorage.removeItem('persist:token');
-
-        return rejectWithValue('Session expired');
-      }
-      return rejectWithValue(getErrorMessage(err));
+      return handleAuthError(err, dispatch, rejectWithValue);
     }
   },
 );
@@ -218,14 +232,7 @@ export const deleteOwn = createAsyncThunk(
       await deleteRecipe(recipeId, signal);
       return recipeId;
     } catch (err) {
-      if (err?.response?.status === 401 || err?.response?.status === 404) {
-        dispatch(clearAuth());
-        dispatch(logout());
-        localStorage.removeItem('persist:token');
-
-        return rejectWithValue('Session expired');
-      }
-      return rejectWithValue(getErrorMessage(err));
+      return handleAuthError(err, dispatch, rejectWithValue);
     }
   },
 );

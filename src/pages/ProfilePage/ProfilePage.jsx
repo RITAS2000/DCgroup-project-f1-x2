@@ -1,44 +1,50 @@
 import { Navigate, useParams } from 'react-router-dom';
+import { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import s from './ProfilePage.module.css';
-
-import { selectUserProfileTotalItems } from '../../redux/userPro/selectors';
-import { useLoadProfileRecipes } from '../../hooks/useLoadProfileRecipes';
 
 import ProfileNavigation from '../../components/ProfileNavigation/ProfileNavigation.jsx';
 import UserRecipesList from '../../components/UserRecipeList/UserRecipesList.jsx';
 import FiltersProfile from '../../components/FiltersProfile/FiltersProfile.jsx';
+import { selectUserProfileLoading } from '../../redux/userPro/slice';
 
 export default function ProfilePage() {
   const { recipeType } = useParams();
-  const totalItems = useSelector(selectUserProfileTotalItems);
   const allowedTypes = ['own', 'favorites'];
+  const isInvalidType = !allowedTypes.includes(recipeType);
+  const activeType = isInvalidType ? 'own' : recipeType;
 
-  const { isLoading } = useLoadProfileRecipes(recipeType);
+  const loading = useSelector(selectUserProfileLoading);
 
-  if (!allowedTypes.includes(recipeType)) {
-    return <Navigate to="/profile/own" replace />;
-  }
+  const suppressLocalSpinnerRef = useRef(true);
+  useEffect(() => {
+    if (!loading) suppressLocalSpinnerRef.current = false;
+  }, [loading]);
 
   return (
     <section className={s.wrap}>
+      {isInvalidType && <Navigate to="/profile/own" replace />}
+
       <header className={s.header}>
         <h1 className={s.h1}>My profile</h1>
-        <ProfileNavigation active={recipeType} />
+        <ProfileNavigation active={activeType} />
         <div className={s.filtersRow}>
-          <p className={s.count}>
-            {isLoading
-              ? '...'
-              : `${totalItems} recipe${totalItems !== 1 ? 's' : ''}`}
-          </p>
-          <div className={s.filtersColumn}>
-            <FiltersProfile />
-          </div>
+          <FiltersProfile title={recipeType} resetKey={recipeType} />
         </div>
       </header>
 
-      {recipeType === 'own' && <UserRecipesList type="own" />}
-      {recipeType === 'favorites' && <UserRecipesList type="favorites" />}
+      {activeType === 'own' && (
+        <UserRecipesList
+          type="own"
+          allowInitialSpinner={!suppressLocalSpinnerRef.current}
+        />
+      )}
+      {activeType === 'favorites' && (
+        <UserRecipesList
+          type="favorites"
+          allowInitialSpinner={!suppressLocalSpinnerRef.current}
+        />
+      )}
     </section>
   );
 }

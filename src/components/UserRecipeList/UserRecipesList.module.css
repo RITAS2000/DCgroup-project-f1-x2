@@ -1,64 +1,47 @@
-.recipe_container {
-  display: flex;
-  align-items: center;
+.wrapper {
+  width: 100%;
 }
 
-.loaderWrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+.recipe_container {
+  display: block;
 }
 
 .recipe_list {
-  display: flex;
-  flex-wrap: wrap;
+  --card-w: 361px;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--card-w), var(--card-w))
+  );
   gap: 24px;
+  justify-content: start;
   margin-bottom: 24px;
+  padding: 0;
+  list-style: none;
+  justify-items: center;
 }
 
-@media screen and (min-width: 768px) {
+@media (min-width: 768px) {
   .recipe_list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
+    --card-w: 339px;
   }
 }
 
-@media screen and (min-width: 1440px) {
+@media (min-width: 1440px) {
   .recipe_list {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 24px;
+    --card-w: 288px;
   }
 }
 
-.recipe_item {
-  height: 100%;
+.recipe_list > li {
+  width: var(--card-w);
 }
 
-@media screen and (min-width: 768px) {
-  .recipe_list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
-  }
-
-  .recipe_item {
-    max-width: 339px;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  .recipe_list {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 24px;
-  }
-
-  .recipe_item {
-    max-width: 288px;
-  }
+.listSpinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 240px;
 }
 
 .empty {
@@ -66,7 +49,41 @@
   text-align: center;
   font-size: 32px;
   font-weight: 600;
-  margin-top: 100px;
-  max-width: 400px;
   margin: 0 auto;
+}
+
+.loadMoreWrap {
+  display: flex;
+  justify-content: center;
+}
+
+.loadMoreBtn {
+  border-radius: 8px;
+  padding: 16px;
+  width: 372px;
+  height: 54px;
+  background: #9b6c43;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+}
+
+@media (min-width: 1440px) {
+  .loadMoreBtn {
+    width: 289px;
+  }
+}
+
+.loadMoreShell {
+  width: 264px;
+  height: 56px;
+  padding: 0 24px;
+  border-radius: 16px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
