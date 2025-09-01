@@ -13,15 +13,10 @@ const ModalLogoutConfirm = () => {
   const handleClose = useCallback(() => dispatch(closeModal()), [dispatch]);
 
   const handleConfirm = async () => {
-    try {
-      await dispatch(logout()).unwrap();
-      dispatch(closeModal());
-      navigate('/');
-      toast.success('You have successfully logged out.');
-    } catch (e) {
-      // показать toast/error при желании
-      console.error(e);
-    }
+    await dispatch(logout()).unwrap();
+    dispatch(closeModal());
+    navigate('/');
+    toast.success('You have successfully logged out.');
   };
 
   return (

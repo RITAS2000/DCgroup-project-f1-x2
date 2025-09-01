@@ -30,8 +30,7 @@ export default function SaveRecipeButton({ recipeId }) {
           const found = savedRecipes.find((recipe) => recipe._id === recipeId);
           setIsSaved(!!found);
         }
-      } catch (error) {
-        console.error('Error fetching saved recipes:', error);
+      } catch {
         toast.error('Error fetching saved recipes. Try to login.');
       }
     };
@@ -52,8 +51,7 @@ export default function SaveRecipeButton({ recipeId }) {
         } else {
           dispatch(openModal({ type: 'errorSaving' }));
         }
-      } catch (error) {
-        console.error('Error deleting saved recipe:', error);
+      } catch {
         toast.error(`Error deleting saved recipe. Try to login.`);
       } finally {
         setIsLoading(false);
@@ -75,8 +73,7 @@ export default function SaveRecipeButton({ recipeId }) {
         } else {
           dispatch(openModal({ type: 'errorSaving' }));
         }
-      } catch (error) {
-        console.error('Error adding saved recipe:', error);
+      } catch {
         toast.error(`Error adding saved recipe. Try to login.`);
       } finally {
         setIsLoading(false);

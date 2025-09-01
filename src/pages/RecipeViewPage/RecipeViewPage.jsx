@@ -20,16 +20,10 @@ export default function RecipeViewPage() {
   useEffect(() => {
     setIsLoading(true);
 
-    Promise.all([
-      getRecipeDetails(recipeId),
-      getAllIngredients()
-    ])
+    Promise.all([getRecipeDetails(recipeId), getAllIngredients()])
       .then(([recipeData, ingredientsData]) => {
         setRecipeDetails(recipeData.data);
         setIngredients(ingredientsData.data);
-      })
-      .catch((error) => {
-        console.error(error);
       })
       .finally(() => {
         setIsLoading(false);
@@ -39,7 +33,14 @@ export default function RecipeViewPage() {
   return (
     <>
       {isLoading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: 300,
+          }}
+        >
           <ClockLoader color="#3d2218" size={100} />
         </div>
       ) : recipeDetails ? (

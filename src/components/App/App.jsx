@@ -28,16 +28,12 @@ export default function App() {
   useEffect(() => {
     const persisted = localStorage.getItem('persist:token');
     if (persisted) {
-      try {
-        const parsed = JSON.parse(persisted);
-        const token = parsed.token?.replace(/"/g, '');
-        const name = parsed.name;
+      const parsed = JSON.parse(persisted);
+      const token = parsed.token?.replace(/"/g, '');
+      const name = parsed.name;
 
-        if (token && name) {
-          dispatch(selectUser({ token, name }));
-        }
-      } catch (err) {
-        console.error('Failed to parse persisted user', err);
+      if (token && name) {
+        dispatch(selectUser({ token, name }));
       }
     }
   }, [dispatch]);

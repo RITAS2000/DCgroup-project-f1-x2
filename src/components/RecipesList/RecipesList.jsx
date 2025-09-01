@@ -40,12 +40,8 @@ export default function RecipesList({ onResetAll }) {
 
   useEffect(() => {
     const fetchSaved = async () => {
-      try {
-        const res = await getSavedRecipes();
-        dispatch(setSavedRecipes(res.items));
-      } catch (err) {
-        console.error('Помилка при завантаженні збережених рецептів:', err);
-      }
+      const res = await getSavedRecipes();
+      dispatch(setSavedRecipes(res.items));
     };
     fetchSaved();
   }, [dispatch]);
@@ -89,8 +85,6 @@ export default function RecipesList({ onResetAll }) {
         });
 
         setHasNextPage(Boolean(data.hasNextPage));
-      } catch (error) {
-        console.error('Помилка при завантаженні рецептів:', error);
       } finally {
         setLoadingFeed(false);
         setLoadingMore(false);

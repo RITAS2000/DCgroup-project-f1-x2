@@ -82,47 +82,25 @@ export default function RecipeCard({
     } finally {
       setIsLoading(false);
     }
-    // try {
-    //   if (!isSavedRecipe) {
-    //     setIsLoading(true);
-    //     const response = await axios.post(
-    //       'https://dcgroup-react-node-b.onrender.com/api/recipes/saved',
-    //       { recipeId: id },
-    //     );
-    //     toast.success('Recipe added to saved recipes!');
-    //     console.log('Saved recipe response:', response.data);
-    //     setIsSavedRecipe(true);
-    //   } else {
-    //     setIsLoading(true);
-    //     const deleteRecipe = await axios.delete(
-    //       `https://dcgroup-react-node-b.onrender.com/api/recipes/saved/${id}`,
-    //     );
-    //     toast.success('Recipe removed from saved recipes!');
-    //     console.log('Deleted recipe response:', deleteRecipe.data);
-    //     setIsSavedRecipe(false);
-    //   }
-    // } catch {
-    //   dispatch(openModal({ type: 'notAuthorized' }));
-    //   // toast.error('Failed !');
-    // } finally {
-    //   setIsLoading(false);
-    // }
   };
   const rawImg = thumb || '';
   const imgSrc = rawImg ? getImageUrl(rawImg) : '/images/placeholder.png';
   return (
     <div className={css.card}>
-      <img className={css.image} src={getImageUrl(imgSrc)} alt={title}
-         onError={(e) => {
-                const img = e.currentTarget;
-                img.onerror = null;
-                const pic = img.closest('picture');
-                if (pic) {
-                  const srcEl = pic.querySelector('source');
-                  if (srcEl) srcEl.srcset = '';
-                }
-                img.src = '/images/placeholder.png';
-              }}
+      <img
+        className={css.image}
+        src={getImageUrl(imgSrc)}
+        alt={title}
+        onError={(e) => {
+          const img = e.currentTarget;
+          img.onerror = null;
+          const pic = img.closest('picture');
+          if (pic) {
+            const srcEl = pic.querySelector('source');
+            if (srcEl) srcEl.srcset = '';
+          }
+          img.src = '/images/placeholder.png';
+        }}
       />
       <div className={css.title_container}>
         <h3 className={css.title}>{title}</h3>
