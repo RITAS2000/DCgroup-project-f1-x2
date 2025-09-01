@@ -76,7 +76,7 @@ const FiltersProfile = ({ title, resetKey }) => {
   }, [resetKey]);
 
   useEffect(() => {
-    const handleResize = () => setIsOpen(window.innerWidth >= 1440);
+    const handleResize = () => setIsOpen(window.innerWidth >= 768);
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -86,7 +86,7 @@ const FiltersProfile = ({ title, resetKey }) => {
     setSelectedCategory('');
     setSelectedIngredient('');
     dispatch(getFetcher({ page: 1, replace: true }));
-    if (window.innerWidth < 1440) setIsOpen(false);
+    if (window.innerWidth < 768) setIsOpen(false);
   };
 
   return (
