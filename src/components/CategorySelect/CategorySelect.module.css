@@ -12,59 +12,88 @@
   padding: 4px 0;
 }
 
-.reactSelect {
+.select {
   width: 100%;
 }
 
-.select__control {
+.select :global(.select__control) {
   height: 33px;
   min-height: 33px;
   border-radius: 8px;
   border: 1px solid #d9d9d9;
+  background: #fff;
   box-shadow: none;
   cursor: pointer;
 }
-.select__control:hover {
+.select :global(.select__control:hover) {
   border-color: #c9c9c9;
 }
-.select__control--is-focused {
-  border-color: #d9d9d9;
-  box-shadow: none;
+.select :global(.select__control--is-focused) {
+  border-color: #d9d9d9 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.select :global(.select__control input) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.select :global(.select__input input) {
+  opacity: 0;
+  color: transparent;
+  caret-color: transparent;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
 }
 
-.select__value-container {
+.select :global(.select__value-container) {
   padding: 4px 8px;
 }
-.select__placeholder {
+.select :global(.select__single-value),
+.select :global(.select__placeholder) {
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   font-size: 16px;
   line-height: 155%;
-  color: #595d62;
-  padding: 4px 8px;
+  color: #595d62; /* серый текст как в профиле/макете */
 }
-.select__single-value {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 155%;
-  color: #111;
-  padding: 4px 8px;
-}
-.select__menu {
-  z-index: 50;
+
+:global(.select__menu) {
+  margin-top: 0 !important;
+  top: 100% !important;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(17, 17, 17, 0.12);
-  margin-top: 6px;
+  z-index: 50;
+}
+:global(.select__menu-list) {
+  padding: 8px 8px 8px 12px;
+}
+:global(.select__option) {
+  padding: 8px 12px;
+  color: #111 !important;
+  background: #fff;
+  cursor: pointer;
+  outline: none !important;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+:global(.select__option--is-focused) {
+  background: #f3f4f6 !important;
+  color: #111 !important;
+  border-radius: 4px;
+}
+:global(.select__option--is-selected),
+:global(.select__option--is-focused.select__option--is-selected),
+:global(.select__option:active) {
+  background: #e5e7eb !important;
+  color: #111 !important;
+  border-radius: 4px;
 }
 
-.select__option {
-  padding: 8px 12px;
-  color: #111;
-}
-.select__option--is-focused {
-  background: #eee;
+.select :global(.select__indicator-separator) {
+  display: none !important;
 }
 
 .chevron {

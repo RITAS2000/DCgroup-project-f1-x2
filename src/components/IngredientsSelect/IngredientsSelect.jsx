@@ -63,7 +63,7 @@ export default function IngredientsSelect({ selectedIngredient, onChange }) {
 
   return (
     <Select
-      className={css.reactSelect}
+      className={css.select}
       classNamePrefix="select"
       placeholder="Ingredient"
       options={options}
