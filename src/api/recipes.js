@@ -41,14 +41,24 @@ export async function getSavedRecipes({
   signal,
 } = {}) {
   const params = { page, perPage: limit };
+  const token = localStorage.getitem('persist:token')?.replace(/"/g, '');
   if (title) params.title = title;
   if (category) params.category = category;
   if (ingredient) params.ingredient = ingredient;
 
   if (title || category || ingredient) params._t = Date.now();
-
-  const res = await api.get('/api/recipes/saved', { params, signal });
-  return normalizePagedResponse(res.data);
+  try {
+    const res = await api.get('/api/recipes/saved', {
+      params,
+      signal,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return normalizePagedResponse(res.data);
+  } catch {
+    return null;
+  }
 }
 
 export async function addFavorite(recipeId, signal) {
