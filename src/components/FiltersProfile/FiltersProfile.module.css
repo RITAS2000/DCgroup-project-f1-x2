@@ -61,7 +61,6 @@
   flex-direction: column;
   gap: 24px;
 }
-
 .panel.panelHidden {
   display: none !important;
 }
@@ -130,43 +129,6 @@
   width: 1px;
   height: 1px;
   pointer-events: none;
-}
-
-.filtersWrapper :global(.select__menu) {
-  margin-top: 0 !important;
-  top: 100% !important;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(17, 17, 17, 0.12);
-  z-index: 50;
-}
-.filtersWrapper :global(.select__menu-list) {
-  padding: 0;
-}
-
-.filtersWrapper :global(.select__option) {
-  padding: 8px 12px;
-  color: #111 !important;
-  background: #fff;
-  cursor: pointer;
-  outline: none !important;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.filtersWrapper
-  :global(.select__option--is-focused:not(.select__option--is-selected)) {
-  background: #f3f4f6 !important;
-}
-.filtersWrapper :global(.select__option--is-selected),
-.filtersWrapper
-  :global(.select__option--is-focused.select__option--is-selected),
-.filtersWrapper :global(.select__option:active) {
-  background: #e5e7eb !important;
-  color: #111 !important;
-}
-.filtersWrapper :global(.select__option)::selection {
-  background: transparent;
-  color: inherit;
 }
 
 .filtersWrapper :global(.select__indicator-separator) {
@@ -244,7 +206,20 @@
   }
 }
 
-.filtersWrapper :global(.select__option) {
+:global(.select__menu) {
+  margin-top: 0 !important;
+  top: 100% !important;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(17, 17, 17, 0.12);
+  z-index: 50;
+}
+
+:global(.select__menu-list) {
+  padding: 8px 8px 8px 12px;
+}
+
+:global(.select__option) {
   padding: 8px 12px;
   color: #111 !important;
   background: #fff;
@@ -254,24 +229,20 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.filtersWrapper :global(.select__option--is-focused) {
+:global(.select__option--is-focused) {
   background: #f3f4f6 !important;
   color: #111 !important;
+  border-radius: 4px;
 }
-
-.filtersWrapper :global(.select__option--is-selected),
-.filtersWrapper
-  :global(.select__option--is-focused.select__option--is-selected) {
+:global(.select__option--is-selected),
+:global(.select__option--is-focused.select__option--is-selected),
+:global(.select__option:active) {
   background: #e5e7eb !important;
   color: #111 !important;
+  border-radius: 4px;
 }
 
-.filtersWrapper :global(.select__option:active) {
-  background: #e5e7eb !important;
-  color: #111 !important;
-}
-
-.filtersWrapper :global(.select__option)::selection {
+:global(.select__option)::selection {
   background: transparent !important;
   color: inherit !important;
 }
