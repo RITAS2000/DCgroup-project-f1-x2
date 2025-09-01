@@ -40,8 +40,12 @@ export default function RecipesList({ onResetAll }) {
 
   useEffect(() => {
     const fetchSaved = async () => {
-      const res = await getSavedRecipes();
-      dispatch(setSavedRecipes(res.items));
+      try {
+        const res = await getSavedRecipes();
+        dispatch(setSavedRecipes(res.items));
+      } catch {
+        dispatch(setSavedRecipes([])); // щоб не було undefined
+      }
     };
     fetchSaved();
   }, [dispatch]);
