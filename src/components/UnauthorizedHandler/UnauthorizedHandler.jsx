@@ -16,31 +16,7 @@ const UnauthorizedHandler = () => {
   const recipesError = useSelector(selectRecipesError);
   const usersError = useSelector(selectUserProfileError);
   const stateToken = useSelector(selectAuthToken);
-  // const navigate = useNavigate();
-  // const location = useLocation();
 
-  // useEffect(() => {
-  //   const persisted = localStorage.getItem('persist:token');
-  //   let token = persisted
-  //     ? JSON.parse(persisted).token?.replace(/"/g, '')
-  //     : null;
-
-  //   const tokenMissing = !(stateToken || token);
-
-  //   if (
-  //     tokenMissing ||
-  //     recipesError?.status === 401 ||
-  //     usersError?.status === 401 ||
-  //     usersError?.status === 404
-  //   ) {
-  //     if (!tokenMissing) dispatch(logout());
-  //     dispatch(clearAuth());
-  //     dispatch(setSavedRecipes([])); // 🟢 очищаємо зафарбовані збережені рецепти
-  //     dispatch(logout());
-  //     localStorage.removeItem('persist:token');
-  //     toast.error('Your session has expired. Please log in again.');
-  //   }
-  // }, [recipesError, usersError, stateToken, dispatch]);
   useEffect(() => {
     const persisted = localStorage.getItem('persist:token');
     let token = persisted
