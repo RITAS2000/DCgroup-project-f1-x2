@@ -151,6 +151,7 @@ export const fetchOwn = createAsyncThunk(
         clientFiltered,
       };
     } catch (err) {
+      toast.error('Your session has expired. Please log in again.');
       return handleAuthError(err, dispatch, rejectWithValue);
     }
   },
