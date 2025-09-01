@@ -30,20 +30,13 @@
   margin-bottom: 16px;
 }
 
-.count {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  font-size: 18px;
-}
-
 .filtersRow {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  max-width: 100%;
   width: 100%;
   gap: 16px;
-  max-width: 361px;
-  position: relative;
 }
 
 @media screen and (min-width: 768px) {

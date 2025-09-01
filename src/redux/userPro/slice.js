@@ -1,6 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchOwn, fetchSaved, removeSaved, deleteOwn } from './thunks';
-import { normalizeListResponse, resolveTotalPages } from './utils';
+import { resolveTotalPages } from './utils';
+
+const T = {
+  fetchOwn: 'profile/fetchOwn',
+  fetchSaved: 'profile/fetchSaved',
+  removeSaved: 'profile/removeSaved',
+  deleteOwn: 'profile/deleteOwn',
+};
 
 const initialState = {
   items: [],
@@ -16,33 +22,20 @@ const initialState = {
   shouldReload: false,
 };
 
+const getItemId = (it) =>
+  String(
+    it?.id ??
+      it?._id ??
+      it?.recipeId ??
+      it?.recipe?.id ??
+      it?.recipe?._id ??
+      '',
+  );
+
 const dedupeById = (arr) => {
   const map = new Map();
-  for (const x of arr) map.set(x.id ?? x._id, x);
+  for (const x of arr) map.set(getItemId(x), x);
   return [...map.values()];
-};
-
-const applyFulfilled = (state, action) => {
-  if (state.currentRequestId !== action.meta.requestId) return;
-  state.loading = false;
-  state.error = null;
-  state.currentRequestId = null;
-
-  const { list, totalPages, totalItems } = normalizeListResponse(
-    action.payload,
-  );
-  const page = action.meta?.arg?.page ?? 1;
-  const limit = action.meta?.arg?.limit ?? 12;
-  const replace = action.meta?.arg?.replace ?? page <= 1;
-
-  state.page = page;
-  state.perPage = limit;
-  state.totalItems = totalItems;
-  state.totalPages = resolveTotalPages(totalPages, totalItems, limit);
-  state.hasNext = page < state.totalPages;
-
-  const newItems = list ?? [];
-  state.items = replace ? newItems : dedupeById([...state.items, ...newItems]);
 };
 
 const handlePending = (state, action) => {
@@ -68,6 +61,48 @@ const handleRejected = (state, action) => {
   state.hasNext = false;
 };
 
+const applyFulfilled = (state, action) => {
+  if (state.currentRequestId !== action.meta.requestId) return;
+  state.loading = false;
+  state.error = null;
+  state.currentRequestId = null;
+
+  const {
+    items,
+    page,
+    limit,
+    replace,
+    hasNext,
+    totalPages,
+    totalItems: serverTotal,
+    clientFiltered,
+  } = action.payload ?? {};
+
+  const newItems = items ?? [];
+  state.items = replace ? newItems : dedupeById([...state.items, ...newItems]);
+
+  state.page = page ?? state.page;
+  state.perPage = limit ?? state.perPage;
+
+  if (clientFiltered) {
+    const effective = state.items.length;
+    state.totalItems = effective;
+    state.totalPages = resolveTotalPages(null, effective, state.perPage);
+    state.hasNext =
+      typeof hasNext === 'boolean'
+        ? hasNext
+        : newItems.length === state.perPage;
+  } else {
+    const effective = serverTotal ?? state.items.length;
+    state.totalItems = effective;
+    state.totalPages = resolveTotalPages(totalPages, effective, state.perPage);
+    state.hasNext =
+      typeof hasNext === 'boolean'
+        ? hasNext
+        : newItems.length === state.perPage;
+  }
+};
+
 const userProfileSlice = createSlice({
   name: 'userProfile',
   initialState,
@@ -89,32 +124,41 @@ const userProfileSlice = createSlice({
     },
     removeRecipeFromList: (state, action) => {
       const id = String(action.payload);
-      state.items = state.items.filter((it) => String(it.id ?? it._id) !== id);
+      state.items = state.items.filter((it) => getItemId(it) !== id);
       state.totalItems = Math.max(state.totalItems - 1, 0);
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchOwn.pending, handlePending)
-      .addCase(fetchOwn.fulfilled, applyFulfilled)
-      .addCase(fetchOwn.rejected, handleRejected)
-      .addCase(fetchSaved.pending, handlePending)
-      .addCase(fetchSaved.fulfilled, applyFulfilled)
-      .addCase(fetchSaved.rejected, handleRejected)
-      .addCase(removeSaved.fulfilled, (state, action) => {
-        const id = String(action.payload);
-        state.items = state.items.filter(
-          (it) => String(it.id ?? it._id) !== id,
-        );
-        state.totalItems = Math.max(state.totalItems - 1, 0);
-      })
-      .addCase(deleteOwn.fulfilled, (state, action) => {
-        const id = String(action.payload);
-        state.items = state.items.filter(
-          (it) => String(it.id ?? it._id) !== id,
-        );
-        state.totalItems = Math.max(state.totalItems - 1, 0);
-      });
+    builder.addCase(`${T.fetchOwn}/pending`, handlePending);
+    builder.addCase(`${T.fetchOwn}/fulfilled`, applyFulfilled);
+    builder.addCase(`${T.fetchOwn}/rejected`, handleRejected);
+    builder.addCase(`${T.fetchSaved}/pending`, handlePending);
+    builder.addCase(`${T.fetchSaved}/fulfilled`, applyFulfilled);
+    builder.addCase(`${T.fetchSaved}/rejected`, handleRejected);
+
+    builder.addCase(`${T.removeSaved}/fulfilled`, (state, action) => {
+      const id = String(
+        action.payload?.id ??
+          action.payload?._id ??
+          action.payload ??
+          action.meta?.arg?.id ??
+          action.meta?.arg,
+      );
+      state.items = state.items.filter((it) => getItemId(it) !== id);
+      state.totalItems = Math.max(state.totalItems - 1, 0);
+    });
+
+    builder.addCase(`${T.deleteOwn}/fulfilled`, (state, action) => {
+      const id = String(
+        action.payload?.id ??
+          action.payload?._id ??
+          action.payload ??
+          action.meta?.arg?.id ??
+          action.meta?.arg,
+      );
+      state.items = state.items.filter((it) => getItemId(it) !== id);
+      state.totalItems = Math.max(state.totalItems - 1, 0);
+    });
   },
 });
 
@@ -124,6 +168,7 @@ export const {
   setShouldReload,
   removeRecipeFromList,
 } = userProfileSlice.actions;
+
 export const selectUserProfile = (state) => state.userProfile;
 export const selectUserRecipes = (state) => state.userProfile.items;
 export const selectUserProfileLoading = (state) => state.userProfile.loading;
@@ -134,5 +179,8 @@ export const selectUserProfileTotalPages = (state) =>
 export const selectUserProfileHasNext = (state) => state.userProfile.hasNext;
 export const selectUserProfileShouldReload = (state) =>
   state.userProfile.shouldReload;
+export const selectUserProfileTotalItems = (state) =>
+  state.userProfile.totalItems;
+export const selectUserProfileType = (state) => state.userProfile.type;
 
 export default userProfileSlice.reducer;
