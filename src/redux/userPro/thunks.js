@@ -8,7 +8,6 @@ import {
 import { getErrorMessage } from '../../utils/errors';
 import { clearAuth } from '../auth/slice';
 import { logout } from '../auth/operations.js';
-import { toast } from 'react-toastify';
 
 const norm = (v) =>
   String(v ?? '')
@@ -129,7 +128,6 @@ export const fetchOwn = createAsyncThunk(
       };
     } catch (err) {
       if (err?.response?.status === 401 || err?.response?.status === 404) {
-        toast.error('Your session has expired. Please log in again.');
         dispatch(clearAuth());
         dispatch(logout());
         localStorage.removeItem('persist:token');
@@ -179,7 +177,6 @@ export const fetchSaved = createAsyncThunk(
       };
     } catch (err) {
       if (err?.response?.status === 401 || err?.response?.status === 404) {
-        toast.error('Your session has expired. Please log in again.');
         dispatch(clearAuth());
         dispatch(logout());
         localStorage.removeItem('persist:token');
@@ -199,7 +196,6 @@ export const removeSaved = createAsyncThunk(
       return recipeId;
     } catch (err) {
       if (err?.response?.status === 401 || err?.response?.status === 404) {
-        toast.error('Your session has expired. Please log in again.');
         dispatch(clearAuth());
         dispatch(logout());
         localStorage.removeItem('persist:token');
@@ -219,7 +215,6 @@ export const deleteOwn = createAsyncThunk(
       return recipeId;
     } catch (err) {
       if (err?.response?.status === 401 || err?.response?.status === 404) {
-        toast.error('Your session has expired. Please log in again.');
         dispatch(clearAuth());
         dispatch(logout());
         localStorage.removeItem('persist:token');
