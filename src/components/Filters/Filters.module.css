@@ -119,7 +119,7 @@
   }
 
   .resetButton {
-    justify-self: end;
+    justify-self: start;
     font-size: 14px;
   }
 }
