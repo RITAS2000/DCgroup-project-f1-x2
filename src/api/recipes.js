@@ -42,9 +42,7 @@ export async function getSavedRecipes({
 } = {}) {
   const params = { page, perPage: limit };
   const token = localStorage.getItem('accessToken');
-  if (!token) {
-    return { items: [], total: 0 }; // повертаємо порожній результат
-  }
+
   if (title) params.title = title;
   if (category) params.category = category;
   if (ingredient) params.ingredient = ingredient;
