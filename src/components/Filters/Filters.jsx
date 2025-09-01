@@ -6,7 +6,6 @@ import css from './Filters.module.css';
 
 import {
   selectDisplayTotal,
-  selectHasSearch,
   selectSearchQuery,
 } from '../../redux/recipes/selectors.js';
 import { useRecipeSearch } from '../../hooks/useRecipeSearch.js';
@@ -20,7 +19,6 @@ const Filters = ({ title, resetKey }) => {
 
   const query = useSelector(selectSearchQuery);
   const displayTotal = useSelector(selectDisplayTotal(title));
-  const hasSearch = useSelector(selectHasSearch(title));
 
   const queryTitle = (title ?? query?.title ?? '').trim();
 
@@ -87,10 +85,7 @@ const Filters = ({ title, resetKey }) => {
           />
         </div>
 
-        <button
-          className={`${css.resetButton} ${!hasSearch ? css.resetHidden : ''}`}
-          onClick={handleReset}
-        >
+        <button className={css.resetButton} onClick={handleReset}>
           Reset filters
         </button>
       </div>
