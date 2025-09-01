@@ -47,18 +47,15 @@ export async function getSavedRecipes({
   if (ingredient) params.ingredient = ingredient;
 
   if (title || category || ingredient) params._t = Date.now();
-  try {
-    const res = await api.get('/api/recipes/saved', {
-      params,
-      signal,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return normalizePagedResponse(res.data);
-  } catch {
-    return null;
-  }
+
+  const res = await api.get('/api/recipes/saved', {
+    params,
+    signal,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return normalizePagedResponse(res.data);
 }
 
 export async function addFavorite(recipeId, signal) {
