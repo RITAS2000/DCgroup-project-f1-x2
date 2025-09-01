@@ -92,7 +92,6 @@ function matchLocally(
 
 const handleAuthError = (err, dispatch, rejectWithValue) => {
   if ([401, 404].includes(err?.response?.status)) {
-    toast.error('Your session has expired. Please log in again.');
     dispatch(clearAuth());
     dispatch(logout());
     localStorage.removeItem('persist:token');
