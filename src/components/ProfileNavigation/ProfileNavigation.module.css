@@ -17,6 +17,12 @@
   outline: none;
 }
 
+@media (min-width: 768px) {
+  .nav a {
+    font-size: 12px;
+  }
+}
+
 .nav a::after {
   content: '';
   position: absolute;
