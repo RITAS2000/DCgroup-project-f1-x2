@@ -41,7 +41,7 @@ export async function getSavedRecipes({
   signal,
 } = {}) {
   const params = { page, perPage: limit };
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem('persist:token');
 
   if (title) params.title = title;
   if (category) params.category = category;
