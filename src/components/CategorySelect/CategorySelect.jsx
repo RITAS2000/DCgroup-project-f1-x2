@@ -64,7 +64,7 @@ export default function CategorySelect({ selectedCategory, onChange }) {
 
   return (
     <Select
-      className={css.reactSelect}
+      className={css.select}
       classNamePrefix="select"
       placeholder="Category"
       options={options}

@@ -12,17 +12,24 @@
   font-size: 32px;
   line-height: 100%;
 }
+
 .bottomRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .count {
   font-weight: 600;
   font-size: 18px;
   line-height: 100%;
   color: var(--black);
 }
+
+.panelSelect {
+  background: #eee;
+}
+
 .filtersBtn {
   display: inline-flex;
   align-items: center;
@@ -36,6 +43,7 @@
   line-height: 100%;
   color: var(--black);
 }
+
 .icon {
   width: 24px;
   height: 24px;
@@ -44,6 +52,7 @@
 .iconBlack {
   --color1: #000;
 }
+
 .panel {
   margin-top: 29px;
   display: grid;
@@ -52,6 +61,7 @@
 .panelHidden {
   display: none;
 }
+
 .resetButton {
   padding: 0;
   background: transparent;
@@ -68,7 +78,6 @@
 .resetButton:focus-visible {
   opacity: 0.85;
 }
-
 .resetHidden {
   display: none;
 }
@@ -77,18 +86,11 @@
   width: 100%;
 }
 
+/* ====== Tablet (>=768px) ====== */
 @media (min-width: 768px) {
   .filtersWrapper {
     padding-left: 32px;
     padding-right: 32px;
-  }
-}
-
-/* ====== ДЕСКТОП (всё в одну линию) ====== */
-@media (min-width: 1440px) {
-  .filtersWrapper {
-    padding-left: 108px;
-    padding-right: 108px;
     margin-top: 32px;
     display: grid;
     grid-template-columns: 1fr auto;
@@ -139,5 +141,13 @@
   }
   .resetHidden {
     display: inline-block;
+  }
+}
+
+/* ====== Desktop (>=1440px) ====== */
+@media (min-width: 1440px) {
+  .filtersWrapper {
+    padding-left: 108px;
+    padding-right: 108px;
   }
 }
