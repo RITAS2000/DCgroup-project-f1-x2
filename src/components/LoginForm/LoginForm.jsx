@@ -28,25 +28,27 @@ export default function LoginForm() {
 
   const [showPassword, setShowPassword] = useState(false); 
 
-  const handleSubmit = async (values, { resetForm }) => {
+  const handleSubmit = async (values, { setSubmitting , resetForm }) => {
   try {
     const result = await dispatch(login(values));
 
     if (result.meta.requestStatus === "fulfilled") {
       navigate("/");
+      resetForm();
     } else {
       toast.error(result.payload?.message || "Login failed. Please try again.");
     }
   } catch (error) {
     toast.error(error?.message || "Something went wrong. Please try again.");
   } finally {
-    resetForm();
+    setSubmitting(false);
   }
 };
 
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
+      enableReinitialize={false} 
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >

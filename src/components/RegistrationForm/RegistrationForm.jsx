@@ -47,7 +47,7 @@ export default function RegistrationForm() {
     confirm: '',
   };
 
-  const handleSubmit = async (values, { resetForm }) => {
+  const handleSubmit = async (values, { resetForm, setSubmitting  }) => {
   try {
     const result = await dispatch(
       register({
@@ -59,18 +59,20 @@ export default function RegistrationForm() {
 
     if (result.meta.requestStatus === "fulfilled") {
       navigate("/auth/login");
+      resetForm();
     } else {
       toast.error(result.payload?.message || "Registration failed. Please try again.");
     }
   } catch (error) {
     toast.error(error?.message || "Something went wrong. Please try again.");
   } finally {
-    resetForm();
+    setSubmitting(false);;
   }
 };
   return (
     <Formik
       initialValues={initialValues}
+      enableReinitialize={false}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
       validateOnChange={true}  
