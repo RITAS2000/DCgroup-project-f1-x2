@@ -30,8 +30,10 @@ export default function UserRecipesList({ type, allowInitialSpinner = true }) {
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
 
   const listRef = useRef(null);
-  const endRef = useRef(null);
   const prevLen = useRef(0);
+
+  const firstNewIndexRef = useRef(null);
+  const shouldAdjustScrollRef = useRef(false);
 
   useEffect(() => {
     dispatch(setRecipeType(type));
@@ -46,20 +48,35 @@ export default function UserRecipesList({ type, allowInitialSpinner = true }) {
     const grew = recipes.length > prevLen.current;
     prevLen.current = recipes.length;
 
-    if (!loading && page > 1 && grew && endRef.current) {
-      const prefersNoMotion = window.matchMedia?.(
-        '(prefers-reduced-motion: reduce)',
-      ).matches;
-      endRef.current.scrollIntoView({
-        behavior: prefersNoMotion ? 'auto' : 'smooth',
-        block: 'start',
-      });
+    if (!loading && page > 1 && grew && shouldAdjustScrollRef.current) {
+      shouldAdjustScrollRef.current = false;
+
+      const idx = firstNewIndexRef.current ?? 0;
+      const firstNewEl = listRef.current?.querySelector(`[data-idx="${idx}"]`);
+
+      if (firstNewEl) {
+        const prefersNoMotion = window.matchMedia?.(
+          '(prefers-reduced-motion: reduce)',
+        ).matches;
+
+        const firstNewTop =
+          firstNewEl.getBoundingClientRect().top + window.scrollY;
+        const offset = Math.round(window.innerHeight * 0.5);
+        const targetY = Math.max(0, firstNewTop - offset);
+
+        window.scrollTo({
+          top: targetY,
+          behavior: prefersNoMotion ? 'auto' : 'smooth',
+        });
+      }
     }
   }, [recipes, loading, page]);
 
   const loadMore = () => {
     if (!loading && hasNext) {
       setLoadMoreLoading(true);
+      firstNewIndexRef.current = recipes.length;
+      shouldAdjustScrollRef.current = true;
       dispatch(fetcher({ page: page + 1 }));
     }
   };
@@ -76,12 +93,11 @@ export default function UserRecipesList({ type, allowInitialSpinner = true }) {
 
       <div className={s.recipe_container} aria-busy={loading}>
         <ul className={s.recipe_list} ref={listRef}>
-          {recipes.map((it) => (
-            <li key={it.id ?? it._id} className={s.recipe_item}>
+          {recipes.map((it, i) => (
+            <li key={it.id ?? it._id} className={s.recipe_item} data-idx={i}>
               <UserRecipeCard item={it} mode={type} />
             </li>
           ))}
-          <li aria-hidden ref={endRef} />
         </ul>
       </div>
 

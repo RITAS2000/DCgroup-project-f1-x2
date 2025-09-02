@@ -42,6 +42,7 @@ const ModalConfirmDelete = () => {
           Cancel
         </button>
         <button
+          type="button"
           onClick={handleConfirm}
           className={css.confirmBtn}
           disabled={submitting}
