@@ -17,22 +17,64 @@ const UnauthorizedHandler = () => {
   const usersError = useSelector(selectUserProfileError);
   const stateToken = useSelector(selectAuthToken);
 
+  // useEffect(() => {
+  //   const persisted = localStorage.getItem('persist:token');
+  //   let token = persisted
+  //     ? JSON.parse(persisted).token?.replace(/"/g, '')
+  //     : null;
+
+  //   const tokenMissing = !(stateToken || token);
+  //   let isSessionToastShown = false;
+  //   if (
+  //     tokenMissing ||
+  //     recipesError?.status === 401 ||
+  //     usersError?.status === 401 ||
+  //     usersError?.status === 404
+  //   ) {
+  //     if (!isSessionToastShown) {
+  //       toast.error('Your session has expired. Please log in again.');
+  //       isSessionToastShown = true;
+  //     }
+
+  //     if (!tokenMissing) dispatch(logout());
+  //     dispatch(clearAuth());
+  //     dispatch(setSavedRecipes([]));
+  //     localStorage.removeItem('persist:token');
+  //   }
+  // }, [recipesError, usersError, stateToken, dispatch]);
   useEffect(() => {
     const persisted = localStorage.getItem('persist:token');
     let token = persisted
       ? JSON.parse(persisted).token?.replace(/"/g, '')
       : null;
 
-    const tokenMissing = !(stateToken || token);
+    const hasToken = Boolean(stateToken || token);
 
+    // 🟥 якщо є токен і сервер каже 401 → сесія прострочена
     if (
-      tokenMissing ||
-      recipesError?.status === 401 ||
-      usersError?.status === 401 ||
-      usersError?.status === 404
+      hasToken &&
+      (recipesError?.status === 401 || usersError?.status === 401)
     ) {
       toast.error('Your session has expired. Please log in again.');
-      if (!tokenMissing) dispatch(logout());
+      dispatch(logout());
+      dispatch(clearAuth());
+      dispatch(setSavedRecipes([]));
+      localStorage.removeItem('persist:token');
+      return;
+    }
+
+    // 🟨 якщо сервер каже 404 (наприклад, юзер видалений)
+    if (hasToken && usersError?.status === 404) {
+      toast.error('User not found. Please log in again.');
+      dispatch(logout());
+      dispatch(clearAuth());
+      dispatch(setSavedRecipes([]));
+      localStorage.removeItem('persist:token');
+      return;
+    }
+
+    // 🟢 якщо токена нема (звичайний logout) → просто чистимо, без тоста
+    if (!hasToken) {
       dispatch(clearAuth());
       dispatch(setSavedRecipes([]));
       localStorage.removeItem('persist:token');

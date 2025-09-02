@@ -8,7 +8,6 @@ import {
 import { getErrorMessage } from '../../utils/errors';
 import { clearAuth } from '../auth/slice';
 import { logout } from '../auth/operations.js';
-import { toast } from 'react-toastify';
 
 const norm = (v) =>
   String(v ?? '')

@@ -224,7 +224,6 @@
 }
 
 :global(.select__option--is-focused) {
-  background: #f3f4f6 !important;
   color: #111 !important;
   border-radius: 4px;
 }
