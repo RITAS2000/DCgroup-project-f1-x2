@@ -71,7 +71,7 @@ export default function RecipesList({ onResetAll }) {
       const top =
         el.getBoundingClientRect().top +
         window.scrollY -
-        window.innerHeight * 0.5;
+        window.innerHeight * 0.01;
       window.scrollTo({
         top: Math.max(0, Math.round(top)),
         behavior: prefersNoMotion ? 'auto' : 'smooth',
