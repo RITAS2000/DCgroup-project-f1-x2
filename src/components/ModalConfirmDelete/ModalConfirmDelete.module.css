@@ -1,17 +1,15 @@
-.modal.modal {
+.modal {
   width: min(362px, 100%);
   max-width: calc(100vw - 32px);
   max-height: calc(100vh - 32px);
-  padding: 56px 24px 32px;
   overflow: auto;
   text-align: center;
   box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
-  .modal.modal {
+  .modal {
     width: min(420px, 100%);
-    padding: 56px 32px 32px;
   }
 }
 
