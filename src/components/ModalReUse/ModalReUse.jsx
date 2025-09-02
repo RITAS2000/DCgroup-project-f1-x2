@@ -10,6 +10,13 @@ export default function ModalReUse({ children }) {
   const handleClose = useCallback(() => dispatch(closeModal()), [dispatch]);
 
   useEffect(() => {
+    document.body.classList.add('skroll'); // додаємо при відкритті
+    return () => {
+      document.body.classList.remove('skroll'); // прибираємо при закритті
+    };
+  }, []);
+
+  useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') handleClose();
     };
