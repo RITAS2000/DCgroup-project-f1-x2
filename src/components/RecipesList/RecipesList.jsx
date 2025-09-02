@@ -7,9 +7,7 @@ import RecipeCard from '../RecipeCard/RecipeCard.jsx';
 import css from './RecipesList.module.css';
 import NoResultSearch from '../NoResultSearch/NoResultSearch.jsx';
 
-import { setFeedTotal } from '../../redux/recipes/slice.js';
-
-import { setSavedRecipes } from '../../redux/recipes/slice.js';
+import { setFeedTotal, setSavedRecipes } from '../../redux/recipes/slice.js';
 import { getSavedRecipes } from '../../api/recipes.js';
 
 import {
@@ -39,15 +37,14 @@ export default function RecipesList({ onResetAll }) {
   const query = useSelector(selectSearchQuery);
 
   useEffect(() => {
-    const fetchSaved = async () => {
+    (async () => {
       try {
         const res = await getSavedRecipes();
         dispatch(setSavedRecipes(res.items));
       } catch {
-        dispatch(setSavedRecipes([])); // щоб не було undefined
+        dispatch(setSavedRecipes([]));
       }
-    };
-    fetchSaved();
+    })();
   }, [dispatch]);
 
   const [recipes, setRecipes] = useState([]);
@@ -56,39 +53,57 @@ export default function RecipesList({ onResetAll }) {
   const [loadingFeed, setLoadingFeed] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const lastCardRef = useRef(null);
-  const scrollAfterLoad = useRef(false);
+  const listRef = useRef(null);
+  const firstNewIdxFeedRef = useRef(null);
+  const firstNewIdxSearchRef = useRef(null);
+  const shouldAdjustFeedRef = useRef(false);
+  const shouldAdjustSearchRef = useRef(false);
 
-  const endSearchRef = useRef(null);
-  const pendingScroll = useRef(false);
+  const prefersNoMotion =
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+  const scrollToFirstNew = useCallback(
+    (idx) => {
+      if (!listRef.current) return;
+      const el = listRef.current.querySelector(`[data-idx="${idx}"]`);
+      if (!el) return;
+      const top =
+        el.getBoundingClientRect().top +
+        window.scrollY -
+        window.innerHeight * 0.5;
+      window.scrollTo({
+        top: Math.max(0, Math.round(top)),
+        behavior: prefersNoMotion ? 'auto' : 'smooth',
+      });
+    },
+    [prefersNoMotion],
+  );
 
   const fetchRecipes = useCallback(
     async (pageNum, isLoadMore = false) => {
       try {
         if (isLoadMore) setLoadingMore(true);
         setLoadingFeed(true);
-        const response = await axios.get('/api/recipes', {
+
+        const { data: resp } = await axios.get('/api/recipes', {
           params: { page: pageNum, perPage: 12 },
         });
-        const data = response.data?.data || {};
-        const recipesArray = data.data || [];
 
-        if (typeof data.totalItems !== 'undefined') {
-          dispatch(setFeedTotal(data.totalItems));
+        const payload = resp?.data || {};
+        const items = payload.data || [];
+
+        if (typeof payload.totalItems !== 'undefined') {
+          dispatch(setFeedTotal(payload.totalItems));
         } else {
-          dispatch(
-            setFeedTotal(Array.isArray(recipesArray) ? recipesArray.length : 0),
-          );
+          dispatch(setFeedTotal(Array.isArray(items) ? items.length : 0));
         }
 
         setRecipes((prev) => {
-          const add = recipesArray.filter(
-            (r) => !prev.some((p) => p._id === r._id),
-          );
-          return [...prev, ...add];
+          const add = items.filter((r) => !prev.some((p) => p._id === r._id));
+          return prev.concat(add);
         });
-
-        setHasNextPage(Boolean(data.hasNextPage));
+        setHasNextPage(Boolean(payload.hasNextPage));
       } finally {
         setLoadingFeed(false);
         setLoadingMore(false);
@@ -102,30 +117,32 @@ export default function RecipesList({ onResetAll }) {
   }, [page, searchMode, fetchRecipes]);
 
   const handleLoadMoreFeed = () => {
-    scrollAfterLoad.current = true;
+    firstNewIdxFeedRef.current = recipes.length;
+    shouldAdjustFeedRef.current = true;
+
     fetchRecipes(page + 1, true);
-    setPage((prev) => prev + 1);
+    setPage((p) => p + 1);
   };
 
   useEffect(() => {
-    if (scrollAfterLoad.current && lastCardRef.current) {
-      lastCardRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-      scrollAfterLoad.current = false;
+    if (shouldAdjustFeedRef.current) {
+      shouldAdjustFeedRef.current = false;
+      scrollToFirstNew(firstNewIdxFeedRef.current ?? 0);
     }
-  }, [recipes]);
+  }, [recipes, scrollToFirstNew]);
+
+  const handleLoadMoreSearch = () => {
+    firstNewIdxSearchRef.current = searched.length;
+    shouldAdjustSearchRef.current = true;
+    dispatch(searchRecipes({ ...query, page: searchPage + 1 }));
+  };
 
   useEffect(() => {
-    if (searchMode && pendingScroll.current && endSearchRef.current) {
-      endSearchRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-      pendingScroll.current = false;
+    if (searchMode && shouldAdjustSearchRef.current) {
+      shouldAdjustSearchRef.current = false;
+      scrollToFirstNew(firstNewIdxSearchRef.current ?? 0);
     }
-  }, [searched.length, searchMode]);
+  }, [searched, searchMode, scrollToFirstNew]);
 
   if (searchMode) {
     if (searching) return <div className={css.recipe_container}>Loading…</div>;
@@ -150,53 +167,10 @@ export default function RecipesList({ onResetAll }) {
 
     return (
       <div className={css.recipe_container}>
-        <ul className={css.recipe_list}>
-          {searched.map(({ _id, thumb, title, time, description, calory }) => (
-            <li className={css.recipe_item} key={_id}>
-              <RecipeCard
-                id={_id}
-                thumb={thumb}
-                title={title}
-                time={time}
-                description={description}
-                calories={calory}
-              />
-            </li>
-          ))}
-        </ul>
-
-        {/* якорь для плавного скролла после догрузки */}
-        <div ref={endSearchRef} />
-        {loadingMore && (
-          <div>
-            <BarLoader color="#9b6c43" />
-          </div>
-        )}
-        {canLoadMore && !searching && (
-          <LoadMoreBtn
-            onClick={() => {
-              pendingScroll.current = true;
-              dispatch(searchRecipes({ ...query, page: searchPage + 1 }));
-            }}
-          />
-        )}
-      </div>
-    );
-  }
-
-  // ===== ОБЫЧНАЯ ЛЕНТА =====
-  return (
-    <div className={css.recipe_container}>
-      <ul className={css.recipe_list}>
-        {recipes.map(
-          ({ _id, thumb, title, time, description, calory }, index) => {
-            const isLastNew = index === recipes.length - 1;
-            return (
-              <li
-                className={css.recipe_item}
-                key={_id}
-                ref={isLastNew ? lastCardRef : null}
-              >
+        <ul className={css.recipe_list} ref={listRef}>
+          {searched.map(
+            ({ _id, thumb, title, time, description, calory }, i) => (
+              <li className={css.recipe_item} key={_id} data-idx={i}>
                 <RecipeCard
                   id={_id}
                   thumb={thumb}
@@ -206,10 +180,39 @@ export default function RecipesList({ onResetAll }) {
                   calories={calory}
                 />
               </li>
-            );
-          },
+            ),
+          )}
+        </ul>
+
+        {loadingMore && (
+          <div>
+            <BarLoader color="#9b6c43" />
+          </div>
         )}
+        {canLoadMore && !searching && (
+          <LoadMoreBtn onClick={handleLoadMoreSearch} />
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className={css.recipe_container}>
+      <ul className={css.recipe_list} ref={listRef}>
+        {recipes.map(({ _id, thumb, title, time, description, calory }, i) => (
+          <li className={css.recipe_item} key={_id} data-idx={i}>
+            <RecipeCard
+              id={_id}
+              thumb={thumb}
+              title={title}
+              time={time}
+              description={description}
+              calories={calory}
+            />
+          </li>
+        ))}
       </ul>
+
       {loadingMore && (
         <div>
           <BarLoader color="#9b6c43" />
