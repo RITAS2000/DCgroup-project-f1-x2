@@ -62,4 +62,8 @@ img {
 }
 body {
   background-color: #fbfcf8;
+  
+}
+body.skroll{
+  overflow: hidden;
 }
