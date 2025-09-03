@@ -50,7 +50,14 @@
 .select :global(.select__value-container) {
   padding: 4px 8px;
 }
-.select :global(.select__single-value),
+.select :global(.select__single-value) {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 155%;
+  color: black;
+}
+
 .select :global(.select__placeholder) {
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
