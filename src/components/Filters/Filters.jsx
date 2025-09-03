@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CategorySelect from '../CategorySelect/CategorySelect.jsx';
 import IngredientsSelect from '../IngredientsSelect/IngredientsSelect.jsx';
 import css from './Filters.module.css';
@@ -9,10 +9,13 @@ import {
   selectSearchQuery,
 } from '../../redux/recipes/selectors.js';
 import { useRecipeSearch } from '../../hooks/useRecipeSearch.js';
+import { clearResults } from '../../redux/recipes/slice.js';
 
 const SPRITE = '/sprite/symbol-defs.svg';
 
 const Filters = ({ title, resetKey }) => {
+  const dispatch = useDispatch();
+
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedIngredient, setSelectedIngredient] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -33,6 +36,10 @@ const Filters = ({ title, resetKey }) => {
     setSelectedCategory('');
     setSelectedIngredient('');
     setIsOpen(false);
+
+    if (!queryTitle) {
+      dispatch(clearResults());
+    }
   };
 
   return (
