@@ -114,10 +114,8 @@
 .filtersWrapper :global(.select__value-container) {
   padding: 4px 8px;
 }
-.filtersWrapper
-  :global(.select__single-value)
-  .filtersWrapper
-  :global(.select__placeholder) {
+.filtersWrapper :global(.select__single-value),
+.filtersWrapper :global(.select__placeholder) {
   font-family: 'Montserrat', sans-serif;
   font-size: 16px;
   line-height: 155%;
