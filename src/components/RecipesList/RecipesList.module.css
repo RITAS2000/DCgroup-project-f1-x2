@@ -43,3 +43,10 @@
     max-width: 288px;
   }
 }
+
+.listSpinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 240px;
+}

@@ -10,6 +10,7 @@ import NoResultSearch from '../NoResultSearch/NoResultSearch.jsx';
 import { setFeedTotal, setSavedRecipes } from '../../redux/recipes/slice.js';
 import { getSavedRecipes } from '../../api/recipes.js';
 
+
 import {
   selectRecipes,
   selectRecipesLoading,
@@ -20,7 +21,7 @@ import {
   selectSearchQuery,
 } from '../../redux/recipes/selectors';
 import { searchRecipes } from '../../redux/recipes/operations';
-import { BarLoader } from 'react-spinners';
+import { BarLoader, ClockLoader } from 'react-spinners';
 
 axios.defaults.baseURL =
   import.meta.env.VITE_API_URL || 'https://dcgroup-react-node-b.onrender.com/';
@@ -198,6 +199,11 @@ export default function RecipesList({ onResetAll }) {
 
   return (
     <div className={css.recipe_container}>
+      {loadingFeed && (
+        <div className={css.listSpinner}>
+          <ClockLoader color="#3d2218" size={100} />
+        </div>
+      )}
       <ul className={css.recipe_list} ref={listRef}>
         {recipes.map(({ _id, thumb, title, time, description, calory }, i) => (
           <li className={css.recipe_item} key={_id} data-idx={i}>
