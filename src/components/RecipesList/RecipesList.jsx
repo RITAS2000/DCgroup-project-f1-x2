@@ -10,7 +10,6 @@ import NoResultSearch from '../NoResultSearch/NoResultSearch.jsx';
 import { setFeedTotal, setSavedRecipes } from '../../redux/recipes/slice.js';
 import { getSavedRecipes } from '../../api/recipes.js';
 
-
 import {
   selectRecipes,
   selectRecipesLoading,
@@ -36,6 +35,7 @@ export default function RecipesList({ onResetAll }) {
   const searchPage = useSelector(selectRecipesPage);
   const totalPages = useSelector(selectRecipesTotalPages);
   const query = useSelector(selectSearchQuery);
+  // const loading = useSelector(selectRecipesLoading);
 
   useEffect(() => {
     (async () => {
@@ -199,34 +199,39 @@ export default function RecipesList({ onResetAll }) {
 
   return (
     <div className={css.recipe_container}>
-      {loadingFeed && (
+      {loadingFeed ? (
         <div className={css.listSpinner}>
           <ClockLoader color="#3d2218" size={100} />
         </div>
-      )}
-      <ul className={css.recipe_list} ref={listRef}>
-        {recipes.map(({ _id, thumb, title, time, description, calory }, i) => (
-          <li className={css.recipe_item} key={_id} data-idx={i}>
-            <RecipeCard
-              id={_id}
-              thumb={thumb}
-              title={title}
-              time={time}
-              description={description}
-              calories={calory}
-            />
-          </li>
-        ))}
-      </ul>
+      ) : (
+        <>
+          <ul className={css.recipe_list} ref={listRef}>
+            {recipes.map(
+              ({ _id, thumb, title, time, description, calory }, i) => (
+                <li className={css.recipe_item} key={_id} data-idx={i}>
+                  <RecipeCard
+                    id={_id}
+                    thumb={thumb}
+                    title={title}
+                    time={time}
+                    description={description}
+                    calories={calory}
+                  />
+                </li>
+              ),
+            )}
+          </ul>
 
-      {loadingMore && (
-        <div>
-          <BarLoader color="#9b6c43" />
-        </div>
-      )}
+          {loadingMore && (
+            <div>
+              <BarLoader color="#9b6c43" />
+            </div>
+          )}
 
-      {recipes.length > 0 && !loadingFeed && hasNextPage && (
-        <LoadMoreBtn onClick={handleLoadMoreFeed} />
+          {recipes.length > 0 && !loadingFeed && hasNextPage && (
+            <LoadMoreBtn onClick={handleLoadMoreFeed} />
+          )}
+        </>
       )}
     </div>
   );
