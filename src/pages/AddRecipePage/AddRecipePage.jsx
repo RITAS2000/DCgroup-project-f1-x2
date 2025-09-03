@@ -67,7 +67,8 @@ const AddRecipePage = () => {
     const formData = new FormData();
 
     const sanitizedIngredients = values.ingredients.map(
-      ({ name, measure }) => ({
+      ({ id, name, measure }) => ({
+        id,
         name,
         measure,
       }),
