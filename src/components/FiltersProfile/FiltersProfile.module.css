@@ -121,6 +121,10 @@
   line-height: 155%;
 }
 
+.filtersWrapper :global(.select__single-value) {
+  color: #000;
+}
+
 .filtersWrapper :global(.select__input input) {
   opacity: 0;
   color: transparent;
@@ -128,7 +132,6 @@
   position: absolute;
   width: 1px;
   height: 1px;
-  pointer-events: none;
 }
 
 .filtersWrapper .select__indicator-separator.select__indicator-separator {
