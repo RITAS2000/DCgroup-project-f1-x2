@@ -129,9 +129,6 @@
   opacity: 0;
   color: transparent;
   caret-color: transparent;
-  position: absolute;
-  width: 1px;
-  height: 1px;
 }
 
 .filtersWrapper .select__indicator-separator.select__indicator-separator {
