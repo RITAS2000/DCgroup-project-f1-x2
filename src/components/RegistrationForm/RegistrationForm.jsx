@@ -1,10 +1,12 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useEffect, useRef, useState } from 'react';
 import { register } from '../../redux/auth/operations';
 import css from './RegistrationForm.module.css';
 import Container from "../Container/Container";
-import { useState } from 'react';
+import { selectAuthLoading } from '../../redux/auth/selectors';
+import { ClockLoader } from 'react-spinners';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,6 +38,13 @@ const validationSchema = Yup.object().shape({
 export default function RegistrationForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const loading = useSelector(selectAuthLoading);
+
+  const suppressLocalSpinnerRef = useRef(true);
+  useEffect(() => {
+    if (!loading) suppressLocalSpinnerRef.current = false;
+  }, [loading]);
+
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -78,8 +87,13 @@ export default function RegistrationForm() {
       validateOnChange={true}  
       validateOnBlur={false}    
     >
-      {({ errors, values, touched }) => (   
+      {({ errors, values, touched, isSubmitting }) => (   
         <Container variant="white">
+          {loading && suppressLocalSpinnerRef.current && ( 
+            <div className={css.listSpinner}>
+                <ClockLoader color="#3d2218" size={100} />
+              </div>
+            )}
           <div className={css.container}>
             <Form className={css.form}>
               <h2 className={css.title}>Register</h2>
@@ -87,7 +101,11 @@ export default function RegistrationForm() {
                 Join our community of culinary enthusiasts, save your favorite
                 recipes, and share your cooking creations
               </p>
-
+               {(isSubmitting || loading) && (
+                <div className={css.overlay} aria-hidden="true">
+                  <ClockLoader color="#3d2218" size={100} />
+                </div>
+              )}
               <label className={css.label}>
                 <span className={css.labelText}>Enter your name</span>
                 <Field
@@ -175,7 +193,7 @@ export default function RegistrationForm() {
                 />
               </label>
 
-              <button type="submit" className={css.button}>
+              <button type="submit" className={css.button} disabled={isSubmitting || loading}>
                 Create account
               </button>
 
