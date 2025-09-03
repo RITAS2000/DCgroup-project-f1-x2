@@ -7,4 +7,4 @@ export const selectloginError = (state) => state.auth.error;
 
 
 export const selectToken = (state) => state.auth.token;
-
+export const selectAuthLoading = (state) => state.auth.loading;
