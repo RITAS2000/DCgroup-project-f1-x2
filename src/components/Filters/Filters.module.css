@@ -24,6 +24,7 @@
   font-size: 18px;
   line-height: 100%;
   color: var(--black);
+  height: 33px;
 }
 
 .filtersBtn {
