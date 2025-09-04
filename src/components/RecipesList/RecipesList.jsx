@@ -146,7 +146,14 @@ export default function RecipesList({ onResetAll }) {
   }, [searched, searchMode, scrollToFirstNew]);
 
   if (searchMode) {
-    if (searching) return <div className={css.recipe_container}>Loading…</div>;
+    if (searching)
+      return (
+        <div className={css.recipe_container}>
+          <div className={css.listSpinner}>
+            <ClockLoader color="#3d2218" size={100} />
+          </div>
+        </div>
+      );
     if (searchError) {
       return (
         <div className={css.recipe_container} style={{ color: 'crimson' }}>
