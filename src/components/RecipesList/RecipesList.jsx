@@ -21,6 +21,7 @@ import {
 } from '../../redux/recipes/selectors';
 import { searchRecipes } from '../../redux/recipes/operations';
 import { BarLoader, ClockLoader } from 'react-spinners';
+import { useLocation } from 'react-router-dom';
 
 axios.defaults.baseURL =
   import.meta.env.VITE_API_URL || 'https://dcgroup-react-node-b.onrender.com/';
@@ -59,6 +60,8 @@ export default function RecipesList({ onResetAll }) {
   const firstNewIdxSearchRef = useRef(null);
   const shouldAdjustFeedRef = useRef(false);
   const shouldAdjustSearchRef = useRef(false);
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/auth/login';
 
   const prefersNoMotion =
     typeof window !== 'undefined' &&
@@ -206,7 +209,7 @@ export default function RecipesList({ onResetAll }) {
 
   return (
     <div className={css.recipe_container}>
-      {loadingFeed && !loadingMore && (
+      {!isLoginPage && loadingFeed && !loadingMore && (
         <div className={css.listSpinner}>
           <ClockLoader color="#3d2218" size={100} />
         </div>
