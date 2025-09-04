@@ -206,40 +206,39 @@ export default function RecipesList({ onResetAll }) {
 
   return (
     <div className={css.recipe_container}>
-      {loadingFeed ? (
+      {loadingFeed && (
         <div className={css.listSpinner}>
           <ClockLoader color="#3d2218" size={100} />
         </div>
-      ) : (
-        <>
-          <ul className={css.recipe_list} ref={listRef}>
-            {recipes.map(
-              ({ _id, thumb, title, time, description, calory }, i) => (
-                <li className={css.recipe_item} key={_id} data-idx={i}>
-                  <RecipeCard
-                    id={_id}
-                    thumb={thumb}
-                    title={title}
-                    time={time}
-                    description={description}
-                    calories={calory}
-                  />
-                </li>
-              ),
-            )}
-          </ul>
-
-          {loadingMore && (
-            <div>
-              <BarLoader color="#9b6c43" />
-            </div>
-          )}
-
-          {recipes.length > 0 && !loadingFeed && hasNextPage && (
-            <LoadMoreBtn onClick={handleLoadMoreFeed} />
-          )}
-        </>
       )}
+      <>
+        <ul className={css.recipe_list} ref={listRef}>
+          {recipes.map(
+            ({ _id, thumb, title, time, description, calory }, i) => (
+              <li className={css.recipe_item} key={_id} data-idx={i}>
+                <RecipeCard
+                  id={_id}
+                  thumb={thumb}
+                  title={title}
+                  time={time}
+                  description={description}
+                  calories={calory}
+                />
+              </li>
+            ),
+          )}
+        </ul>
+
+        {loadingMore && (
+          <div>
+            <BarLoader color="#9b6c43" />
+          </div>
+        )}
+
+        {recipes.length > 0 && !loadingFeed && hasNextPage && (
+          <LoadMoreBtn onClick={handleLoadMoreFeed} />
+        )}
+      </>
     </div>
   );
 }
