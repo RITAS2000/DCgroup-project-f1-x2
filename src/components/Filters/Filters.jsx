@@ -25,7 +25,7 @@ const Filters = ({ title, resetKey }) => {
 
   const queryTitle = (title ?? query?.title ?? '').trim();
 
-  useRecipeSearch({ title, selectedCategory, selectedIngredient });
+  useRecipeSearch({ title, selectedCategory, selectedIngredient, resetKey });
 
   useEffect(() => {
     setSelectedCategory('');
