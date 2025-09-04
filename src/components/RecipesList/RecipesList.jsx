@@ -61,7 +61,7 @@ export default function RecipesList({ onResetAll }) {
   const shouldAdjustFeedRef = useRef(false);
   const shouldAdjustSearchRef = useRef(false);
   const location = useLocation();
-  const isLoginPage = location.pathname === '/auth/login';
+  const isRecipesPage = location.pathname.startsWith('/recipes');
 
   const prefersNoMotion =
     typeof window !== 'undefined' &&
@@ -209,7 +209,7 @@ export default function RecipesList({ onResetAll }) {
 
   return (
     <div className={css.recipe_container}>
-      {!isLoginPage && loadingFeed && !loadingMore && (
+      {!isRecipesPage && loadingFeed && !loadingMore && (
         <div className={css.listSpinner}>
           <ClockLoader color="#3d2218" size={100} />
         </div>
