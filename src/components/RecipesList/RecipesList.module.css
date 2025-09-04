@@ -49,5 +49,5 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  min-height: 240px;
+  transform: translate(-50%, -50%);
 }
