@@ -209,11 +209,11 @@ export default function RecipesList({ onResetAll }) {
 
   return (
     <div className={css.recipe_container}>
-      {!isRecipesPage && loadingFeed && !loadingMore && (
+      {/* {!isRecipesPage && loadingFeed && !loadingMore && (
         <div className={css.listSpinner}>
           <ClockLoader color="#3d2218" size={100} />
         </div>
-      )}
+      )} */}
       <>
         <ul className={css.recipe_list} ref={listRef}>
           {recipes.map(
