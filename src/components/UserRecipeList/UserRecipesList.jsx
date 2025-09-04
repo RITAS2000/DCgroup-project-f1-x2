@@ -12,6 +12,7 @@ import {
 import UserRecipeCard from '../UserRecipeCard/UserRecipeCard';
 import { ClockLoader, BarLoader } from 'react-spinners';
 import s from './UserRecipesList.module.css';
+import { useLocation } from 'react-router-dom';
 
 export default function UserRecipesList({ type, allowInitialSpinner = true }) {
   const dispatch = useDispatch();
@@ -21,6 +22,8 @@ export default function UserRecipesList({ type, allowInitialSpinner = true }) {
   const error = useSelector(selectUserProfileError);
   const page = useSelector(selectUserProfilePage);
   const hasNext = useSelector(selectUserProfileHasNext);
+  const location = useLocation();
+  const isLoginPage = location.pathname.startsWith('/auth/login');
 
   const fetcher = useMemo(
     () => (type === 'favorites' ? fetchSaved : fetchOwn),
@@ -82,6 +85,7 @@ export default function UserRecipesList({ type, allowInitialSpinner = true }) {
   };
 
   const showTabSpinner = allowInitialSpinner && loading && page === 1;
+  if (isLoginPage) return null;
 
   return (
     <div className={s.wrapper}>
