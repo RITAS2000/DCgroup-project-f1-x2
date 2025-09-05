@@ -1,16 +1,15 @@
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { register } from '../../redux/auth/operations';
 import css from './RegistrationForm.module.css';
-import Container from "../Container/Container";
+import Container from '../Container/Container';
 import { selectAuthLoading } from '../../redux/auth/selectors';
 import { ClockLoader } from 'react-spinners';
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import * as Yup from 'yup';
 
@@ -45,7 +44,6 @@ export default function RegistrationForm() {
     if (!loading) suppressLocalSpinnerRef.current = false;
   }, [loading]);
 
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -56,44 +54,46 @@ export default function RegistrationForm() {
     confirm: '',
   };
 
-  const handleSubmit = async (values, { resetForm, setSubmitting  }) => {
-  try {
-    const result = await dispatch(
-      register({
-        name: values.name,
-        email: values.email,
-        password: values.password,
-      })
-    );
+  const handleSubmit = async (values, { resetForm, setSubmitting }) => {
+    try {
+      const result = await dispatch(
+        register({
+          name: values.name,
+          email: values.email,
+          password: values.password,
+        }),
+      );
 
-    if (result.meta.requestStatus === "fulfilled") {
-      navigate("/auth/login");
-      resetForm();
-    } else {
-      toast.error(result.payload?.message || "Registration failed. Please try again.");
+      if (result.meta.requestStatus === 'fulfilled') {
+        navigate('/auth/login');
+        resetForm();
+      } else {
+        toast.error(
+          result.payload?.message || 'Registration failed. Please try again.',
+        );
+      }
+    } catch (error) {
+      toast.error(error?.message || 'Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
-  } catch (error) {
-    toast.error(error?.message || "Something went wrong. Please try again.");
-  } finally {
-    setSubmitting(false);;
-  }
-};
+  };
   return (
     <Formik
       initialValues={initialValues}
       enableReinitialize={false}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
-      validateOnChange={true}  
-      validateOnBlur={false}    
+      validateOnChange={true}
+      validateOnBlur={false}
     >
-      {({ errors, values, touched, isSubmitting }) => (   
+      {({ errors, values, touched, isSubmitting }) => (
         <Container variant="white">
-          {loading && suppressLocalSpinnerRef.current && ( 
+          {loading && suppressLocalSpinnerRef.current && (
             <div className={css.listSpinner}>
-                <ClockLoader color="#3d2218" size={100} />
-              </div>
-            )}
+              <ClockLoader color="#78b825ff" size={100} />
+            </div>
+          )}
           <div className={css.container}>
             <Form className={css.form}>
               <h2 className={css.title}>Register</h2>
@@ -101,7 +101,7 @@ export default function RegistrationForm() {
                 Join our community of culinary enthusiasts, save your favorite
                 recipes, and share your cooking creations
               </p>
-               {(isSubmitting || loading) && (
+              {(isSubmitting || loading) && (
                 <div className={css.overlay} aria-hidden="true">
                   <ClockLoader color="#3d2218" size={100} />
                 </div>
@@ -132,7 +132,7 @@ export default function RegistrationForm() {
                   aria-invalid={Boolean(values.email && errors.email)}
                   className={`${css.input} ${
                     values.email && errors.email ? css.inputError : ''
-                  }`} 
+                  }`}
                 />
                 <ErrorMessage
                   name="email"
@@ -157,7 +157,11 @@ export default function RegistrationForm() {
                     onClick={() => setShowPassword(!showPassword)}
                     className={css.toggleBtn}
                   >
-                    {showPassword ? <AiOutlineEye size={20} />  : <AiOutlineEyeInvisible size={20} /> }
+                    {showPassword ? (
+                      <AiOutlineEye size={20} />
+                    ) : (
+                      <AiOutlineEyeInvisible size={20} />
+                    )}
                   </button>
                 </div>
                 <ErrorMessage
@@ -183,7 +187,11 @@ export default function RegistrationForm() {
                     onClick={() => setShowConfirm(!showConfirm)}
                     className={css.toggleBtn}
                   >
-                    {showConfirm ? <AiOutlineEye size={20} />  : <AiOutlineEyeInvisible size={20} />}
+                    {showConfirm ? (
+                      <AiOutlineEye size={20} />
+                    ) : (
+                      <AiOutlineEyeInvisible size={20} />
+                    )}
                   </button>
                 </div>
                 <ErrorMessage
@@ -193,14 +201,21 @@ export default function RegistrationForm() {
                 />
               </label>
 
-              <button type="submit" className={css.button} disabled={isSubmitting || loading}>
+              <button
+                type="submit"
+                className={css.button}
+                disabled={isSubmitting || loading}
+              >
                 Create account
               </button>
 
               <div className={css.box}>
                 <p className={css.registerHint}>
                   Already have an account?
-                  <Link to="/auth/login" className={`${css.registerLink} ${css.pulseLink}`}>
+                  <Link
+                    to="/auth/login"
+                    className={`${css.registerLink} ${css.pulseLink}`}
+                  >
                     Log in
                   </Link>
                 </p>
